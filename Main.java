@@ -8,9 +8,9 @@ public class Main extends JFrame {
         // Create a JTextField
         final JTextField tf = new JTextField();
         tf.setBounds(50, 50, 200, 40); // Set position and size of the text field
-        JLabel  l1;
-        l1=new JLabel("2D FLOOR PLANNER");
-        l1.setBounds(750,50, 750,30);
+        JLabel l1;
+        l1 = new JLabel("2D FLOOR PLANNER");
+        l1.setBounds(750, 50, 750, 30);
         // Create button 1: "add bedroom"
         JButton b1 = new JButton("add bedroom");
         b1.setBounds(1300, 100, 130, 40);
@@ -19,8 +19,8 @@ public class Main extends JFrame {
         JButton b2 = new JButton("add bathroom");
         b2.setBounds(1300, 200, 130, 40);
 
-        JButton b3 = new JButton("add bathroom");
-        b2.setBounds(1300, 300, 130, 40);
+        JButton b3 = new JButton("git");
+        b3.setBounds(1300, 300, 100, 20);
 
         // Add the components to the frame
         add(l1);
