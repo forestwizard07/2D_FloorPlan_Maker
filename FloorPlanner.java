@@ -6,7 +6,7 @@ public class FloorPlanner extends JFrame {
     public FloorPlanner(){
         JFrame frame = new JFrame();
         frame.setSize(800,800);
-        frame.setTitle("2D Floor Planner");
+        frame.setTitle("2D Floor Planner"); //sussybAKA
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         
         JMenuBar menuBar = new JMenuBar();
