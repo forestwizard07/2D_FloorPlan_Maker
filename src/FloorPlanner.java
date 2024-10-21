@@ -6,12 +6,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class FloorPlanner extends JFrame {
-    private DrawingPanel drawingPanel;
+    private DrawingPanel drawingPanel; //helllowwww bitchhh
     public FloorPlanner(){
 
-        this.setSize(800,800);
+        this.setSize(800,800);//loli
         this.setTitle("2D Floor Planner");     //sussy
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE); //git testing
 
         JMenuBar menuBar = new JMenuBar();
         drawingPanel = new DrawingPanel();
