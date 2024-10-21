@@ -33,7 +33,7 @@ public class FloorPlanner extends JFrame {
         bathroom.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                drawingPanel.addRoom("Bathroom");
+                drawingPanel.addRoom("Bathroom"); //helllow bitch 2.0
             }
         });
 
