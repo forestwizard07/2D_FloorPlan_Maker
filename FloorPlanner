@@ -1,3 +1,4 @@
+import java.awt.BorderLayout;
 import java.awt.Color;
 import javax.swing.*;
 
@@ -36,7 +37,18 @@ public class FloorPlanner extends JFrame {
         // Add menus to the menu bar
         menuBar.add(fileMenu);
         menuBar.add(newRoom);
+        JPanel bottomPanel = new JPanel();
+        //bottomPanel.setBackground();
+        bottomPanel.setLayout(new BorderLayout());
 
+        // Bottom Right compartment
+        JPanel bottomRightPanel = new JPanel();
+        bottomRightPanel.setBackground(Color.BLACK);
+        bottomRightPanel.add(new JLabel("Bottom Right Compartment"));
+
+        // Add the bottom-right panel to the bottom panel
+        bottomPanel.add(bottomRightPanel, BorderLayout.EAST);
+        frame.add(bottomPanel,BorderLayout.SOUTH);
         // Set the menu bar
         frame.setJMenuBar(menuBar);
 
