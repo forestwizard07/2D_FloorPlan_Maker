@@ -51,40 +51,40 @@ public class FloorPlanner extends JFrame {
 
 
         //the following code is for the bottom right panels where we add dimensions of the room and all
-        JPanel bottomPanel = new JPanel();
-        bottomPanel.setLayout(new BorderLayout());
+        JPanel optionsPanel = new JPanel();
+        optionsPanel.setLayout(new BorderLayout());
 
 
-        JPanel bottomRightPanel = new JPanel();
-        bottomRightPanel.setLayout(new GridLayout(9,2,10,10));
-        bottomRightPanel.setBorder(border);
-        bottomPanel.add(bottomRightPanel, BorderLayout.EAST);
-        bottomRightPanel.setBackground(Color.decode("#999999"));
+        
+        optionsPanel.setLayout(new GridLayout(9,2,10,10));
+        optionsPanel.setBorder(border);
+       
+        optionsPanel.setBackground(Color.decode("#999999"));
 
 
         JLabel heighttext = new JLabel("Enter Height:");
-        bottomRightPanel.add(heighttext);
+        optionsPanel.add(heighttext);
         JTextField getHeight = new JTextField(20);
-        bottomRightPanel.add(getHeight);
+        optionsPanel.add(getHeight);
 
         JLabel widthtext = new JLabel("Enter Width:");
-        bottomRightPanel.add(widthtext);
+        optionsPanel.add(widthtext);
         JTextField getWidth = new JTextField(20);
-        bottomRightPanel.add(getWidth);
+        optionsPanel.add(getWidth);
 
 
         JLabel selRoom = new JLabel("Select Room: ");
-        bottomRightPanel.add(selRoom);
+        optionsPanel.add(selRoom);
         String[] roomType = {"Bedroom", "Bathroom", "Dining Room", "Living Room", "Kitchen"};
         JComboBox<String> room = new JComboBox<>(roomType);
-        bottomRightPanel.add(room);
+        optionsPanel.add(room);
 
 
 
 
 
         JPanel roomDirection = new JPanel();
-        bottomRightPanel.add(roomDirection, BorderLayout.SOUTH);
+        optionsPanel.add(roomDirection, BorderLayout.SOUTH);
         roomDirection.setBackground(Color.decode("#999999"));
         roomDirection.setLayout(new GridLayout(1,5,10,10));
 
@@ -147,7 +147,7 @@ public class FloorPlanner extends JFrame {
 
         JButton addRoom = new JButton("+ Add");
         addRoom.setBackground(Color.decode("#dddddd"));
-        bottomRightPanel.add(addRoom);
+        optionsPanel.add(addRoom);
 
         /*bedroom.addActionListener(new ActionListener() {
             @Override
@@ -221,7 +221,7 @@ public class FloorPlanner extends JFrame {
 
 
 
-        frame.add(bottomPanel,BorderLayout.SOUTH);
+        frame.add(optionsPanel,BorderLayout.EAST);
         frame.setJMenuBar(menuBar);
         frame.setBackground(Color.blue);
         frame.setVisible(true);
