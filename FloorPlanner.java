@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Objects;
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.border.MatteBorder;
 // me big lawda
 public class FloorPlanner extends JFrame {
     private DrawingPanel drawingPanel; //hello git testing
@@ -42,8 +43,9 @@ public class FloorPlanner extends JFrame {
 
         menuBar.add(fileMenu);
 
-        Border border = BorderFactory.createLineBorder(Color.BLACK, 1); //we can use this to edit borders for the menuBars
-        menuBar.setBorder(border);
+        Border borderthin = BorderFactory.createLineBorder(Color.BLACK, 1);
+        Border borderthick = BorderFactory.createLineBorder(Color.BLACK, 3); //we can use this to edit borders for the menuBars
+        menuBar.setBorder(borderthin);
         //fileMenu.setBorder(border);
         //newRoom.setBorder(border);
         //newFurniture.setBorder(border);
@@ -52,16 +54,18 @@ public class FloorPlanner extends JFrame {
 
         //the following code is for the bottom right panels where we add dimensions of the room and all
         JPanel optionsPanel = new JPanel();
-        optionsPanel.setLayout(new BorderLayout());
+        JPanel placeHolder = new JPanel();
+        
+        placeHolder.setLayout(new BorderLayout());
 
 
         
         optionsPanel.setLayout(new GridLayout(9,2,10,10));
-        optionsPanel.setBorder(border);
-       
+        optionsPanel.setBorder(new MatteBorder(3, 0, 3, 0, Color.BLACK));
+        placeHolder.setBorder(new MatteBorder(3, 3, 0, 3, Color.BLACK));
         optionsPanel.setBackground(Color.decode("#999999"));
 
-
+        placeHolder.add(optionsPanel, BorderLayout.SOUTH);
         JLabel heighttext = new JLabel("Enter Height:");
         optionsPanel.add(heighttext);
         JTextField getHeight = new JTextField(20);
@@ -221,7 +225,7 @@ public class FloorPlanner extends JFrame {
 
 
 
-        frame.add(optionsPanel,BorderLayout.EAST);
+        frame.add(placeHolder,BorderLayout.EAST);
         frame.setJMenuBar(menuBar);
         frame.setBackground(Color.blue);
         frame.setVisible(true);
