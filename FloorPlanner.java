@@ -107,7 +107,7 @@ public class FloorPlanner extends JFrame {
         north.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                north.setBackground(Color.YELLOW); // Highlight color
+                north.setBackground(Color.decode("#ecd47b")); // Highlight color
                 south.setBackground(Color.decode("#dddddd"));
                 east.setBackground(Color.decode("#dddddd"));
                 west.setBackground(Color.decode("#dddddd"));
@@ -117,7 +117,7 @@ public class FloorPlanner extends JFrame {
         south.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                south.setBackground(Color.YELLOW); // Highlight color
+                south.setBackground(Color.decode("#ecd47b")); // Highlight color
                 north.setBackground(Color.decode("#dddddd"));
                 east.setBackground(Color.decode("#dddddd"));
                 west.setBackground(Color.decode("#dddddd"));
@@ -127,7 +127,7 @@ public class FloorPlanner extends JFrame {
         east.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                east.setBackground(Color.YELLOW); // Highlight color
+                east.setBackground(Color.decode("#ecd47b")); // Highlight color
                 south.setBackground(Color.decode("#dddddd"));
                 north.setBackground(Color.decode("#dddddd"));
                 west.setBackground(Color.decode("#dddddd"));
@@ -137,7 +137,7 @@ public class FloorPlanner extends JFrame {
         west.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                west.setBackground(Color.YELLOW); // Highlight color
+                west.setBackground(Color.decode("#ecd47b")); // Highlight color
                 south.setBackground(Color.decode("#dddddd"));
                 east.setBackground(Color.decode("#dddddd"));
                 north.setBackground(Color.decode("#dddddd"));
@@ -182,6 +182,15 @@ public class FloorPlanner extends JFrame {
                 selectedItem = (String) source.getSelectedItem();
                 //drawingPanel.addRoom(selectedItem, width, height);
                 
+                
+                
+                //drawingPanel.addRoom(selectedItem, width, height, selectedDirection);
+            }
+            
+        });
+        addRoom.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 if(Objects.equals(getWidth.getText(), "")){
                     width = 100;
                 } else {
@@ -192,14 +201,6 @@ public class FloorPlanner extends JFrame {
                 } else {
                     height = Integer.parseInt(getHeight.getText());
                 }
-                
-                //drawingPanel.addRoom(selectedItem, width, height, selectedDirection);
-            }
-            
-        });
-        addRoom.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
                 drawingPanel.addRoom(selectedItem, width, height, selectedDirection);
                 System.out.println(selectedItem+" "+width+" "+height+" "+ selectedDirection);
             }
@@ -291,7 +292,4 @@ class DrawingPanel extends JPanel {
             }
         }
     }
-}
-
-        
-        
+}          
