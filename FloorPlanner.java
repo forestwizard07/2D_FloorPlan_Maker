@@ -32,9 +32,19 @@ public class FloorPlanner extends JFrame {
         drawingPanel.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent event) {
                 Point clickPoint = event.getPoint(); // Get the location where the user clicked
-                System.out.println(clickPoint.x);
+                //System.out.println(clickPoint.x);
+                if(!drawingPanel.rooms.isEmpty()){
+                    for (Room room: drawingPanel.rooms){
+                        if (room.contains(clickPoint)) {
+                            System.out.println("Room selected: " + room.type);
+                            room.isSelected = true; // Mark the room as selected
+                            System.out.println(room.type);
+                            break; // Exit loop once the clicked room is found
+                        }
+                    }
+                }
                 
-                //selectRoomAt(clickPoint); // Attempt to select a room at the clicked point
+                
             }
         });
         
@@ -236,7 +246,7 @@ class Room {
     }
     public boolean contains(Point p) {
         
-        System.out.println(p.x >= this.position.x && p.x <= this.position.x + w && p.y >= this.position.y && p.y <= this.position.y + h);
+        //System.out.println(p.x >= this.position.x && p.x <= this.position.x + w && p.y >= this.position.y && p.y <= this.position.y + h);
         return p.x >= this.position.x && p.x <= this.position.x + w && p.y >= this.position.y && p.y <= this.position.y + h;
     }
 }
@@ -266,9 +276,8 @@ class DrawingPanel extends JPanel {
                 break;
         }
         rooms.add(new Room(room, new Point(x, y), width, height, direction));
-        int x_now = x;
-        int y_now = y;
-        rooms.get(-1).position = new Point(x_now, y_now);
+        
+        
         repaint();
         hprev = height;
         wprev = width;
