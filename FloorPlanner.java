@@ -25,6 +25,7 @@ public class FloorPlanner extends JFrame {
         fileMenu.add(exitItem);
 
         menuBar.add(fileMenu);
+
         //add room menu
         JMenu newRoom = new JMenu("+ | New Room");   
         JMenuItem bedroom = new JMenuItem("Bedroom");
@@ -53,8 +54,6 @@ public class FloorPlanner extends JFrame {
         JMenuItem shower = new JMenuItem("Shower");
         JMenuItem stove = new JMenuItem("Stove");
 
-
-        
         newFurniture.add(sofa);
         newFurniture.add(table);
         newFurniture.add(sink);
@@ -71,49 +70,69 @@ public class FloorPlanner extends JFrame {
         menuBar.add(newRoom);
         menuBar.add(newFurniture);
 
-        Border border = BorderFactory.createLineBorder(Color.GRAY, 1); //we can use this to edit borders for the menuBars 
+        Border border = BorderFactory.createLineBorder(Color.BLACK, 1); //we can use this to edit borders for the menuBars 
         menuBar.setBorder(border);
-        fileMenu.setBorder(border);
-        newRoom.setBorder(border);
-        newFurniture.setBorder(border);
+        //fileMenu.setBorder(border);
+        //newRoom.setBorder(border);
+        //newFurniture.setBorder(border);
+        menuBar.setBackground(Color.decode("#999999"));
         
+       
+       //the following code is for the bottom right panels where we add dimensions of the room and all
         JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout(new BorderLayout());
 
         
         JPanel bottomRightPanel = new JPanel();
-        bottomRightPanel.setLayout(new GridLayout(6,1,10,10));
+        bottomRightPanel.setLayout(new GridLayout(8,1,10,10));
         bottomRightPanel.setBorder(border);
-        //bottomRightPanel.setBackground(Color.gray);
+        bottomRightPanel.setBackground(Color.decode("#999999"));
+        
        
         
         bottomPanel.add(bottomRightPanel, BorderLayout.EAST);
+        JLabel selRoom = new JLabel("Selected Room: ");
+        bottomRightPanel.add(selRoom);
+        JTextField selectedRoom = new JTextField();
+        selectedRoom.setEditable(false);
+        selectedRoom.setText("Bathroom");
+        bottomRightPanel.add(selectedRoom);
         JLabel height = new JLabel("Enter Height:");
         bottomRightPanel.add(height);
         JTextField getHeight = new JTextField(20);
         bottomRightPanel.add(getHeight);
+        
         JLabel width = new JLabel("Enter Width:");
         bottomRightPanel.add(width);
         JTextField getWidth = new JTextField(20);
         bottomRightPanel.add(getWidth);
+        
         JPanel roomDirection = new JPanel();
         bottomRightPanel.add(roomDirection, BorderLayout.SOUTH);
+        roomDirection.setBackground(Color.decode("#999999"));
         roomDirection.setLayout(new GridLayout(1,5,10,10));
+        
         JLabel direction = new JLabel("Position");
         roomDirection.add(direction);
         JButton north = new JButton("N");
+        north.setBackground(Color.decode("#dddddd"));
         roomDirection.add(north);
         JButton south = new JButton("S");
+        south.setBackground(Color.decode("#dddddd"));
         roomDirection.add(south);
         JButton east = new JButton("E");
+        east.setBackground(Color.decode("#dddddd"));
         roomDirection.add(east);
         JButton west = new JButton("W");
+        west.setBackground(Color.decode("#dddddd"));
         roomDirection.add(west);
+        
         JButton addRoom = new JButton("+ Add");
+        addRoom.setBackground(Color.decode("#dddddd"));
         bottomRightPanel.add(addRoom);
+        
         frame.add(bottomPanel,BorderLayout.SOUTH);
         frame.setJMenuBar(menuBar);
-
         frame.setBackground(Color.blue);
         frame.setVisible(true);
     }
