@@ -1,5 +1,6 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Point;
@@ -13,13 +14,13 @@ import java.util.Objects;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.MatteBorder;
-
 // me big lawda
-public class FloorPlanner extends JFrame{
+public class FloorPlanner extends JFrame {
     private DrawingPanel drawingPanel; //hello git testing
     private String selectedDirection;
     private String selectedItem;
     public int width, height;
+
     public FloorPlanner(){
         JFrame frame = new JFrame();
         frame.setSize(800,800);
@@ -51,53 +52,42 @@ public class FloorPlanner extends JFrame{
         fileMenu.add(exportItem);
         fileMenu.add(exitItem);
 
-
-
         menuBar.add(fileMenu);
 
-        Border borderthin = BorderFactory.createLineBorder(Color.BLACK, 1);
-        Border borderthick = BorderFactory.createLineBorder(Color.BLACK, 3); //we can use this to edit borders for the menuBars
-        menuBar.setBorder(borderthin);
-        //fileMenu.setBorder(border);
-        //newRoom.setBorder(border);
-        //newFurniture.setBorder(border);
+        Border borderThin = BorderFactory.createLineBorder(Color.BLACK, 1);
+        menuBar.setBorder(borderThin);
         menuBar.setBackground(Color.decode("#999999"));
 
-
-        //the following code is for the bottom right panels where we add dimensions of the room and all
         JPanel optionsPanel = new JPanel();
         JPanel placeHolder = new JPanel();
-        
         placeHolder.setLayout(new BorderLayout());
 
-
-        
         optionsPanel.setLayout(new GridLayout(9,2,10,10));
-        optionsPanel.setBorder(new MatteBorder(3, 0, 3, 0, Color.BLACK));
-        placeHolder.setBorder(new MatteBorder(3, 3, 0, 3, Color.BLACK));
+        optionsPanel.setBorder(new MatteBorder(2, 0, 0, 0, Color.BLACK));
+        placeHolder.setBorder(new MatteBorder(0, 2, 2, 2, Color.BLACK));
         optionsPanel.setBackground(Color.decode("#999999"));
+        placeHolder.setBackground(Color.decode("#999999"));
 
         placeHolder.add(optionsPanel, BorderLayout.SOUTH);
+
         JLabel heighttext = new JLabel("Enter Height:");
         optionsPanel.add(heighttext);
         JTextField getHeight = new JTextField(20);
+        getHeight.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
         optionsPanel.add(getHeight);
 
         JLabel widthtext = new JLabel("Enter Width:");
         optionsPanel.add(widthtext);
         JTextField getWidth = new JTextField(20);
+        getWidth.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
         optionsPanel.add(getWidth);
 
-
-        JLabel selRoom = new JLabel("Select Room: ");
+        JLabel selRoom = new JLabel("Select Room:");
         optionsPanel.add(selRoom);
         String[] roomType = {"Bedroom", "Bathroom", "Dining Room", "Living Room", "Kitchen"};
         JComboBox<String> room = new JComboBox<>(roomType);
+        room.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
         optionsPanel.add(room);
-
-
-
-
 
         JPanel roomDirection = new JPanel();
         optionsPanel.add(roomDirection, BorderLayout.SOUTH);
@@ -106,84 +96,76 @@ public class FloorPlanner extends JFrame{
 
         JLabel direction = new JLabel("Position");
         roomDirection.add(direction);
+
         JButton north = new JButton("N");
         north.setBackground(Color.decode("#dddddd"));
-
+        north.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
         roomDirection.add(north);
+
         JButton south = new JButton("S");
         south.setBackground(Color.decode("#dddddd"));
+        south.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
         roomDirection.add(south);
+
         JButton east = new JButton("E");
         east.setBackground(Color.decode("#dddddd"));
+        east.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
         roomDirection.add(east);
+
         JButton west = new JButton("W");
         west.setBackground(Color.decode("#dddddd"));
+        west.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
         roomDirection.add(west);
 
         north.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                north.setBackground(Color.YELLOW); // Highlight color
+                north.setBackground(Color.YELLOW);
                 south.setBackground(Color.decode("#dddddd"));
                 east.setBackground(Color.decode("#dddddd"));
                 west.setBackground(Color.decode("#dddddd"));
-
             }
         });
+
         south.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                south.setBackground(Color.YELLOW); // Highlight color
+                south.setBackground(Color.YELLOW);
                 north.setBackground(Color.decode("#dddddd"));
                 east.setBackground(Color.decode("#dddddd"));
                 west.setBackground(Color.decode("#dddddd"));
-
             }
         });
+
         east.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                east.setBackground(Color.YELLOW); // Highlight color
+                east.setBackground(Color.YELLOW);
                 south.setBackground(Color.decode("#dddddd"));
                 north.setBackground(Color.decode("#dddddd"));
                 west.setBackground(Color.decode("#dddddd"));
-
             }
         });
+
         west.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                west.setBackground(Color.YELLOW); // Highlight color
+                west.setBackground(Color.YELLOW);
                 south.setBackground(Color.decode("#dddddd"));
                 east.setBackground(Color.decode("#dddddd"));
                 north.setBackground(Color.decode("#dddddd"));
-
             }
         });
 
         JButton addRoom = new JButton("+ Add");
         addRoom.setBackground(Color.decode("#dddddd"));
+        addRoom.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
         optionsPanel.add(addRoom);
-
-        /*bedroom.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int width = Integer.parseInt(getWidth.getText());
-                int height = Integer.parseInt(getHeight.getText());
-                JMenuItem source = (JMenuItem) e.getSource();
-
-                System.out.println("This is pressed !");
-
-                drawingPanel.addRoom("Bathroom", width, height); // Fixed parenthesis
-            }
-        });*/
 
         ActionListener directionListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Get the source of the action event (the clicked button)
                 JButton clickedButton = (JButton) e.getSource();
-                // Set the selected direction based on the clicked button's text
                 selectedDirection = clickedButton.getText();
             }
         };
@@ -191,19 +173,15 @@ public class FloorPlanner extends JFrame{
         south.addActionListener(directionListener);
         east.addActionListener(directionListener);
         west.addActionListener(directionListener);
+
         room.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                
                 JComboBox<String> source = (JComboBox<String>) e.getSource();
                 selectedItem = (String) source.getSelectedItem();
-                //drawingPanel.addRoom(selectedItem, width, height);
-
-               
-                //drawingPanel.addRoom(selectedItem, width, height, selectedDirection);
             }
-
         });
+
         addRoom.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -222,24 +200,15 @@ public class FloorPlanner extends JFrame{
                 System.out.println(selectedItem+" "+width+" "+height+" "+ selectedDirection);
                 System.out.println(drawingPanel.rooms);
                 selectedDirection = "";
-                west.setBackground(Color.decode("#dddddd")); // Highlight color
+                west.setBackground(Color.decode("#dddddd"));
                 south.setBackground(Color.decode("#dddddd"));
                 east.setBackground(Color.decode("#dddddd"));
                 north.setBackground(Color.decode("#dddddd"));
-
             }
         });
 
-
-
-
-        // Add action listeners for rooms
-
-
-
-        frame.add(placeHolder,BorderLayout.EAST);
+        frame.add(placeHolder, BorderLayout.EAST);
         frame.setJMenuBar(menuBar);
-        frame.setBackground(Color.blue);
         frame.setVisible(true);
     }
 
@@ -274,76 +243,59 @@ class DrawingPanel extends JPanel {
     static int x = 100;
     static int y = 100;
     static int hprev=0,wprev=0;
-    
-    
-
-
-
-
-
-
-
-
     // Method to add room and trigger repaint
     public void addRoom(String room, int width, int height, String direction) {
-
-
-
-        // Adjust positioning based on direction
         switch (direction) {
             case "E":
-                x += (wprev); // Move rooms to the right for East
+                x += (wprev);
                 break;
             case "W":
-                x -= (wprev); // Move rooms to the left for West
+                x -= (wprev);
                 break;
             case "N":
-                y -= (hprev); // Move rooms upward for North
+                y -= (hprev);
                 break;
             case "S":
-                y += (hprev); // Move rooms downward for South
+                y += (hprev);
                 break;
             default:
-                x += (wprev); // Default is East
+                x += (wprev);
                 break;
-        }rooms.add(new Room(room, new Point(x, y), width, height, direction));
-        repaint(); // Trigger repaint to update the drawing
-        hprev=height;
-        wprev=width;
+        }
+        rooms.add(new Room(room, new Point(x, y), width, height, direction));
+        repaint();
+        hprev = height;
+        wprev = width;
     }
 
-    // Override paintComponent to handle custom drawing
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        // Draw based on the selected room
         for (Room room : rooms) {
-           
             switch(room.type) {
                 case "Bedroom":
-                g.setColor(Color.decode("#00cc00"));
-                break;
-
+                    g.setColor(Color.decode("#00cc00"));
+                    break;
                 case "Bathroom":
-                g.setColor(Color.decode("#0066ff"));
-                break; 
-
+                    g.setColor(Color.decode("#0066ff"));
+                    break;
                 case "Living Room":   
-                g.setColor(Color.decode("#ff3399"));
-                break;
-
+                    g.setColor(Color.decode("#ff3399"));
+                    break;
                 case "Dining Room":
-                g.setColor(Color.decode("#ffff00"));
-                break;
-
+                    g.setColor(Color.decode("#ffff00"));
+                    break;
                 case "Kitchen":
-                g.setColor(Color.decode("#ff0000"));
-                break;
+                    g.setColor(Color.decode("#ff0000"));
+                    break;
+            }
+            g.fillRect(room.position.x, room.position.y, room.w, room.h);
+            g.setColor(Color.BLACK);
+            g.drawRect(room.position.x, room.position.y, room.w, room.h); // 1px border for rooms
+            FontMetrics fm = g.getFontMetrics();
+            g.drawString(room.type, (room.w - fm.stringWidth(room.type))/2+room.position.x, (room.h - fm.getHeight())/2 + fm.getAscent()+room.position.y);
         }
-        g.fillRect(room.position.x, room.position.y, room.w, room.h);
-        g.setColor(Color.BLACK);
-        g.drawString(room.type, room.position.x + 5, room.position.y + 15);
     }
 }
-}
+
