@@ -5,14 +5,17 @@ import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.MatteBorder;
+
 // me big lawda
-public class FloorPlanner extends JFrame {
+public class FloorPlanner extends JFrame{
     private DrawingPanel drawingPanel; //hello git testing
     private String selectedDirection;
     private String selectedItem;
@@ -23,10 +26,19 @@ public class FloorPlanner extends JFrame {
         frame.setTitle("2D Floor Planner");
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         frame.setBackground(Color.WHITE);
-
-        JMenuBar menuBar = new JMenuBar();
         drawingPanel = new DrawingPanel();
         drawingPanel.setVisible(true);
+        drawingPanel.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent event) {
+                Point clickPoint = event.getPoint(); // Get the location where the user clicked
+                System.out.println(clickPoint.x);
+                //selectRoomAt(clickPoint); // Attempt to select a room at the clicked point
+            }
+        });
+
+        JMenuBar menuBar = new JMenuBar();
+        
+        
         JMenu fileMenu = new JMenu("File");
         frame.add(drawingPanel, BorderLayout.CENTER);
 
@@ -242,6 +254,7 @@ class Room {
     public int w = 100;
     public int h = 100;
     public String direction;
+    boolean isSelected;
 
     Room(String type, Point position, int w, int h, String direction) {
         this.type = type;
@@ -249,6 +262,10 @@ class Room {
         this.w = w;
         this.h = h;
         this.direction = direction;
+        this.isSelected = false;
+    }
+    public boolean contains(Point p) {
+        return p.x >= this.position.x && p.x <= this.position.x + w && p.y >= this.position.y && p.y <= this.position.y + h;
     }
 }
 
@@ -257,6 +274,16 @@ class DrawingPanel extends JPanel {
     static int x = 100;
     static int y = 100;
     static int hprev=0,wprev=0;
+    
+    
+
+
+
+
+
+
+
+
     // Method to add room and trigger repaint
     public void addRoom(String room, int width, int height, String direction) {
 
