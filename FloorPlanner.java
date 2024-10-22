@@ -263,6 +263,9 @@ class DrawingPanel extends JPanel {
                 break;
         }
         rooms.add(new Room(room, new Point(x, y), width, height, direction));
+        int x_now = x;
+        int y_now = y;
+        rooms.get(-1).position = new Point(x_now, y_now);
         repaint();
         hprev = height;
         wprev = width;
