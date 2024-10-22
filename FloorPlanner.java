@@ -12,7 +12,7 @@ import javax.swing.*;
 import javax.swing.border.Border;
 
 public class FloorPlanner extends JFrame {
-    private DrawingPanel drawingPanel;
+    private DrawingPanel drawingPanel; //hello git testing
     private String selectedDirection;
     private String selectedItem;
     public int width, height;
