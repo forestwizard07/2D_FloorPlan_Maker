@@ -291,25 +291,24 @@ class DrawingPanel extends JPanel {
            
             switch(room.type) {
                 case "Bedroom":
-                g.setColor(Color.GREEN);
+                g.setColor(Color.decode("#00cc00"));
                 break;
 
                 case "Bathroom":
-                g.setColor(Color.BLUE);
-                break;
+                g.setColor(Color.decode("#0066ff"));
+                break; 
 
-                case "Living Room":
-                g.setColor(Color.PINK);
+                case "Living Room":   
+                g.setColor(Color.decode("#ff3399"));
                 break;
 
                 case "Dining Room":
-                g.setColor(Color.YELLOW);
+                g.setColor(Color.decode("#ffff00"));
                 break;
 
                 case "Kitchen":
-                g.setColor(Color.RED);
+                g.setColor(Color.decode("#ff0000"));
                 break;
-
         }
         g.fillRect(room.position.x, room.position.y, room.w, room.h);
         g.setColor(Color.BLACK);
