@@ -10,67 +10,79 @@ public class FloorPlanner extends JFrame {
         frame.setSize(800,800);
         frame.setTitle("2D Floor Planner");
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        frame.setBackground(Color.WHITE);
         
         JMenuBar menuBar = new JMenuBar();
         JMenu fileMenu = new JMenu("File");
 
-        JMenuItem openItem = new JMenuItem("Open");
+        JMenuItem newItem = new JMenuItem("New");
         JMenuItem saveItem = new JMenuItem("Save");
+        JMenuItem exportItem = new JMenuItem("Export");
         JMenuItem exitItem = new JMenuItem("Exit");
-        fileMenu.add(openItem);
+        fileMenu.add(newItem);
         fileMenu.add(saveItem);
+        fileMenu.add(exportItem);
         fileMenu.add(exitItem);
 
         menuBar.add(fileMenu);
-
-       
         //add room menu
         JMenu newRoom = new JMenu("+ | New Room");   
         JMenuItem bedroom = new JMenuItem("Bedroom");
         JMenuItem bathroom = new JMenuItem("Bathroom");
         JMenuItem dining = new JMenuItem("Dining Room");
         JMenuItem kitchen = new JMenuItem("Kitchen");
+        JMenuItem living = new JMenuItem("Living Room");
 
         
         newRoom.add(bedroom);
         newRoom.add(bathroom);
         newRoom.add(dining);
         newRoom.add(kitchen);
-        newRoom.add(bathroom);
+        newRoom.add(living);
+
 
         //add furniture menu
         JMenu newFurniture = new JMenu("+ | New Furniture");   
         JMenuItem sofa = new JMenuItem("Sofa");
-        JMenuItem table = new JMenuItem("Dining Table");
+        JMenuItem table = new JMenuItem("Table");
         JMenuItem sink = new JMenuItem("Sink");
         JMenuItem chair = new JMenuItem("Chair");
+        JMenuItem bed = new JMenuItem("Bed");
+        JMenuItem commode = new JMenuItem("Commode");
+        JMenuItem basin = new JMenuItem("Basin");
+        JMenuItem shower = new JMenuItem("Shower");
+        JMenuItem stove = new JMenuItem("Stove");
+
 
         
         newFurniture.add(sofa);
         newFurniture.add(table);
         newFurniture.add(sink);
         newFurniture.add(chair);
-        //newRoom.add(bathroom);
+        newFurniture.add(bed);
+        newFurniture.add(commode);
+        newFurniture.add(basin);
+        newFurniture.add(shower);
+        newFurniture.add(stove);
 
-        
-        
+        //newRoom.add(bathroom);
         
         menuBar.add(Box.createHorizontalGlue());  //adds stuff to the right of the menuBar
         menuBar.add(newRoom);
         menuBar.add(newFurniture);
 
-        Border border = BorderFactory.createLineBorder(Color.BLACK, 3); //we can use this to edit borders for the menuBars 
-        //menuBar.setBorder(border);
-        //newRoom.setBorder(border);
-        
-
+        Border border = BorderFactory.createLineBorder(Color.GRAY, 1); //we can use this to edit borders for the menuBars 
+        menuBar.setBorder(border);
+        fileMenu.setBorder(border);
+        newRoom.setBorder(border);
+        newFurniture.setBorder(border);
         
         JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout(new BorderLayout());
 
         
         JPanel bottomRightPanel = new JPanel();
-        bottomRightPanel.setLayout(new GridLayout(5,1));
+        bottomRightPanel.setLayout(new GridLayout(6,1,10,10));
         bottomRightPanel.setBorder(border);
         //bottomRightPanel.setBackground(Color.gray);
        
@@ -84,6 +96,21 @@ public class FloorPlanner extends JFrame {
         bottomRightPanel.add(width);
         JTextField getWidth = new JTextField(20);
         bottomRightPanel.add(getWidth);
+        JPanel roomDirection = new JPanel();
+        bottomRightPanel.add(roomDirection, BorderLayout.SOUTH);
+        roomDirection.setLayout(new GridLayout(1,5,10,10));
+        JLabel direction = new JLabel("Position");
+        roomDirection.add(direction);
+        JButton north = new JButton("N");
+        roomDirection.add(north);
+        JButton south = new JButton("S");
+        roomDirection.add(south);
+        JButton east = new JButton("E");
+        roomDirection.add(east);
+        JButton west = new JButton("W");
+        roomDirection.add(west);
+        JButton addRoom = new JButton("+ Add");
+        bottomRightPanel.add(addRoom);
         frame.add(bottomPanel,BorderLayout.SOUTH);
         frame.setJMenuBar(menuBar);
 
