@@ -51,9 +51,10 @@ public class FloorPlanner extends JFrame {
         placeHolder.setLayout(new BorderLayout());
 
         optionsPanel.setLayout(new GridLayout(9,2,10,10));
-        optionsPanel.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
-        placeHolder.setBorder(new MatteBorder(1, 1, 0, 1, Color.BLACK));
+        optionsPanel.setBorder(new MatteBorder(1, 0, 0, 0, Color.BLACK));
+        placeHolder.setBorder(new MatteBorder(0, 1, 1, 1, Color.BLACK));
         optionsPanel.setBackground(Color.decode("#999999"));
+        placeHolder.setBackground(Color.decode("#999999"));
 
         placeHolder.add(optionsPanel, BorderLayout.SOUTH);
 
