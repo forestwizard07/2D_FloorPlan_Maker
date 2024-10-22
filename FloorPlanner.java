@@ -33,10 +33,11 @@ public class FloorPlanner extends JFrame {
             public void mouseClicked(MouseEvent event) {
                 Point clickPoint = event.getPoint(); // Get the location where the user clicked
                 System.out.println(clickPoint.x);
+                
                 //selectRoomAt(clickPoint); // Attempt to select a room at the clicked point
             }
         });
-
+        
         JMenuBar menuBar = new JMenuBar();
         
         
@@ -234,6 +235,8 @@ class Room {
         this.isSelected = false;
     }
     public boolean contains(Point p) {
+        
+        System.out.println(p.x >= this.position.x && p.x <= this.position.x + w && p.y >= this.position.y && p.y <= this.position.y + h);
         return p.x >= this.position.x && p.x <= this.position.x + w && p.y >= this.position.y && p.y <= this.position.y + h;
     }
 }
