@@ -77,10 +77,6 @@ public class FloorPlanner extends JFrame {
         bottomRightPanel.add(selRoom);
         String[] roomType = {"Bedroom", "Bathroom", "Dining Room", "Living Room", "Kitchen"};
         JComboBox<String> room = new JComboBox<>(roomType);
-
-
-
-
         bottomRightPanel.add(room);
 
 
@@ -182,10 +178,19 @@ public class FloorPlanner extends JFrame {
         room.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                
                 JComboBox<String> source = (JComboBox<String>) e.getSource();
                 selectedItem = (String) source.getSelectedItem();
                 //drawingPanel.addRoom(selectedItem, width, height);
 
+               
+                //drawingPanel.addRoom(selectedItem, width, height, selectedDirection);
+            }
+
+        });
+        addRoom.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 if(Objects.equals(getWidth.getText(), "")){
                     width = 100;
                 } else {
@@ -197,13 +202,6 @@ public class FloorPlanner extends JFrame {
                     height = Integer.parseInt(getHeight.getText());
                 }
 
-                //drawingPanel.addRoom(selectedItem, width, height, selectedDirection);
-            }
-
-        });
-        addRoom.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
                 drawingPanel.addRoom(selectedItem, width, height, selectedDirection);
                 System.out.println(selectedItem+" "+width+" "+height+" "+ selectedDirection);
                 System.out.println(drawingPanel.rooms);
@@ -284,17 +282,32 @@ class DrawingPanel extends JPanel {
 
         // Draw based on the selected room
         for (Room room : rooms) {
-            if (room.type.equals("Bathroom")) {
-                g.setColor(Color.RED);
-                g.fillRect(room.position.x, room.position.y, room.w, room.h);
-                g.setColor(Color.BLACK);
-                g.drawString(room.type, room.position.x + 5, room.position.y + 15);
-            } else if (room.type.equals("Bedroom")) {
+           
+            switch(room.type) {
+                case "Bedroom":
+                g.setColor(Color.GREEN);
+                break;
+
+                case "Bathroom":
                 g.setColor(Color.BLUE);
-                g.fillRect(room.position.x, room.position.y, room.w, room.h);
-                g.setColor(Color.BLACK);
-                g.drawString(room.type, room.position.x + 5, room.position.y + 15);
-            }
+                break;
+
+                case "Living Room":
+                g.setColor(Color.PINK);
+                break;
+
+                case "Dining Room":
+                g.setColor(Color.YELLOW);
+                break;
+
+                case "Kitchen":
+                g.setColor(Color.RED);
+                break;
+
         }
+        g.fillRect(room.position.x, room.position.y, room.w, room.h);
+        g.setColor(Color.BLACK);
+        g.drawString(room.type, room.position.x + 5, room.position.y + 15);
     }
+}
 }
