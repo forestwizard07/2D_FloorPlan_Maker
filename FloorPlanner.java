@@ -11,6 +11,7 @@ import java.util.Objects;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.MatteBorder;
+import java.awt.*;
 
 public class FloorPlanner extends JFrame {
     private DrawingPanel drawingPanel;
@@ -276,7 +277,8 @@ class DrawingPanel extends JPanel {
             g.fillRect(room.position.x, room.position.y, room.w, room.h);
             g.setColor(Color.BLACK);
             g.drawRect(room.position.x, room.position.y, room.w, room.h); // 1px border for rooms
-            g.drawString(room.type, room.position.x + 5, room.position.y + 15);
+            FontMetrics fm = g.getFontMetrics();
+            g.drawString(room.type, (room.w - fm.stringWidth(room.type))/2+room.position.x, (room.h - fm.getHeight())/2 + fm.getAscent()+room.position.y);
         }
     }
 }
