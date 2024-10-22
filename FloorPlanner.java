@@ -205,6 +205,12 @@ public class FloorPlanner extends JFrame {
                 drawingPanel.addRoom(selectedItem, width, height, selectedDirection);
                 System.out.println(selectedItem+" "+width+" "+height+" "+ selectedDirection);
                 System.out.println(drawingPanel.rooms);
+                selectedDirection = "";
+                west.setBackground(Color.decode("#dddddd")); // Highlight color
+                south.setBackground(Color.decode("#dddddd"));
+                east.setBackground(Color.decode("#dddddd"));
+                north.setBackground(Color.decode("#dddddd"));
+
             }
         });
 
