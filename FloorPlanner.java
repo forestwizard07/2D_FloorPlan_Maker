@@ -8,9 +8,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.MatteBorder;
@@ -18,7 +22,7 @@ import javax.swing.border.MatteBorder;
 public class FloorPlanner extends JFrame {
     private DrawingPanel drawingPanel; //hello git testing
     private String selectedDirection;
-    private String selectedItem;
+    private String selectedItem= "Bedroom";
     public int width, height;
 
     public FloorPlanner(){
@@ -63,6 +67,13 @@ public class FloorPlanner extends JFrame {
         fileMenu.add(exportItem);
         fileMenu.add(exitItem);
 
+        exportItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Screenshot.takeScreenshot(drawingPanel);
+            }
+        });
+
         menuBar.add(fileMenu);
 
         Border borderThin = BorderFactory.createLineBorder(Color.BLACK, 1);
@@ -97,6 +108,7 @@ public class FloorPlanner extends JFrame {
         optionsPanel.add(selRoom);
         String[] roomType = {"Bedroom", "Bathroom", "Dining Room", "Living Room", "Kitchen"};
         JComboBox<String> room = new JComboBox<>(roomType);
+        //room.setSelectedIndex(0); 
         room.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
         optionsPanel.add(room);
 
@@ -313,4 +325,29 @@ class DrawingPanel extends JPanel {
         }
     }
 }
+class Screenshot{
+    //private JPanel panel;
 
+    public static void takeScreenshot(JPanel panel) {
+        // Capture screenshot
+        
+        JFileChooser fileChooser = new JFileChooser();
+        int option = fileChooser.showSaveDialog(panel);
+        if(option == JFileChooser.APPROVE_OPTION){
+            File file = fileChooser.getSelectedFile();
+            System.out.println("File Saved as: " + file.getName());
+            try {
+            BufferedImage screenshot = new BufferedImage(panel.getWidth(), panel.getHeight(), BufferedImage.TYPE_INT_RGB);
+            Graphics g = screenshot.getGraphics();
+            panel.paint(g);
+            ImageIO.write(screenshot, "png", file);
+            System.out.println("Screenshot saved as "+file.getName());
+            }catch (Exception e) {
+            e.printStackTrace();
+            }
+        }
+        else{
+            System.out.println("Save command canceled");
+        }        
+    }
+}
