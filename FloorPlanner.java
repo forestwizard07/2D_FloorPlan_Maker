@@ -10,7 +10,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -28,6 +27,9 @@ public class FloorPlanner extends JFrame {
     public FloorPlanner(){
         JFrame frame = new JFrame();
         frame.setSize(800,800);
+        // Set the JFrame to full screen mode
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        
         frame.setTitle("2D Floor Planner");
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         frame.setBackground(Color.WHITE);
@@ -37,14 +39,27 @@ public class FloorPlanner extends JFrame {
             public void mouseClicked(MouseEvent event) {
                 Point clickPoint = event.getPoint(); // Get the location where the user clicked
                 //System.out.println(clickPoint.x);
+                Boolean clickedRoom = false;
                 if(!drawingPanel.rooms.isEmpty()){
                     for (Room room: drawingPanel.rooms){
+                        room.isSelected=false;
                         if (room.contains(clickPoint)) {
+                            
                             System.out.println("Room selected: " + room.type);
-                            room.isSelected = true; // Mark the room as selected
+                            room.isSelected = true;
+                            clickedRoom = true; // Mark the room as selected
+                            drawingPanel.repaint();
                             System.out.println(room.type);
-                            break; // Exit loop once the clicked room is found
+                            //break; // Exit loop once the clicked room is found
                         }
+                    }
+                    if(clickedRoom==false){
+                        for (Room room: drawingPanel.rooms){
+                            room.isSelected=false;
+                            drawingPanel.repaint();
+                            System.out.println("Clicked canvas!");
+                        }
+
                     }
                 }
                 
@@ -318,8 +333,15 @@ class DrawingPanel extends JPanel {
                     break;
             }
             g.fillRect(room.position.x, room.position.y, room.w, room.h);
-            g.setColor(Color.BLACK);
+            if(room.isSelected==true){
+                g.setColor(Color.BLACK);
+            }
+            else{
+                g.setColor(Color.decode("#dddddd"));
+                
+            }
             g.drawRect(room.position.x, room.position.y, room.w, room.h); // 1px border for rooms
+            g.setColor(Color.BLACK);
             FontMetrics fm = g.getFontMetrics();
             g.drawString(room.type, (room.w - fm.stringWidth(room.type))/2+room.position.x, (room.h - fm.getHeight())/2 + fm.getAscent()+room.position.y);
         }
