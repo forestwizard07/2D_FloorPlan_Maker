@@ -336,6 +336,9 @@ class Screenshot{
         if(option == JFileChooser.APPROVE_OPTION){
             File file = fileChooser.getSelectedFile();
             System.out.println("File Saved as: " + file.getName());
+            if (!file.getAbsolutePath().endsWith(".png")) {
+                file = new File(file.getAbsolutePath() + ".png");
+            }
             try {
             BufferedImage screenshot = new BufferedImage(panel.getWidth(), panel.getHeight(), BufferedImage.TYPE_INT_RGB);
             Graphics g = screenshot.getGraphics();
