@@ -26,6 +26,7 @@ public class FloorPlanner extends JFrame {
     private String selectedItem= "Bedroom";
     public int width, height,index;
     public int checkx,checky;
+    public boolean displayGrid=false;
 
     public FloorPlanner(){
         JFrame frame = new JFrame();
@@ -43,8 +44,8 @@ public class FloorPlanner extends JFrame {
             int diffy;
             public void mouseClicked(MouseEvent event) {
                 Point clickPoint = event.getPoint(); // Get the location where the user clicked
-                //System.out.println(clickPoint.x);
                 Boolean clickedRoom = false;
+                System.out.println(drawingPanel.getWidth()+" "+drawingPanel.getHeight());
                 if(!drawingPanel.rooms.isEmpty()){
                     for (Room room: drawingPanel.rooms){
                         room.isSelected=false;
@@ -123,7 +124,7 @@ public class FloorPlanner extends JFrame {
 
         JMenuItem newItem = new JMenuItem("New");
         JMenuItem saveItem = new JMenuItem("Save");
-        JMenuItem exportItem = new JMenuItem("Export");
+        JMenuItem exportItem = new JMenuItem("Export as PNG");
         JMenuItem exitItem = new JMenuItem("Exit");
         fileMenu.add(newItem);
         fileMenu.add(saveItem);
@@ -155,6 +156,34 @@ public class FloorPlanner extends JFrame {
 
         placeHolder.add(optionsPanel, BorderLayout.SOUTH);
 
+        /*JCheckBox grid = new JCheckBox("Grid ON/OFF");
+        grid.setBackground(Color.decode("#dddddd"));
+        grid.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+        optionsPanel.add(grid);
+
+        grid.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(grid.isSelected()){
+                    displayGrid = true;
+                    System.out.println(displayGrid);
+                    DisplayGrid gr = new DisplayGrid();
+                    gr.displaygrid(displayGrid);
+                }
+                    
+                else{
+                    displayGrid = false;
+                    System.out.println(displayGrid);
+                    DisplayGrid gr = new DisplayGrid();
+                    gr.displaygrid(displayGrid);
+                }
+                    
+
+            }
+        });*/
+
+        
+        
         JLabel heighttext = new JLabel("Enter Height:");
         optionsPanel.add(heighttext);
         JTextField getHeight = new JTextField(20);
@@ -297,11 +326,14 @@ public class FloorPlanner extends JFrame {
         frame.setJMenuBar(menuBar);
         frame.setVisible(true);
     }
+    
 
     public static void main(String[] args) {
         new FloorPlanner();
     }
 }
+
+
 
 class Room {
     String type;
@@ -332,6 +364,7 @@ class DrawingPanel extends JPanel {
     static int y = 100;
     static int hprev=0,wprev=0;
     
+    
     // Method to add room and trigger repaint
     public void addRoom(String room, int width, int height, String direction, JPanel panel, int x1, int y1) {
         if(rooms.isEmpty()){
@@ -361,6 +394,26 @@ class DrawingPanel extends JPanel {
                     break;
             }
         }
+        int columns = panel.getWidth()/2;
+        int rows = panel.getHeight()/2;
+        int xcoordinate = x/50;
+        int ycoordinate = y/50; 
+
+        System.out.println("Printing coordinates"+xcoordinate+" "+ycoordinate);
+        if((x/50)-xcoordinate<(xcoordinate+50)-(x/50)){
+            x = xcoordinate*50;
+        }
+        else{
+            x= (xcoordinate+50)*50;
+        }
+
+        if((y/50)-ycoordinate<(ycoordinate+50)-(y/50)){
+            y = ycoordinate*50;
+        }
+        else{
+            y = (ycoordinate+50)*50;
+        }
+        System.out.println("Printing new coordinates"+x+" "+y);
         rooms.add(new Room(room, new Point(x, y), width, height, direction));
         
         
@@ -407,8 +460,16 @@ class DrawingPanel extends JPanel {
             FontMetrics fm = g.getFontMetrics();
             g.drawString(room.type, (room.w - fm.stringWidth(room.type))/2+room.position.x, (room.h - fm.getHeight())/2 + fm.getAscent()+room.position.y);
         }
+        for(int i=0;i<=1646;i+=50){
+            for(int j=0;j<=986;j+=50){
+                g.fillOval(i, j, 5, 5); 
+            }
+        }
+        
     }
 }
+
+
 class Screenshot{
     
 
