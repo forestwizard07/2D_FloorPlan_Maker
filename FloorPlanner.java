@@ -19,13 +19,20 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.MatteBorder;
+<<<<<<< HEAD
 
+=======
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+// me big lawda
+>>>>>>> 678ba9a099cf2455f639bc1ddf41672d26260059
 public class FloorPlanner extends JFrame {
     private DrawingPanel drawingPanel; 
     private String selectedDirection;
     private String selectedItem= "Bedroom";
     public int width, height,index;
     public int checkx,checky;
+    public boolean displayGrid=false;
 
     public FloorPlanner(){
         JFrame frame = new JFrame();
@@ -44,8 +51,8 @@ public class FloorPlanner extends JFrame {
             @Override
             public void mouseClicked(MouseEvent event) {
                 Point clickPoint = event.getPoint(); // Get the location where the user clicked
-                //System.out.println(clickPoint.x);
                 Boolean clickedRoom = false;
+                System.out.println(drawingPanel.getWidth()+" "+drawingPanel.getHeight());
                 if(!drawingPanel.rooms.isEmpty()){
                     for (Room room: drawingPanel.rooms){
                         room.isSelected=false;
@@ -124,7 +131,7 @@ public class FloorPlanner extends JFrame {
 
         JMenuItem newItem = new JMenuItem("New");
         JMenuItem saveItem = new JMenuItem("Save");
-        JMenuItem exportItem = new JMenuItem("Export");
+        JMenuItem exportItem = new JMenuItem("Export as PNG");
         JMenuItem exitItem = new JMenuItem("Exit");
         fileMenu.add(newItem);
         fileMenu.add(saveItem);
@@ -148,7 +155,7 @@ public class FloorPlanner extends JFrame {
         JPanel placeHolder = new JPanel();
         placeHolder.setLayout(new BorderLayout());
 
-        optionsPanel.setLayout(new GridLayout(9,2,10,10));
+        optionsPanel.setLayout(new GridLayout(13,2,10,10));
         optionsPanel.setBorder(new MatteBorder(2, 0, 0, 0, Color.BLACK));
         placeHolder.setBorder(new MatteBorder(0, 2, 2, 2, Color.BLACK));
         optionsPanel.setBackground(Color.decode("#999999"));
@@ -156,6 +163,64 @@ public class FloorPlanner extends JFrame {
 
         placeHolder.add(optionsPanel, BorderLayout.SOUTH);
 
+        /*JCheckBox grid = new JCheckBox("Grid ON/OFF");
+        grid.setBackground(Color.decode("#dddddd"));
+        grid.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+        optionsPanel.add(grid);
+
+        grid.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(grid.isSelected()){
+                    displayGrid = true;
+                    System.out.println(displayGrid);
+                    
+                    drawingPanel.displayrid(displayGrid);
+                }
+                    
+                else{
+                    displayGrid = false;
+                    System.out.println(displayGrid);
+                    
+                    drawingPanel.displaygrid(displayGrid);
+                }
+                    
+
+            }
+        });*/
+
+        JLabel xscale = new JLabel("X Scale:");
+        optionsPanel.add(xscale);
+        JSlider scalex = new JSlider(JSlider.HORIZONTAL, 50, 500, 100);
+        scalex.setMajorTickSpacing(50);
+        scalex.setMinorTickSpacing(50);
+        scalex.setSnapToTicks(true);
+        scalex.setPaintTicks(true);
+        scalex.setPaintLabels(true);
+        optionsPanel.add(scalex);
+        scalex.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent e) {
+                drawingPanel.addXScale(scalex.getValue());
+            }
+        });
+        JLabel yscale = new JLabel("Y Scale:");
+        optionsPanel.add(yscale);
+        JSlider scaley = new JSlider(JSlider.HORIZONTAL, 50, 500, 100);
+        scaley.setMajorTickSpacing(50);
+        scaley.setMinorTickSpacing(50);
+        scaley.setSnapToTicks(true);
+        scaley.setPaintTicks(true);
+        scaley.setPaintLabels(true);
+        
+        optionsPanel.add(scaley);
+        scaley.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent e) {
+                drawingPanel.addYScale(scaley.getValue());
+            }
+        });
+
+        
+        
         JLabel heighttext = new JLabel("Enter Height:");
         optionsPanel.add(heighttext);
         JTextField getHeight = new JTextField(20);
@@ -298,11 +363,14 @@ public class FloorPlanner extends JFrame {
         frame.setJMenuBar(menuBar);
         frame.setVisible(true);
     }
+    
 
     public static void main(String[] args) {
         new FloorPlanner();
     }
 }
+
+
 
 class Room {
     String type;
@@ -332,9 +400,27 @@ class DrawingPanel extends JPanel {
     static int x = 100;
     static int y = 100;
     static int hprev=0,wprev=0;
+    static int xscale=100,yscale=100;
+    public void addXScale(int x){
+        System.out.println("In the scale function"+x+" "+y);
+        xscale = x;
+        repaint();
+       
+    }
+    public void addYScale(int y){
+        yscale = y;
+        repaint();
+    }
     
     // Method to add room and trigger repaint
     public void addRoom(String room, int width, int height, String direction, JPanel panel, int x1, int y1) {
+        for(Room roomtype: rooms){
+            if (roomtype.isSelected){
+                hprev = roomtype.h;
+                wprev = roomtype.w;
+            }
+        }
+        
         if(rooms.isEmpty()){
             y = panel.getHeight()/2;
             x = panel.getWidth()/2;
@@ -362,6 +448,26 @@ class DrawingPanel extends JPanel {
                     break;
             }
         }
+        int columns = panel.getWidth()/2;
+        int rows = panel.getHeight()/2;
+        int xcoordinate = x/xscale;
+        int ycoordinate = y/yscale; 
+
+        System.out.println("Printing coordinates"+xcoordinate+" "+ycoordinate);
+        if((x/xscale)-xcoordinate<(xcoordinate+xscale)-(x/xscale)){
+            x = xcoordinate*xscale;
+        }
+        else{
+            x= (xcoordinate+xscale)*xscale;
+        }
+
+        if((y/yscale)-ycoordinate<(ycoordinate+yscale)-(y/yscale)){
+            y = ycoordinate*yscale;
+        }
+        else{
+            y = (ycoordinate+yscale)*yscale;
+        }
+        System.out.println("Printing new coordinates"+x+" "+y);
         rooms.add(new Room(room, new Point(x, y), width, height, direction));
         
         
@@ -408,8 +514,16 @@ class DrawingPanel extends JPanel {
             FontMetrics fm = g.getFontMetrics();
             g.drawString(room.type, (room.w - fm.stringWidth(room.type))/2+room.position.x, (room.h - fm.getHeight())/2 + fm.getAscent()+room.position.y);
         }
+        for(int i=0;i<=1646;i+=xscale){
+            for(int j=0;j<=986;j+=yscale){
+                g.fillOval(i, j, 5, 5); 
+            }
+        }
+        
     }
 }
+
+
 class Screenshot{
     
 
