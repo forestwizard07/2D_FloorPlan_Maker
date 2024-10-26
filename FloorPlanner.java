@@ -429,8 +429,11 @@ class DrawingPanel extends JPanel {
     public void addRoom(String room, int width, int height, String direction, JPanel panel, int x1, int y1) {
         for(Room roomtype: rooms){
             if (roomtype.isSelected){
+
                 hprev = roomtype.h;
                 wprev = roomtype.w;
+                x=roomtype.position.x;
+                y=roomtype.position.y;
             }
         }
         
@@ -441,16 +444,16 @@ class DrawingPanel extends JPanel {
         else{
             switch (direction) {
                 case "E":
-                    x += (wprev+1);
+                    x += (wprev);
                     break;
                 case "W":
-                    x -= (wprev+1);
+                    x -= (wprev);
                     break;
                 case "N":
-                    y -= (hprev+1);
+                    y -= (hprev);
                     break;
                 case "S":
-                    y += (hprev+1);
+                    y += (hprev);
                     break;
                 case "drag":
                     x = x1;
@@ -502,7 +505,7 @@ class DrawingPanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-
+       
         for (Room room : rooms) {
             switch(room.type) {
                 case "Bedroom":
