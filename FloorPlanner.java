@@ -19,9 +19,9 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.MatteBorder;
-// me big lawda
+
 public class FloorPlanner extends JFrame {
-    private DrawingPanel drawingPanel; //hello git testing
+    private DrawingPanel drawingPanel; 
     private String selectedDirection;
     private String selectedItem= "Bedroom";
     public int width, height,index;
@@ -41,6 +41,7 @@ public class FloorPlanner extends JFrame {
         drawingPanel.addMouseListener(new MouseAdapter() {
             int diffx;
             int diffy;
+            @Override
             public void mouseClicked(MouseEvent event) {
                 Point clickPoint = event.getPoint(); // Get the location where the user clicked
                 //System.out.println(clickPoint.x);
