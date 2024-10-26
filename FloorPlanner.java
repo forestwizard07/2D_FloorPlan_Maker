@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
@@ -29,7 +30,9 @@ public class FloorPlanner extends JFrame {
     public int width, height,index;
     public int checkx,checky;
     public boolean displayGrid=false;
-
+    public Room selectedRoom;
+    public int diffx;
+    public int diffy;
     public FloorPlanner(){
         JFrame frame = new JFrame();
         frame.setSize(800,800);
@@ -41,9 +44,9 @@ public class FloorPlanner extends JFrame {
         frame.setBackground(Color.WHITE);
         drawingPanel = new DrawingPanel();
         drawingPanel.setVisible(true);
+       
         drawingPanel.addMouseListener(new MouseAdapter() {
-            int diffx;
-            int diffy;
+            
             @Override
             public void mouseClicked(MouseEvent event) {
                 Point clickPoint = event.getPoint(); // Get the location where the user clicked
@@ -74,11 +77,11 @@ public class FloorPlanner extends JFrame {
                 
                 
             }
-
+            
             public void mousePressed(MouseEvent event){
                 Point clickPoint = event.getPoint();
                 Boolean pressedRoom = false;
-
+                
                 if(!drawingPanel.rooms.isEmpty()){
                     for (Room room: drawingPanel.rooms){
                         
@@ -97,26 +100,42 @@ public class FloorPlanner extends JFrame {
                             selectedItem = room.type;
                             width = room.w;
                             height = room.h;
-                            selectedDirection = "drag";                                                       
+                            selectedDirection = "drag"; 
+                            selectedRoom = room;                                                      
                         }
                     }
                     
                 }
             }
-
+            
             public void mouseReleased(MouseEvent event){
                 Point clickPoint= event.getPoint();
                 if(clickPoint.x!=checkx||clickPoint.y!=checky){
                     System.out.println("Im here"+ index);
-
+                    //selectedRoom.position.x=clickPoint.x-diffx;
+                    //selectedRoom.position.y=clickPoint.y-diffy;
                     drawingPanel.rooms.remove(index);
                     drawingPanel.addRoom(selectedItem, width, height, selectedDirection, drawingPanel, clickPoint.x-diffx, clickPoint.y-diffy);
-                }
+                    selectedRoom=null;
+                    
+                }drawingPanel.repaint();
                 
                 
             }
         });
 
+        drawingPanel.addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                if (selectedRoom != null) {
+                    int newx = e.getX() - diffx;
+                    int newy = e.getY() - diffy;
+                    selectedRoom.position.x = newx;
+                    selectedRoom.position.y = newy;
+                    drawingPanel.repaint(); 
+                }
+            }
+        });
         
         
         JMenuBar menuBar = new JMenuBar();
@@ -404,7 +423,7 @@ class Room {
         
         this.isSelected=p.x >= this.position.x && p.x <= this.position.x + w && p.y >= this.position.y && p.y <= this.position.y + h;
         
-        return p.x >= this.position.x && p.x <= this.position.x + w && p.y >= this.position.y && p.y <= this.position.y + h;
+        return this.isSelected;
     }
 }
 
@@ -505,7 +524,7 @@ class DrawingPanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-       
+        Graphics2D g2 = (Graphics2D) g;
         for (Room room : rooms) {
             switch(room.type) {
                 case "Bedroom":
@@ -525,16 +544,17 @@ class DrawingPanel extends JPanel {
                     break;
             }
             g.fillRect(room.position.x, room.position.y, room.w, room.h);
-            Graphics2D g2 = (Graphics2D) g;
+            
             if(room.isSelected==true){
                 
-                g.setColor(Color.BLACK);
+                
                 g2.setStroke(new BasicStroke(5)); 
             }
             else{
-                g.setColor(Color.BLACK);
+                
                 g2.setStroke(new BasicStroke(1));
             }
+            g.setColor(Color.BLACK);
             g2.drawRect(room.position.x, room.position.y, room.w, room.h); // 1px border for rooms
             g2.setColor(Color.BLACK);
             FontMetrics fm = g.getFontMetrics();
@@ -545,6 +565,7 @@ class DrawingPanel extends JPanel {
                 g.fillOval(i, j, 5, 5); 
             }
         }
+
         
     }
 }
