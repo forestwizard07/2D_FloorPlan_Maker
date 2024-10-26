@@ -19,13 +19,9 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.MatteBorder;
-<<<<<<< HEAD
-
-=======
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 // me big lawda
->>>>>>> 678ba9a099cf2455f639bc1ddf41672d26260059
 public class FloorPlanner extends JFrame {
     private DrawingPanel drawingPanel; 
     private String selectedDirection;
@@ -314,6 +310,11 @@ public class FloorPlanner extends JFrame {
         addRoom.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
         optionsPanel.add(addRoom);
 
+        JButton delRoom = new JButton("+ Delete");
+        delRoom.setBackground(Color.decode("#dddddd"));
+        delRoom.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+        optionsPanel.add(delRoom);
+
         ActionListener directionListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -359,6 +360,17 @@ public class FloorPlanner extends JFrame {
             }
         });
 
+
+        delRoom.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                drawingPanel.delRoom();
+                
+            }
+        });
+
+        
+
         frame.add(placeHolder, BorderLayout.EAST);
         frame.setJMenuBar(menuBar);
         frame.setVisible(true);
@@ -391,6 +403,7 @@ class Room {
     public boolean contains(Point p) {
         
         this.isSelected=p.x >= this.position.x && p.x <= this.position.x + w && p.y >= this.position.y && p.y <= this.position.y + h;
+        
         return p.x >= this.position.x && p.x <= this.position.x + w && p.y >= this.position.y && p.y <= this.position.y + h;
     }
 }
@@ -475,6 +488,16 @@ class DrawingPanel extends JPanel {
         hprev = height;
         wprev = width;
     }
+    public void delRoom(){
+        
+        for (int i = 0; i < rooms.size(); i++) {
+            if(rooms.get(i).isSelected){
+                rooms.remove(i);
+            }
+            repaint();
+        }
+    }
+
 
     @Override
     protected void paintComponent(Graphics g) {
