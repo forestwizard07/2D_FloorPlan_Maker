@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
@@ -23,13 +24,15 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 // me big lawda
 public class FloorPlanner extends JFrame {
-    private DrawingPanel drawingPanel; //hello git testing
+    private DrawingPanel drawingPanel; 
     private String selectedDirection;
     private String selectedItem= "Bedroom";
     public int width, height,index;
     public int checkx,checky;
     public boolean displayGrid=false;
-
+    public Room selectedRoom;
+    public int diffx;
+    public int diffy;
     public FloorPlanner(){
         JFrame frame = new JFrame();
         frame.setSize(800,800);
@@ -41,9 +44,10 @@ public class FloorPlanner extends JFrame {
         frame.setBackground(Color.WHITE);
         drawingPanel = new DrawingPanel();
         drawingPanel.setVisible(true);
+       
         drawingPanel.addMouseListener(new MouseAdapter() {
-            int diffx;
-            int diffy;
+            
+            @Override
             public void mouseClicked(MouseEvent event) {
                 Point clickPoint = event.getPoint(); // Get the location where the user clicked
                 Boolean clickedRoom = false;
@@ -73,11 +77,11 @@ public class FloorPlanner extends JFrame {
                 
                 
             }
-
+            
             public void mousePressed(MouseEvent event){
                 Point clickPoint = event.getPoint();
                 Boolean pressedRoom = false;
-
+                
                 if(!drawingPanel.rooms.isEmpty()){
                     for (Room room: drawingPanel.rooms){
                         
@@ -96,26 +100,42 @@ public class FloorPlanner extends JFrame {
                             selectedItem = room.type;
                             width = room.w;
                             height = room.h;
-                            selectedDirection = "drag";                                                       
+                            selectedDirection = "drag"; 
+                            selectedRoom = room;                                                      
                         }
                     }
                     
                 }
             }
-
+            
             public void mouseReleased(MouseEvent event){
                 Point clickPoint= event.getPoint();
                 if(clickPoint.x!=checkx||clickPoint.y!=checky){
                     System.out.println("Im here"+ index);
-
+                    //selectedRoom.position.x=clickPoint.x-diffx;
+                    //selectedRoom.position.y=clickPoint.y-diffy;
                     drawingPanel.rooms.remove(index);
                     drawingPanel.addRoom(selectedItem, width, height, selectedDirection, drawingPanel, clickPoint.x-diffx, clickPoint.y-diffy);
-                }
+                    selectedRoom=null;
+                    
+                }drawingPanel.repaint();
                 
                 
             }
         });
 
+        drawingPanel.addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                if (selectedRoom != null) {
+                    int newx = e.getX() - diffx;
+                    int newy = e.getY() - diffy;
+                    selectedRoom.position.x = newx;
+                    selectedRoom.position.y = newy;
+                    drawingPanel.repaint(); 
+                }
+            }
+        });
         
         
         JMenuBar menuBar = new JMenuBar();
@@ -309,6 +329,11 @@ public class FloorPlanner extends JFrame {
         addRoom.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
         optionsPanel.add(addRoom);
 
+        JButton delRoom = new JButton("+ Delete");
+        delRoom.setBackground(Color.decode("#dddddd"));
+        delRoom.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+        optionsPanel.add(delRoom);
+
         ActionListener directionListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -354,6 +379,17 @@ public class FloorPlanner extends JFrame {
             }
         });
 
+
+        delRoom.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                drawingPanel.delRoom();
+                
+            }
+        });
+
+        
+
         frame.add(placeHolder, BorderLayout.EAST);
         frame.setJMenuBar(menuBar);
         frame.setVisible(true);
@@ -386,7 +422,8 @@ class Room {
     public boolean contains(Point p) {
         
         this.isSelected=p.x >= this.position.x && p.x <= this.position.x + w && p.y >= this.position.y && p.y <= this.position.y + h;
-        return p.x >= this.position.x && p.x <= this.position.x + w && p.y >= this.position.y && p.y <= this.position.y + h;
+        
+        return this.isSelected;
     }
 }
 
@@ -411,8 +448,11 @@ class DrawingPanel extends JPanel {
     public void addRoom(String room, int width, int height, String direction, JPanel panel, int x1, int y1) {
         for(Room roomtype: rooms){
             if (roomtype.isSelected){
+
                 hprev = roomtype.h;
                 wprev = roomtype.w;
+                x=roomtype.position.x;
+                y=roomtype.position.y;
             }
         }
         
@@ -423,16 +463,16 @@ class DrawingPanel extends JPanel {
         else{
             switch (direction) {
                 case "E":
-                    x += (wprev+1);
+                    x += (wprev);
                     break;
                 case "W":
-                    x -= (wprev+1);
+                    x -= (wprev);
                     break;
                 case "N":
-                    y -= (hprev+1);
+                    y -= (hprev);
                     break;
                 case "S":
-                    y += (hprev+1);
+                    y += (hprev);
                     break;
                 case "drag":
                     x = x1;
@@ -470,11 +510,21 @@ class DrawingPanel extends JPanel {
         hprev = height;
         wprev = width;
     }
+    public void delRoom(){
+        
+        for (int i = 0; i < rooms.size(); i++) {
+            if(rooms.get(i).isSelected){
+                rooms.remove(i);
+            }
+            repaint();
+        }
+    }
+
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-
+        Graphics2D g2 = (Graphics2D) g;
         for (Room room : rooms) {
             switch(room.type) {
                 case "Bedroom":
@@ -494,16 +544,17 @@ class DrawingPanel extends JPanel {
                     break;
             }
             g.fillRect(room.position.x, room.position.y, room.w, room.h);
-            Graphics2D g2 = (Graphics2D) g;
+            
             if(room.isSelected==true){
                 
-                g.setColor(Color.BLACK);
+                
                 g2.setStroke(new BasicStroke(5)); 
             }
             else{
-                g.setColor(Color.BLACK);
+                
                 g2.setStroke(new BasicStroke(1));
             }
+            g.setColor(Color.BLACK);
             g2.drawRect(room.position.x, room.position.y, room.w, room.h); // 1px border for rooms
             g2.setColor(Color.BLACK);
             FontMetrics fm = g.getFontMetrics();
@@ -514,6 +565,7 @@ class DrawingPanel extends JPanel {
                 g.fillOval(i, j, 5, 5); 
             }
         }
+
         
     }
 }
