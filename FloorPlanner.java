@@ -176,6 +176,7 @@ public class FloorPlanner extends JFrame {
                     }
                     
                 }
+                
                 if((clickPoint.x!=checkx||clickPoint.y!=checky)&&pressedRoom){
                     System.out.println("Im here"+ index);
                     //selectedRoom.position.x=clickPoint.x-diffx;
@@ -499,10 +500,10 @@ class DrawingPanel extends JPanel {
                     x += (wprev);
                     break;
                 case "W":
-                    x -= (wprev);
+                    x -= width;
                     break;
                 case "N":
-                    y -= (hprev);
+                    y -= height;
                     break;
                 case "S":
                     y += (hprev);
