@@ -24,6 +24,7 @@ import javax.swing.border.MatteBorder;
 public class FloorPlanner extends JFrame {
     private DrawingPanel drawingPanel; 
     private String selectedDirection;
+    private String selectedPosition = "";
     private String selectedItem= "Bedroom";
     public int width, height,index;
     public int checkx,checky;
@@ -133,7 +134,7 @@ public class FloorPlanner extends JFrame {
                     //selectedRoom.position.x=clickPoint.x-diffx;
                     //selectedRoom.position.y=clickPoint.y-diffy;
                     drawingPanel.rooms.remove(index);
-                    drawingPanel.addRoom(selectedItem, width, height, selectedDirection, drawingPanel, clickPoint.x-diffx, clickPoint.y-diffy);
+                    drawingPanel.addRoom(selectedItem, width, height, selectedDirection,selectedPosition, drawingPanel, clickPoint.x-diffx, clickPoint.y-diffy);
                     selectedRoom=null;
                     
                 }drawingPanel.repaint();
@@ -238,7 +239,7 @@ public class FloorPlanner extends JFrame {
         roomDirection.setBackground(Color.decode("#999999"));
         roomDirection.setLayout(new GridLayout(1,5,10,10));
 
-        JLabel direction = new JLabel("Position");
+        JLabel direction = new JLabel("Direction");
         roomDirection.add(direction);
 
         JButton north = new JButton("N");
@@ -260,6 +261,33 @@ public class FloorPlanner extends JFrame {
         west.setBackground(Color.decode("#dddddd"));
         west.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
         roomDirection.add(west);
+
+        JPanel roomPosition = new JPanel();
+        optionsPanel.add(roomPosition, BorderLayout.SOUTH);
+        roomDirection.setBackground(Color.decode("#999999"));
+        roomDirection.setLayout(new GridLayout(1,5,10,10));
+
+        JLabel position = new JLabel("Position:");
+        roomPosition.add(position);
+
+        JButton left = new JButton("L/U");
+        left.setBackground(Color.decode("#dddddd"));
+        left.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+        roomPosition.add(left);
+
+        JButton centre = new JButton("C");
+        centre.setBackground(Color.decode("#dddddd"));
+        centre.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+        roomPosition.add(centre);
+
+        JButton right = new JButton("R/D");
+        right.setBackground(Color.decode("#dddddd"));
+        right.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+        roomPosition.add(right);
+
+
+
+
 
         north.addActionListener(new ActionListener() {
             @Override
@@ -323,6 +351,27 @@ public class FloorPlanner extends JFrame {
         east.addActionListener(directionListener);
         west.addActionListener(directionListener);
 
+
+        ActionListener positionListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JButton clickedButton = (JButton) e.getSource();
+                selectedPosition = clickedButton.getText();
+        
+                // Highlight the selected button and reset others
+                left.setBackground(Color.decode("#dddddd"));
+                centre.setBackground(Color.decode("#dddddd"));
+                right.setBackground(Color.decode("#dddddd"));
+        
+                clickedButton.setBackground(Color.YELLOW); // Highlight the selected button
+            }
+        };
+        
+        
+        left.addActionListener(positionListener);
+        centre.addActionListener(positionListener);
+        right.addActionListener(positionListener);
+
         room.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -345,7 +394,7 @@ public class FloorPlanner extends JFrame {
                     height = Integer.parseInt(getHeight.getText());
                 }
 
-                drawingPanel.addRoom(selectedItem, width, height, selectedDirection, drawingPanel, 0, 0);
+                drawingPanel.addRoom(selectedItem, width, height, selectedDirection,selectedPosition, drawingPanel, 0, 0);
                 System.out.println(selectedItem+" "+width+" "+height+" "+ selectedDirection);
                 System.out.println(drawingPanel.rooms);
                 selectedDirection = "";
@@ -422,7 +471,8 @@ class DrawingPanel extends JPanel {
     }
     
     // Method to add room and trigger repaint
-    public void addRoom(String room, int width, int height, String direction, JPanel panel, int x1, int y1) {
+    public void addRoom(String room, int width, int height, String direction,String posn, JPanel panel, int x1, int y1) {
+        
         for(Room roomtype: rooms){
             if (roomtype.isSelected){
 
@@ -440,27 +490,132 @@ class DrawingPanel extends JPanel {
         else{
             switch (direction) {
                 case "E":
-                    x += (wprev);
+                    x += wprev; // Move right by the width of the previous room
+                    switch (posn) {
+                        case "L/U":
+                            if (height == hprev) {
+                                y += (height / 3); // Adjust Y if heights are equal
+                            } else if (height < hprev) {
+                                break; // No change if new height is smaller
+                            } else {
+                                y -= (height-hprev); // Adjust Y for larger height
+                            }
+                            break;
+                        case "C":
+                            if (height == hprev) {
+                                break; // No change if heights are equal
+                            } else if (height < hprev) {
+                                y += (hprev-height)/2; // Move up if new height is smaller
+                            } else {
+                                y -= (height-hprev)/2;// Move down if new height is larger
+                            }
+                            break;
+                        case "R/D":
+                            if (height == hprev) {
+                                y -= (height / 3); // Adjust Y if heights are equal
+                            } else if (height < hprev) {
+                                y += (hprev-height); // Move up if new height is smaller
+                            } else {
+                                break; // No change if new height is larger
+                            }
+                            break;
+                    }
                     break;
+    
                 case "W":
-                    x -= (width);
+                    x -= width; // Move left by the width of the new room
+                    switch (posn) {
+                        case "L/U":
+                            if (height == hprev) {
+                                y += (height / 3); // Adjust Y if heights are equal
+                            } else if (height < hprev) {
+                                break; // No change if new height is smaller
+                            } else {
+                                y -= (height-hprev); // Adjust Y for larger height
+                            }
+                            break;
+                        case "C":
+                            if (height == hprev) {
+                                break; // No change if heights are equal
+                            } else if (height < hprev) {
+                                y += (hprev-height)/2; // Move up if new height is smaller
+                            } else {
+                                y -= (height-hprev)/2;; // Move down if new height is larger
+                            }
+                            break;
+                        case "R/D":
+                            if (height == hprev) {
+                                y -= (height / 3); // Adjust Y if heights are equal
+                            } else if (height < hprev) {
+                                y += (hprev-height); // Move up if new height is smaller
+                            } else {
+                                break; // No change if new height is larger
+                            }
+                            break;
+                    }
                     break;
+    
                 case "N":
-                    y -= (height);
+                    y -= height; // Move up by the height of the new room
+                    switch (posn) {
+                        case "L/U":
+                            if (width == wprev) {
+                                x -= (width / 3); // Adjust X for equal width
+                            } else if (width < wprev) {
+                                break; // No change if new width is smaller
+                            } else {
+                                x -= (width - wprev) ; // Center for larger width
+                            }
+                            break;
+                        case "C":
+                            x += (wprev - width) / 2; // Center horizontally
+                            break;
+                        case "R/D":
+                            if (width == wprev) {
+                                x += (width / 3); // Adjust X for equal width
+                            } else if (width < wprev) {
+                                x += (wprev - width); // Align to left for smaller width
+                            } else {
+                                break; // No change if new width is larger
+                            }
+                            break;
+                    }
                     break;
+    
                 case "S":
-                    y += (hprev);
+                    y += hprev; // Move down by the height of the previous room
+                    switch (posn) {
+                        case "L/U" -> {
+                            if (width == wprev) {
+                                x -= (width / 3); // Adjust X for equal width
+                            } else if (width < wprev) {
+                                break; // No change if new width is smaller
+                            } else {
+                                x -= (width - wprev); // Align to left for larger width
+                            }
+                    }
+                        case "C" -> x += (wprev - width) / 2; // Center horizontally
+                        case "R/D" -> {
+                            if (width == wprev) {
+                                x += (width / 3); // Adjust X for equal width
+                            } else if (width < wprev) {
+                                x += (wprev-width); // Align to right for smaller width
+                            } else {
+                                break; // No change if new width is larger
+                            }
+                    }
+                    }
                     break;
-               
-                default:
-                    if(x + wprev<1260){
-                        x += (wprev);
-                        
-                    }else{
-                        x=631;
-                        y += (hprev);
-                    }break;
 
+    
+                default:
+                    if (x + wprev < 1260) {
+                        x += wprev; // Move right if within bounds
+                    } else {
+                        x = 631; // Reset x position if out of bounds
+                        y += hprev; // Move down by the height of the previous room
+                    }
+                    break;
             }
         }
         int columns = panel.getWidth()/2;
