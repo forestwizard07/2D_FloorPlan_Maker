@@ -49,6 +49,9 @@ public class FloorPlanner extends JFrame {
             @Override
             public void mouseClicked(MouseEvent event) {
                 Point clickPoint = event.getPoint(); // Get the location where the user clicked
+                System.out.println("---------------");
+                System.out.println(clickPoint.x);
+                
                 Boolean clickedRoom = false;
                 Boolean pressedRoom = false;
                 System.out.println(drawingPanel.getWidth()+" "+drawingPanel.getHeight());
@@ -91,51 +94,7 @@ public class FloorPlanner extends JFrame {
                     }
                 }  
             }
-            
-            /*public void mousePressed(MouseEvent event){
-                Point clickPoint = event.getPoint();
-               
-                
-                if(!drawingPanel.rooms.isEmpty()){
-                    for (Room room: drawingPanel.rooms){
                         
-                        if (room.contains(clickPoint)) {
-                            checkx= clickPoint.x;
-                            checky = clickPoint.y;
-                            index = drawingPanel.rooms.indexOf(room);
-                            System.out.println(index);
-                            System.out.println("Room pressed: " + room.type);
-                            //room.isSelected = true;
-                            pressedRoom = true; // Mark the room as selected
-                            drawingPanel.repaint();
-                            System.out.println(room.position.x+" "+room.position.y);
-                            diffx = clickPoint.x - room.position.x;
-                            diffy = clickPoint.y - room.position.y;
-                            selectedItem = room.type;
-                            width = room.w;
-                            height = room.h;
-                            selectedDirection = "drag"; 
-                            selectedRoom = room;                                                      
-                        }
-                    }
-                    
-                }
-            }*/
-            
-            /*public void mouseReleased(MouseEvent event){
-                Point clickPoint= event.getPoint();
-                if((clickPoint.x!=checkx||clickPoint.y!=checky)&&clickedRoom&&pressedRoom){
-                    System.out.println("Im here"+ index);
-                    //selectedRoom.position.x=clickPoint.x-diffx;
-                    //selectedRoom.position.y=clickPoint.y-diffy;
-                    drawingPanel.rooms.remove(index);
-                    drawingPanel.addRoom(selectedItem, width, height, selectedDirection, drawingPanel, clickPoint.x-diffx, clickPoint.y-diffy);
-                    selectedRoom=null;
-                    
-                }drawingPanel.repaint();
-                
-                
-            }*/
         });
 
         drawingPanel.addMouseMotionListener(new MouseMotionAdapter() {
@@ -222,6 +181,16 @@ public class FloorPlanner extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 frame.dispose();
+            }
+        });
+
+        saveItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ArrayList<String> a=new ArrayList<>();
+                for(Room room: drawingPanel.rooms){
+                    
+                }
             }
         });
 
@@ -484,8 +453,14 @@ class DrawingPanel extends JPanel {
                     break;
                
                 default:
-                    x += (wprev+1);
-                    break;
+                    if(x + wprev<1260){
+                        x += (wprev);
+                        
+                    }else{
+                        x=631;
+                        y += (hprev);
+                    }break;
+
             }
         }
         int columns = panel.getWidth()/2;
@@ -497,6 +472,7 @@ class DrawingPanel extends JPanel {
         repaint();
         hprev = height;
         wprev = width;
+        System.out.println(rooms);
     }
     public void delRoom(){
         
