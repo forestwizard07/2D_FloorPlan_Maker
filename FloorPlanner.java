@@ -48,6 +48,10 @@ public class FloorPlanner extends JFrame {
             
             @Override
             public void mouseClicked(MouseEvent event) {
+                if (event.getClickCount() < 2) {
+                        
+                    
+                
                 Point clickPoint = event.getPoint(); // Get the location where the user clicked
                 Boolean clickedRoom = false;
                 Boolean pressedRoom = false;
@@ -91,7 +95,7 @@ public class FloorPlanner extends JFrame {
                     }
                 }
                 
-                
+            }
             }
             
             /*public void mousePressed(MouseEvent event){
@@ -147,6 +151,7 @@ public class FloorPlanner extends JFrame {
                 Boolean clickedRoom = false;
                 Boolean pressedRoom = false;
                 Point clickPoint= e.getPoint();
+                
                 if(!drawingPanel.rooms.isEmpty()){
                     for (Room room: drawingPanel.rooms){
                         
@@ -178,8 +183,8 @@ public class FloorPlanner extends JFrame {
                     drawingPanel.rooms.remove(index);
                     drawingPanel.addRoom(selectedItem, width, height, selectedDirection, drawingPanel, clickPoint.x-diffx, clickPoint.y-diffy);
                     selectedRoom=null;
-                    
-                }drawingPanel.repaint();
+                    drawingPanel.repaint();
+                }
                 
                 
                 
