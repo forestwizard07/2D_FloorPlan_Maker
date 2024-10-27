@@ -501,10 +501,10 @@ class DrawingPanel extends JPanel {
                     x += (wprev);
                     break;
                 case "W":
-                    x -= (wprev);
+                    x -= (width);
                     break;
                 case "N":
-                    y -= (hprev);
+                    y -= (height);
                     break;
                 case "S":
                     y += (hprev);
@@ -577,10 +577,7 @@ class DrawingPanel extends JPanel {
             g2.setColor(Color.BLACK);
             FontMetrics fm = g.getFontMetrics();
             g.drawString(room.type, (room.w - fm.stringWidth(room.type))/2+room.position.x, (room.h - fm.getHeight())/2 + fm.getAscent()+room.position.y);
-        }
-
-
-        
+        } 
     }
 }
 
