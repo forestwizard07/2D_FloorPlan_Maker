@@ -31,7 +31,10 @@ public class FloorPlanner extends JFrame {
     public Room selectedRoom;
     public int diffx;
     public int diffy;
+    private Point originalPoint; 
     public FloorPlanner(){
+          // Declare this at the class level
+
         JFrame frame = new JFrame();
         frame.setSize(800,800);
         // Set the JFrame to full screen mode
@@ -42,9 +45,8 @@ public class FloorPlanner extends JFrame {
         frame.setBackground(Color.WHITE);
         drawingPanel = new DrawingPanel();
         drawingPanel.setVisible(true);
-       
+
         drawingPanel.addMouseListener(new MouseAdapter() {
-            
             
             @Override
             public void mouseClicked(MouseEvent event) {
@@ -61,6 +63,9 @@ public class FloorPlanner extends JFrame {
                             room.isSelected = true;
                             clickedRoom = true; // Mark the room as selected
                             drawingPanel.repaint();
+
+                            originalPoint = new Point(room.position.x, room.position.y);
+
                             System.out.println(room.type);
                             checkx= clickPoint.x;
                             checky = clickPoint.y;
@@ -77,7 +82,7 @@ public class FloorPlanner extends JFrame {
                             width = room.w;
                             height = room.h;
                             selectedDirection = "drag"; 
-                            selectedRoom = room;   
+                            selectedRoom = room;  
                             //break; // Exit loop once the clicked room is found
                         }
                     }
@@ -89,53 +94,9 @@ public class FloorPlanner extends JFrame {
                         }
 
                     }
+                    
                 }  
             }
-            
-            /*public void mousePressed(MouseEvent event){
-                Point clickPoint = event.getPoint();
-               
-                
-                if(!drawingPanel.rooms.isEmpty()){
-                    for (Room room: drawingPanel.rooms){
-                        
-                        if (room.contains(clickPoint)) {
-                            checkx= clickPoint.x;
-                            checky = clickPoint.y;
-                            index = drawingPanel.rooms.indexOf(room);
-                            System.out.println(index);
-                            System.out.println("Room pressed: " + room.type);
-                            //room.isSelected = true;
-                            pressedRoom = true; // Mark the room as selected
-                            drawingPanel.repaint();
-                            System.out.println(room.position.x+" "+room.position.y);
-                            diffx = clickPoint.x - room.position.x;
-                            diffy = clickPoint.y - room.position.y;
-                            selectedItem = room.type;
-                            width = room.w;
-                            height = room.h;
-                            selectedDirection = "drag"; 
-                            selectedRoom = room;                                                      
-                        }
-                    }
-                    
-                }
-            }*/
-            
-            /*public void mouseReleased(MouseEvent event){
-                Point clickPoint= event.getPoint();
-                if((clickPoint.x!=checkx||clickPoint.y!=checky)&&clickedRoom&&pressedRoom){
-                    System.out.println("Im here"+ index);
-                    //selectedRoom.position.x=clickPoint.x-diffx;
-                    //selectedRoom.position.y=clickPoint.y-diffy;
-                    drawingPanel.rooms.remove(index);
-                    drawingPanel.addRoom(selectedItem, width, height, selectedDirection, drawingPanel, clickPoint.x-diffx, clickPoint.y-diffy);
-                    selectedRoom=null;
-                    
-                }drawingPanel.repaint();
-                
-                
-            }*/
         });
 
         drawingPanel.addMouseMotionListener(new MouseMotionAdapter() {
@@ -152,19 +113,16 @@ public class FloorPlanner extends JFrame {
                             checkx= clickPoint.x;
                             checky = clickPoint.y;
                             index = drawingPanel.rooms.indexOf(room);
-                            System.out.println(index);
-                            System.out.println("Room pressed: " + room.type);
                             //room.isSelected = true;
                             pressedRoom = true; // Mark the room as selected
                             drawingPanel.repaint();
-                            System.out.println(room.position.x+" "+room.position.y);
                             diffx = clickPoint.x - room.position.x;
                             diffy = clickPoint.y - room.position.y;
                             selectedItem = room.type;
                             width = room.w;
                             height = room.h;
                             //selectedDirection = "drag"; 
-                            selectedRoom = room;                                                      
+                            selectedRoom=room; 
                         }
                     }
                     
@@ -193,8 +151,10 @@ public class FloorPlanner extends JFrame {
                 }*/
 
             }
+
         });
-        
+
+            
         
         JMenuBar menuBar = new JMenuBar();
         
@@ -223,6 +183,8 @@ public class FloorPlanner extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 frame.dispose();
             }
+
+
         });
 
         menuBar.add(fileMenu);
@@ -242,7 +204,32 @@ public class FloorPlanner extends JFrame {
         placeHolder.setBackground(Color.decode("#999999"));
 
         placeHolder.add(optionsPanel, BorderLayout.SOUTH);
-        
+
+        /*JCheckBox grid = new JCheckBox("Grid ON/OFF");
+        grid.setBackground(Color.decode("#dddddd"));
+        grid.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+        optionsPanel.add(grid);
+
+        grid.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(grid.isSelected()){
+                    displayGrid = true;
+                    System.out.println(displayGrid);
+                    
+                    drawingPanel.displayrid(displayGrid);
+                }
+                    
+                else{
+                    displayGrid = false;
+                    System.out.println(displayGrid);
+                    
+                    drawingPanel.displaygrid(displayGrid);
+                }
+                    
+
+            }
+        });*/        
         
         JLabel heighttext = new JLabel("Enter Height:");
         optionsPanel.add(heighttext);
@@ -433,10 +420,25 @@ class Room {
         
         return this.isSelected;
     }
+
+    public boolean checkOverlap() {
+        int overlap =0;
+        for (Room roomInList : DrawingPanel.rooms) {
+            if (this != roomInList &&
+                this.position.x < roomInList.position.x + roomInList.w &&
+                this.position.x + this.w > roomInList.position.x &&
+                this.position.y < roomInList.position.y + roomInList.h &&
+                this.position.y + this.h > roomInList.position.y) {
+                overlap++;
+            }
+        }
+        return overlap!=0;
+    }
+    
 }
 
 class DrawingPanel extends JPanel {
-    public List<Room> rooms = new ArrayList<>();
+    public static List<Room> rooms = new ArrayList<>();
     static int x = 100;
     static int y = 100;
     static int hprev=0,wprev=0;
@@ -482,7 +484,10 @@ class DrawingPanel extends JPanel {
                 case "S":
                     y += (hprev);
                     break;
-               
+                //case "drag":
+                    //x = x1;
+                    //y= y1;
+                    //break; 
                 default:
                     x += (wprev+1);
                     break;
@@ -490,10 +495,29 @@ class DrawingPanel extends JPanel {
         }
         int columns = panel.getWidth()/2;
         int rows = panel.getHeight()/2;
+
+        Point pos = new Point(x, y);
+
+        Room new_room = new Room(room, pos, width, height, direction);
       
-        rooms.add(new Room(room, new Point(x, y), width, height, direction));
-        
-        
+        rooms.add(new_room);
+
+        if(new_room.checkOverlap()){
+            System.out.println("Before Overlap correction: " + DrawingPanel.rooms);
+            System.out.println(new_room + " OVERLAPS!!!!!");
+            DrawingPanel.rooms.removeLast();
+            switch (direction) {
+                case "E" -> x -= (wprev);
+                case "W" -> x += (width);
+                case "N" -> y += (height);
+                case "S" -> y -= (hprev);
+                default -> x -= (wprev+1);
+            }
+            System.out.println(new_room + " Was removed");
+            System.out.println("After Overlap correction: " + DrawingPanel.rooms);
+            
+        }
+
         repaint();
         hprev = height;
         wprev = width;
