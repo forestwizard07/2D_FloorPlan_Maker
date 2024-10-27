@@ -2,6 +2,7 @@ import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FontMetrics;
+import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
@@ -451,10 +452,25 @@ class Room {
         
         return this.isSelected;
     }
+
+    public boolean checkOverlap() {
+        int overlap =0;
+        for (Room roomInList : DrawingPanel.rooms) {
+            if (this != roomInList &&
+                this.position.x < roomInList.position.x + roomInList.w &&
+                this.position.x + this.w > roomInList.position.x &&
+                this.position.y < roomInList.position.y + roomInList.h &&
+                this.position.y + this.h > roomInList.position.y) {
+                overlap++;
+            }
+        }
+        return overlap!=0;
+    }
+
 }
 
 class DrawingPanel extends JPanel {
-    public List<Room> rooms = new ArrayList<>();
+    public static List<Room> rooms = new ArrayList<>();
     static int x = 100;
     static int y = 100;
     static int hprev=0,wprev=0;
@@ -621,7 +637,29 @@ class DrawingPanel extends JPanel {
         int columns = panel.getWidth()/2;
         int rows = panel.getHeight()/2;
       
-        rooms.add(new Room(room, new Point(x, y), width, height, direction));
+        Point pos = new Point(x, y);
+
+        Room new_room = new Room(room, pos, width, height, direction);
+      
+        rooms.add(new_room);
+
+        if(new_room.checkOverlap()){
+            System.out.println("Before Overlap correction: " + DrawingPanel.rooms);
+            System.out.println(new_room + " OVERLAPS!!!!!");/////////////////////
+            DrawingPanel.rooms.removeLast();
+            switch (direction) {
+                case "E" -> x -= (wprev);
+                case "W" -> x += (width);
+                case "N" -> y += (height);
+                case "S" -> y -= (hprev);
+                default -> x -= (wprev+1);
+            }
+            System.out.println(new_room + " Was removed");
+            System.out.println("After Overlap correction: " + DrawingPanel.rooms);
+            JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(panel);
+    OverlapDialog dialog = new OverlapDialog(parentFrame, new_room + " overlaps with an existing room. Please reposition.");
+    dialog.setVisible(true);
+        }
         
         
         repaint();
@@ -710,5 +748,30 @@ class Screenshot{
         else{
             System.out.println("Save command canceled");
         }        
+    }
+}
+
+
+class OverlapDialog extends JDialog {
+    public OverlapDialog(Frame parent, String message) {
+        super(parent, "Overlap Detected", true);
+        
+        // Set up the dialog layout
+        JPanel panel = new JPanel(new BorderLayout());
+        JLabel label = new JLabel(message);
+        panel.add(label, BorderLayout.CENTER);
+
+        // Add a dismiss button
+        JButton dismissButton = new JButton("Dismiss");
+        dismissButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+            }
+        });
+        panel.add(dismissButton, BorderLayout.SOUTH);
+
+        add(panel);
+        setSize(300, 150);
+        setLocationRelativeTo(parent);
     }
 }
