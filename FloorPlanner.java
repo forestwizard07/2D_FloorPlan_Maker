@@ -73,9 +73,7 @@ public class FloorPlanner extends JFrame {
                         }
 
                     }
-                }
-                
-                
+                }  
             }
             
             public void mousePressed(MouseEvent event){
@@ -485,6 +483,7 @@ class DrawingPanel extends JPanel {
         }
         int columns = panel.getWidth()/2;
         int rows = panel.getHeight()/2;
+        /*
         int xcoordinate = x/xscale;
         int ycoordinate = y/yscale; 
 
@@ -503,6 +502,7 @@ class DrawingPanel extends JPanel {
             y = (ycoordinate+yscale)*yscale;
         }
         System.out.println("Printing new coordinates"+x+" "+y);
+        */
         rooms.add(new Room(room, new Point(x, y), width, height, direction));
         
         
@@ -560,11 +560,13 @@ class DrawingPanel extends JPanel {
             FontMetrics fm = g.getFontMetrics();
             g.drawString(room.type, (room.w - fm.stringWidth(room.type))/2+room.position.x, (room.h - fm.getHeight())/2 + fm.getAscent()+room.position.y);
         }
+        /*
         for(int i=0;i<=1646;i+=xscale){
             for(int j=0;j<=986;j+=yscale){
                 g.fillOval(i, j, 5, 5); 
             }
         }
+            */
 
         
     }
