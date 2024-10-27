@@ -20,8 +20,6 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.MatteBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 // me big lawda
 public class FloorPlanner extends JFrame {
     private DrawingPanel drawingPanel; 
@@ -47,10 +45,12 @@ public class FloorPlanner extends JFrame {
        
         drawingPanel.addMouseListener(new MouseAdapter() {
             
+            
             @Override
             public void mouseClicked(MouseEvent event) {
                 Point clickPoint = event.getPoint(); // Get the location where the user clicked
                 Boolean clickedRoom = false;
+                Boolean pressedRoom = false;
                 System.out.println(drawingPanel.getWidth()+" "+drawingPanel.getHeight());
                 if(!drawingPanel.rooms.isEmpty()){
                     for (Room room: drawingPanel.rooms){
@@ -62,6 +62,22 @@ public class FloorPlanner extends JFrame {
                             clickedRoom = true; // Mark the room as selected
                             drawingPanel.repaint();
                             System.out.println(room.type);
+                            checkx= clickPoint.x;
+                            checky = clickPoint.y;
+                            index = drawingPanel.rooms.indexOf(room);
+                            System.out.println(index);
+                            System.out.println("Room pressed: " + room.type);
+                            //room.isSelected = true;
+                            pressedRoom = true; // Mark the room as selected
+                            drawingPanel.repaint();
+                            System.out.println(room.position.x+" "+room.position.y);
+                            diffx = clickPoint.x - room.position.x;
+                            diffy = clickPoint.y - room.position.y;
+                            selectedItem = room.type;
+                            width = room.w;
+                            height = room.h;
+                            selectedDirection = "drag"; 
+                            selectedRoom = room;   
                             //break; // Exit loop once the clicked room is found
                         }
                     }
@@ -78,9 +94,9 @@ public class FloorPlanner extends JFrame {
                 
             }
             
-            public void mousePressed(MouseEvent event){
+            /*public void mousePressed(MouseEvent event){
                 Point clickPoint = event.getPoint();
-                Boolean pressedRoom = false;
+               
                 
                 if(!drawingPanel.rooms.isEmpty()){
                     for (Room room: drawingPanel.rooms){
@@ -106,11 +122,11 @@ public class FloorPlanner extends JFrame {
                     }
                     
                 }
-            }
+            }*/
             
-            public void mouseReleased(MouseEvent event){
+            /*public void mouseReleased(MouseEvent event){
                 Point clickPoint= event.getPoint();
-                if(clickPoint.x!=checkx||clickPoint.y!=checky){
+                if((clickPoint.x!=checkx||clickPoint.y!=checky)&&clickedRoom&&pressedRoom){
                     System.out.println("Im here"+ index);
                     //selectedRoom.position.x=clickPoint.x-diffx;
                     //selectedRoom.position.y=clickPoint.y-diffy;
@@ -121,12 +137,52 @@ public class FloorPlanner extends JFrame {
                 }drawingPanel.repaint();
                 
                 
-            }
+            }*/
         });
 
         drawingPanel.addMouseMotionListener(new MouseMotionAdapter() {
-            @Override
+            
+           
             public void mouseDragged(MouseEvent e) {
+                Boolean clickedRoom = false;
+                Boolean pressedRoom = false;
+                Point clickPoint= e.getPoint();
+                if(!drawingPanel.rooms.isEmpty()){
+                    for (Room room: drawingPanel.rooms){
+                        
+                        if (room.contains(clickPoint)) {
+                            checkx= clickPoint.x;
+                            checky = clickPoint.y;
+                            index = drawingPanel.rooms.indexOf(room);
+                            System.out.println(index);
+                            System.out.println("Room pressed: " + room.type);
+                            //room.isSelected = true;
+                            pressedRoom = true; // Mark the room as selected
+                            drawingPanel.repaint();
+                            System.out.println(room.position.x+" "+room.position.y);
+                            diffx = clickPoint.x - room.position.x;
+                            diffy = clickPoint.y - room.position.y;
+                            selectedItem = room.type;
+                            width = room.w;
+                            height = room.h;
+                            //selectedDirection = "drag"; 
+                            selectedRoom = room;                                                      
+                        }
+                    }
+                    
+                }
+                if((clickPoint.x!=checkx||clickPoint.y!=checky)&&pressedRoom){
+                    System.out.println("Im here"+ index);
+                    //selectedRoom.position.x=clickPoint.x-diffx;
+                    //selectedRoom.position.y=clickPoint.y-diffy;
+                    drawingPanel.rooms.remove(index);
+                    drawingPanel.addRoom(selectedItem, width, height, selectedDirection, drawingPanel, clickPoint.x-diffx, clickPoint.y-diffy);
+                    selectedRoom=null;
+                    
+                }drawingPanel.repaint();
+                
+                
+                
                 if (selectedRoom != null) {
                     int newx = e.getX() - diffx;
                     int newy = e.getY() - diffy;
@@ -134,6 +190,10 @@ public class FloorPlanner extends JFrame {
                     selectedRoom.position.y = newy;
                     drawingPanel.repaint(); 
                 }
+                /*for (Room room: drawingPanel.rooms){
+                    room.isSelected = false;
+                }*/
+
             }
         });
         
@@ -170,7 +230,7 @@ public class FloorPlanner extends JFrame {
         JPanel placeHolder = new JPanel();
         placeHolder.setLayout(new BorderLayout());
 
-        optionsPanel.setLayout(new GridLayout(13,2,10,10));
+        optionsPanel.setLayout(new GridLayout(10,2,10,10));
         optionsPanel.setBorder(new MatteBorder(2, 0, 0, 0, Color.BLACK));
         placeHolder.setBorder(new MatteBorder(0, 2, 2, 2, Color.BLACK));
         optionsPanel.setBackground(Color.decode("#999999"));
@@ -202,39 +262,7 @@ public class FloorPlanner extends JFrame {
                     
 
             }
-        });*/
-
-        JLabel xscale = new JLabel("X Scale:");
-        optionsPanel.add(xscale);
-        JSlider scalex = new JSlider(JSlider.HORIZONTAL, 50, 500, 100);
-        scalex.setMajorTickSpacing(50);
-        scalex.setMinorTickSpacing(50);
-        scalex.setSnapToTicks(true);
-        scalex.setPaintTicks(true);
-        scalex.setPaintLabels(true);
-        optionsPanel.add(scalex);
-        scalex.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent e) {
-                drawingPanel.addXScale(scalex.getValue());
-            }
-        });
-        JLabel yscale = new JLabel("Y Scale:");
-        optionsPanel.add(yscale);
-        JSlider scaley = new JSlider(JSlider.HORIZONTAL, 50, 500, 100);
-        scaley.setMajorTickSpacing(50);
-        scaley.setMinorTickSpacing(50);
-        scaley.setSnapToTicks(true);
-        scaley.setPaintTicks(true);
-        scaley.setPaintLabels(true);
-        
-        optionsPanel.add(scaley);
-        scaley.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent e) {
-                drawingPanel.addYScale(scaley.getValue());
-            }
-        });
-
-        
+        });*/        
         
         JLabel heighttext = new JLabel("Enter Height:");
         optionsPanel.add(heighttext);
@@ -474,34 +502,16 @@ class DrawingPanel extends JPanel {
                 case "S":
                     y += (hprev);
                     break;
-                case "drag":
-                    x = x1;
-                    y= y1;
-                    break; 
+                //case "drag":
+                    //x = x1;
+                    //y= y1;
+                    //break; 
                 default:
                     x += (wprev+1);
                     break;
             }
         }
-        int columns = panel.getWidth()/2;
-        int rows = panel.getHeight()/2;
-        int xcoordinate = x/xscale;
-        int ycoordinate = y/yscale; 
-
-        System.out.println("Printing coordinates"+xcoordinate+" "+ycoordinate);
-        if((x/xscale)-xcoordinate<(xcoordinate+xscale)-(x/xscale)){
-            x = xcoordinate*xscale;
-        }
-        else{
-            x= (xcoordinate+xscale)*xscale;
-        }
-
-        if((y/yscale)-ycoordinate<(ycoordinate+yscale)-(y/yscale)){
-            y = ycoordinate*yscale;
-        }
-        else{
-            y = (ycoordinate+yscale)*yscale;
-        }
+        
         System.out.println("Printing new coordinates"+x+" "+y);
         rooms.add(new Room(room, new Point(x, y), width, height, direction));
         
@@ -559,11 +569,6 @@ class DrawingPanel extends JPanel {
             g2.setColor(Color.BLACK);
             FontMetrics fm = g.getFontMetrics();
             g.drawString(room.type, (room.w - fm.stringWidth(room.type))/2+room.position.x, (room.h - fm.getHeight())/2 + fm.getAscent()+room.position.y);
-        }
-        for(int i=0;i<=1646;i+=xscale){
-            for(int j=0;j<=986;j+=yscale){
-                g.fillOval(i, j, 5, 5); 
-            }
         }
 
         
