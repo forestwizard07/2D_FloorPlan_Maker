@@ -223,8 +223,6 @@ public class FloorPlanner extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 frame.dispose();
             }
-
-
         });
 
         menuBar.add(fileMenu);
@@ -244,32 +242,7 @@ public class FloorPlanner extends JFrame {
         placeHolder.setBackground(Color.decode("#999999"));
 
         placeHolder.add(optionsPanel, BorderLayout.SOUTH);
-
-        /*JCheckBox grid = new JCheckBox("Grid ON/OFF");
-        grid.setBackground(Color.decode("#dddddd"));
-        grid.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
-        optionsPanel.add(grid);
-
-        grid.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(grid.isSelected()){
-                    displayGrid = true;
-                    System.out.println(displayGrid);
-                    
-                    drawingPanel.displayrid(displayGrid);
-                }
-                    
-                else{
-                    displayGrid = false;
-                    System.out.println(displayGrid);
-                    
-                    drawingPanel.displaygrid(displayGrid);
-                }
-                    
-
-            }
-        });*/        
+        
         
         JLabel heighttext = new JLabel("Enter Height:");
         optionsPanel.add(heighttext);
@@ -509,10 +482,7 @@ class DrawingPanel extends JPanel {
                 case "S":
                     y += (hprev);
                     break;
-                //case "drag":
-                    //x = x1;
-                    //y= y1;
-                    //break; 
+               
                 default:
                     x += (wprev+1);
                     break;
