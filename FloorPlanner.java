@@ -52,10 +52,11 @@ public class FloorPlanner extends JFrame {
                 System.out.println(clickPoint.x);
                 
                 Boolean clickedRoom = false;
+                @SuppressWarnings("unused")
                 Boolean pressedRoom = false;
                 System.out.println(drawingPanel.getWidth()+" "+drawingPanel.getHeight());
-                if(!drawingPanel.rooms.isEmpty()){
-                    for (Room room: drawingPanel.rooms){
+                if(!DrawingPanel.rooms.isEmpty()){
+                    for (Room room: DrawingPanel.rooms){
                         room.isSelected=false;
                         if (room.contains(clickPoint)) {
                             
@@ -66,7 +67,7 @@ public class FloorPlanner extends JFrame {
                             System.out.println(room.type);
                             checkx= clickPoint.x;
                             checky = clickPoint.y;
-                            index = drawingPanel.rooms.indexOf(room);
+                            index = DrawingPanel.rooms.indexOf(room);
                             System.out.println(index);
                             System.out.println("Room pressed: " + room.type);
                             //room.isSelected = true;
@@ -99,17 +100,18 @@ public class FloorPlanner extends JFrame {
         drawingPanel.addMouseMotionListener(new MouseMotionAdapter() {
             
            
+            @Override
             public void mouseDragged(MouseEvent e) {
                 Boolean clickedRoom = false;
                 Boolean pressedRoom = false;
                 Point clickPoint= e.getPoint();
-                if(!drawingPanel.rooms.isEmpty()){
-                    for (Room room: drawingPanel.rooms){
+                if(!DrawingPanel.rooms.isEmpty()){
+                    for (Room room: DrawingPanel.rooms){
                         
                         if (room.contains(clickPoint)) {
                             checkx= clickPoint.x;
                             checky = clickPoint.y;
-                            index = drawingPanel.rooms.indexOf(room);
+                            index = DrawingPanel.rooms.indexOf(room);
                             System.out.println(index);
                             System.out.println("Room pressed: " + room.type);
                             //room.isSelected = true;
@@ -131,7 +133,7 @@ public class FloorPlanner extends JFrame {
                     System.out.println("Im here"+ index);
                     //selectedRoom.position.x=clickPoint.x-diffx;
                     //selectedRoom.position.y=clickPoint.y-diffy;
-                    drawingPanel.rooms.remove(index);
+                    DrawingPanel.rooms.remove(index);
                     drawingPanel.addRoom(selectedItem, width, height, selectedDirection,selectedPosition, drawingPanel, clickPoint.x-diffx, clickPoint.y-diffy);
                     selectedRoom=null;
                     
@@ -169,27 +171,18 @@ public class FloorPlanner extends JFrame {
         fileMenu.add(exportItem);
         fileMenu.add(exitItem);
 
-        exportItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Screenshot.takeScreenshot(drawingPanel);
-            }
+        exportItem.addActionListener((ActionEvent e) -> {
+            Screenshot.takeScreenshot(drawingPanel);
         });
 
-        exitItem.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                frame.dispose();
-            }
+        exitItem.addActionListener((ActionEvent e) -> {
+            frame.dispose();
         });
 
-        saveItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ArrayList<String> a=new ArrayList<>();
-                for(Room room: drawingPanel.rooms){
-                    
-                }
+        saveItem.addActionListener((ActionEvent e) -> {
+            ArrayList<String> a=new ArrayList<>();
+            for(Room room: DrawingPanel.rooms){
+                
             }
         });
 
@@ -287,44 +280,32 @@ public class FloorPlanner extends JFrame {
 
 
 
-        north.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                north.setBackground(Color.YELLOW);
-                south.setBackground(Color.decode("#dddddd"));
-                east.setBackground(Color.decode("#dddddd"));
-                west.setBackground(Color.decode("#dddddd"));
-            }
+        north.addActionListener((var e) -> {
+            north.setBackground(Color.YELLOW);
+            south.setBackground(Color.decode("#dddddd"));
+            east.setBackground(Color.decode("#dddddd"));
+            west.setBackground(Color.decode("#dddddd"));
         });
 
-        south.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                south.setBackground(Color.YELLOW);
-                north.setBackground(Color.decode("#dddddd"));
-                east.setBackground(Color.decode("#dddddd"));
-                west.setBackground(Color.decode("#dddddd"));
-            }
+        south.addActionListener((ActionEvent e) -> {
+            south.setBackground(Color.YELLOW);
+            north.setBackground(Color.decode("#dddddd"));
+            east.setBackground(Color.decode("#dddddd"));
+            west.setBackground(Color.decode("#dddddd"));
         });
 
-        east.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                east.setBackground(Color.YELLOW);
-                south.setBackground(Color.decode("#dddddd"));
-                north.setBackground(Color.decode("#dddddd"));
-                west.setBackground(Color.decode("#dddddd"));
-            }
+        east.addActionListener((ActionEvent e) -> {
+            east.setBackground(Color.YELLOW);
+            south.setBackground(Color.decode("#dddddd"));
+            north.setBackground(Color.decode("#dddddd"));
+            west.setBackground(Color.decode("#dddddd"));
         });
 
-        west.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                west.setBackground(Color.YELLOW);
-                south.setBackground(Color.decode("#dddddd"));
-                east.setBackground(Color.decode("#dddddd"));
-                north.setBackground(Color.decode("#dddddd"));
-            }
+        west.addActionListener((ActionEvent e) -> {
+            west.setBackground(Color.YELLOW);
+            south.setBackground(Color.decode("#dddddd"));
+            east.setBackground(Color.decode("#dddddd"));
+            north.setBackground(Color.decode("#dddddd"));
         });
 
         JButton addRoom = new JButton("+ Add");
@@ -337,32 +318,27 @@ public class FloorPlanner extends JFrame {
         delRoom.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
         optionsPanel.add(delRoom);
 
-        ActionListener directionListener = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JButton clickedButton = (JButton) e.getSource();
-                selectedDirection = clickedButton.getText();
-            }
+        ActionListener directionListener = (ActionEvent e) -> {
+            JButton clickedButton = (JButton) e.getSource();
+            selectedDirection = clickedButton.getText();
         };
+        
         north.addActionListener(directionListener);
         south.addActionListener(directionListener);
         east.addActionListener(directionListener);
         west.addActionListener(directionListener);
 
 
-        ActionListener positionListener = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JButton clickedButton = (JButton) e.getSource();
-                selectedPosition = clickedButton.getText();
-        
-                // Highlight the selected button and reset others
-                left.setBackground(Color.decode("#dddddd"));
-                centre.setBackground(Color.decode("#dddddd"));
-                right.setBackground(Color.decode("#dddddd"));
-        
-                clickedButton.setBackground(Color.YELLOW); // Highlight the selected button
-            }
+        ActionListener positionListener = (ActionEvent e) -> {
+            JButton clickedButton = (JButton) e.getSource();
+            selectedPosition = clickedButton.getText();
+            
+            // Highlight the selected button and reset others
+            left.setBackground(Color.decode("#dddddd"));
+            centre.setBackground(Color.decode("#dddddd"));
+            right.setBackground(Color.decode("#dddddd"));
+            
+            clickedButton.setBackground(Color.YELLOW); // Highlight the selected button
         };
         
         
@@ -370,46 +346,36 @@ public class FloorPlanner extends JFrame {
         centre.addActionListener(positionListener);
         right.addActionListener(positionListener);
 
-        room.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JComboBox<String> source = (JComboBox<String>) e.getSource();
-                selectedItem = (String) source.getSelectedItem();
-            }
+        room.addActionListener((ActionEvent e) -> {
+            JComboBox<String> source = (JComboBox<String>) e.getSource();
+            selectedItem = (String) source.getSelectedItem();
         });
 
-        addRoom.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(Objects.equals(getWidth.getText(), "")){
-                    width = 100;
-                } else {
-                    width = Integer.parseInt(getWidth.getText());
-                }
-                if(Objects.equals(getHeight.getText(), "")){
-                    height = 100;
-                } else {
-                    height = Integer.parseInt(getHeight.getText());
-                }
-
-                drawingPanel.addRoom(selectedItem, width, height, selectedDirection,selectedPosition, drawingPanel, 0, 0);
-                System.out.println(selectedItem+" "+width+" "+height+" "+ selectedDirection);
-                System.out.println(drawingPanel.rooms);
-                selectedDirection = "";
-                west.setBackground(Color.decode("#dddddd"));
-                south.setBackground(Color.decode("#dddddd"));
-                east.setBackground(Color.decode("#dddddd"));
-                north.setBackground(Color.decode("#dddddd"));
+        addRoom.addActionListener((ActionEvent e) -> {
+            if(Objects.equals(getWidth.getText(), "")){
+                width = 100;
+            } else {
+                width = Integer.parseInt(getWidth.getText());
             }
+            if(Objects.equals(getHeight.getText(), "")){
+                height = 100;
+            } else {
+                height = Integer.parseInt(getHeight.getText());
+            }
+            
+            drawingPanel.addRoom(selectedItem, width, height, selectedDirection,selectedPosition, drawingPanel, 0, 0);
+            System.out.println(selectedItem+" "+width+" "+height+" "+ selectedDirection);
+            System.out.println(DrawingPanel.rooms);
+            selectedDirection = "";
+            west.setBackground(Color.decode("#dddddd"));
+            south.setBackground(Color.decode("#dddddd"));
+            east.setBackground(Color.decode("#dddddd"));
+            north.setBackground(Color.decode("#dddddd"));
         });
 
 
-        delRoom.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                drawingPanel.delRoom();
-                
-            }
+        delRoom.addActionListener((ActionEvent e) -> {
+            drawingPanel.delRoom();
         });
 
         
@@ -458,7 +424,7 @@ class Screenshot{
 
 
 class OverlapDialog extends JDialog {
-    @SuppressWarnings("Convert2Lambda")
+    
     public OverlapDialog(Frame parent, String message) {
         super(parent, "Overlap Detected", true);
         
@@ -469,10 +435,8 @@ class OverlapDialog extends JDialog {
 
         // Add a dismiss button
         JButton dismissButton = new JButton("Dismiss");
-        dismissButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
+        dismissButton.addActionListener((ActionEvent e) -> {
+            dispose();
         });
         panel.add(dismissButton, BorderLayout.SOUTH);
 
