@@ -25,17 +25,24 @@ public class Room {
     }
 
     public boolean checkOverlap() {
-        int overlap =0;
         for (Room roomInList : DrawingPanel.rooms) {
             if (this != roomInList &&
                 this.position.x < roomInList.position.x + roomInList.w &&
                 this.position.x + this.w > roomInList.position.x &&
                 this.position.y < roomInList.position.y + roomInList.h &&
                 this.position.y + this.h > roomInList.position.y) {
-                overlap++;
+                    
+                int xOverlap = Math.min(this.position.x + this.w, roomInList.position.x + roomInList.w) 
+                                - Math.max(this.position.x, roomInList.position.x);
+                int yOverlap = Math.min(this.position.y + this.h, roomInList.position.y + roomInList.h) 
+                                - Math.max(this.position.y, roomInList.position.y);
+    
+                // Only return true if both xOverlap and yOverlap are positive, indicating an actual intersection area
+                if (xOverlap > 0 && yOverlap > 0) {
+                    return true;
+                }
             }
         }
-        return overlap!=0;
+        return false; // No overlaps found
     }
-
 }

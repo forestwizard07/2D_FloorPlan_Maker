@@ -50,136 +50,14 @@ public class DrawingPanel extends JPanel {
             x = panel.getWidth()/2;
         }
         else{
-            switch (direction) {
-                case "E" -> {
-                    x += wprev; // Move right by the width of the previous room
-                    switch (posn) {
-                        case "L/U" -> {
-                            if (height == hprev) {
-                                y += (height / 3); // Adjust Y if heights are equal
-                            } else if (height < hprev) {
-                                break; // No change if new height is smaller
-                            } else {
-                                y -= (height-hprev); // Adjust Y for larger height
-                            }
-                    }
-                        case "C" -> {
-                            if (height == hprev) {
-                                break; // No change if heights are equal
-                            } else if (height < hprev) {
-                                y += (hprev-height)/2; // Move up if new height is smaller
-                            } else {
-                                y -= (height-hprev)/2;// Move down if new height is larger
-                            }
-                    }
-                        case "R/D" -> {
-                            if (height == hprev) {
-                                y -= (height / 3); // Adjust Y if heights are equal
-                            } else if (height < hprev) {
-                                y += (hprev-height); // Move up if new height is smaller
-                            } else {
-                                break; // No change if new height is larger
-                            }
-                    }
-                    }
-                }
-    
-                case "W" -> {
-                    x -= width; // Move left by the width of the new room
-                    switch (posn) {
-                        case "L/U" -> {
-                            if (height == hprev) {
-                                y += (height / 3); // Adjust Y if heights are equal
-                            } else if (height < hprev) {
-                                break; // No change if new height is smaller
-                            } else {
-                                y -= (height-hprev); // Adjust Y for larger height
-                            }
-                    }
-                        case "C" -> {
-                            if (height == hprev) {
-                                break; // No change if heights are equal
-                            } else if (height < hprev) {
-                                y += (hprev-height)/2; // Move up if new height is smaller
-                            } else {
-                                y -= (height-hprev)/2; // Move down if new height is larger
-                            }
-                    }
-                        case "R/D" -> {
-                            if (height == hprev) {
-                                y -= (height / 3); // Adjust Y if heights are equal
-                            } else if (height < hprev) {
-                                y += (hprev-height); // Move up if new height is smaller
-                            } else {
-                                break; // No change if new height is larger
-                            }
-                    }
-                    }
-                }
-    
-                case "N" -> {
-                    y -= height; // Move up by the height of the new room
-                    switch (posn) {
-                        case "L/U" -> {
-                            if (width == wprev) {
-                                x -= (width / 3); // Adjust X for equal width
-                            } else if (width < wprev) {
-                                break; // No change if new width is smaller
-                            } else {
-                                x -= (width - wprev) ; // Center for larger width
-                            }
-                        }
-                        case "C" -> x += (wprev - width) / 2; // Center horizontally
-                        case "R/D" -> {
-                            if (width == wprev) {
-                                x += (width / 3); // Adjust X for equal width
-                            } else if (width < wprev) {
-                                x += (wprev - width); // Align to left for smaller width
-                            } else {
-                                break; // No change if new width is larger
-                            }
-                        }
-                    }
-                }
-
-    
-                case "S" -> {
-                    y += hprev; // Move down by the height of the previous room
-                    switch (posn) {
-                        case "L/U" -> {
-                            if (width == wprev) {
-                                x -= (width / 3); // Adjust X for equal width
-                            } else if (width < wprev) {
-                                break; // No change if new width is smaller
-                            } else {
-                                x -= (width - wprev); // Align to left for larger width
-                            }
-                        }
-                        case "C" -> x += (wprev - width) / 2; // Center horizontally
-                        case "R/D" -> {
-                            if (width == wprev) {
-                                x += (width / 3); // Adjust X for equal width
-                            } else if (width < wprev) {
-                                x += (wprev-width); // Align to right for smaller width
-                            } else {
-                                break; // No change if new width is larger
-                            }
-                        }
-                    }
-                }
-
-    
-                default -> {
-                    if (x + wprev < 1260) {
-                        x += wprev; // Move right if within bounds
-                    } else {
-                        x = 631; // Reset x position if out of bounds
-                        y += hprev; // Move down by the height of the previous room
-                    }
-                }
-            }
+            adjustPositionByDirection(direction, width, height, wprev, hprev);
+            adjustPositionByAlignment(direction, posn, width, height, wprev, hprev);
         }
 
+        if (x + wprev >= 1260) {
+            x = 631;
+            y += hprev;
+        }
         Point pos = new Point(x, y);
 
         Room new_room = new Room(room, pos, width, height, direction);
@@ -210,8 +88,8 @@ public class DrawingPanel extends JPanel {
         wprev = width;
         System.out.println(rooms);
     }
+    
     public void delRoom(){
-        
         for (int i = 0; i < rooms.size(); i++) {
             if(rooms.get(i).isSelected){
                 rooms.remove(i);
@@ -250,6 +128,61 @@ public class DrawingPanel extends JPanel {
             FontMetrics fm = g.getFontMetrics();
             g.drawString(room.type, (room.w - fm.stringWidth(room.type))/2+room.position.x, (room.h - fm.getHeight())/2 + fm.getAscent()+room.position.y);
         } 
+    }
+
+    private void adjustPositionByDirection(String direction, int width, int height, int wprev, int hprev) {
+        switch (direction) {
+            case "E" -> x += wprev;
+            case "W" -> x -= width;
+            case "N" -> y -= height;
+            case "S" -> y += hprev;
+            default-> x+=wprev;
+        }
+    }
+    
+    // Helper to adjust x and y based on alignment position
+    private void adjustPositionByAlignment(String direction, String posn, int width, int height, int wprev, int hprev) {
+        switch (posn) {
+            case "L/U" -> adjustLeftOrUpAlignment(direction, width, height, wprev, hprev);
+            case "C" -> adjustCenterAlignment(direction, width, height, wprev, hprev);
+            case "R/D" -> adjustRightOrDownAlignment(direction, width, height, wprev, hprev);
+        }
+    }
+    
+    // Handle adjustments for "L/U" position
+    private void adjustLeftOrUpAlignment(String direction, int width, int height, int wprev, int hprev) {
+        switch (direction) {
+            case "E", "W" -> {
+                if (height == hprev) y += height / 3;
+                else if (height > hprev) y -= (height - hprev);
+            }
+            case "N", "S" -> {
+                if (width == wprev) x -= width / 3;
+                else if (width > wprev) x -= (width - wprev);
+            }
+        }
+    }
+    
+    // Handle adjustments for "C" position
+    private void adjustCenterAlignment(String direction, int width, int height, int wprev, int hprev) {
+        switch (direction) {
+            case "E", "W" -> y += (hprev - height) / 2;
+            case "N", "S" -> x += (wprev - width) / 2;
+        }
+    }
+    
+    // Handle adjustments for "R/D" position
+    private void adjustRightOrDownAlignment(String direction, int width, int height, int wprev, int hprev) {
+        switch (direction) {
+            case "E", "W" -> {
+                if (height == hprev) y -= height / 3;
+                else if (height < hprev) y += (hprev - height);
+            }
+            case "N", "S" -> {
+                if (width == wprev) x += width / 3;
+                else if (width < wprev) x += (wprev - width);
+            }
+        }
     }
     
 }
