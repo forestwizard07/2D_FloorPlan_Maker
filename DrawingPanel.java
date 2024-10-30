@@ -67,7 +67,7 @@ public class DrawingPanel extends JPanel {
         if(new_room.checkOverlap()){
             System.out.println("Before Overlap correction: " + DrawingPanel.rooms);
             System.out.println(new_room + " OVERLAPS!!!!!");/////////////////////
-            DrawingPanel.rooms.removeLast();
+            (DrawingPanel.rooms).remove(DrawingPanel.rooms.size()-1);
             switch (direction) {
                 case "E" -> x -= (wprev);
                 case "W" -> x += (width);
