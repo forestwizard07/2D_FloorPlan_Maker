@@ -556,7 +556,7 @@ class DrawingPanel extends JPanel {
                             } else if (height < hprev) {
                                 y += (hprev-height)/2; // Move up if new height is smaller
                             } else {
-                                y -= (height-hprev)/2;; // Move down if new height is larger
+                                y -= (height-hprev)/2; // Move down if new height is larger
                             }
                             break;
                         case "R/D":
