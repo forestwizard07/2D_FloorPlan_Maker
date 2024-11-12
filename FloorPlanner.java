@@ -80,7 +80,8 @@ public class FloorPlanner extends JFrame {
                             width = room.w;
                             height = room.h;
                             selectedDirection = "drag"; 
-                            selectedRoom = room;   
+                            selectedRoom = room;  
+                            System.out.println("I'm in clicked"); 
                             //break; // Exit loop once the clicked room is found
                         }
                     }
@@ -94,7 +95,29 @@ public class FloorPlanner extends JFrame {
                     }
                 }  
             }
+            
                         
+        });
+        drawingPanel.addMouseListener(new MouseAdapter(){
+            public void MouseReleased(MouseEvent e){
+                 if (selectedRoom != null) {
+                    int newx = e.getX() - diffx;
+                    int newy = e.getY() - diffy;
+                    int oldx = checkx;
+                    int oldy = checky;
+                    selectedRoom.position.x = newx;
+                    selectedRoom.position.y = newy;
+                    if(selectedRoom.checkOverlap()){
+                        JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(frame);
+                        OverlapDialog dialog = new OverlapDialog(parentFrame, "The new "+selectedRoom.type + " overlaps with an existing room. Please enter again!");
+                        dialog.setVisible(true);
+                        selectedRoom.position.x = oldx;
+                        selectedRoom.position.y = oldy;
+                    }
+                    drawingPanel.repaint(); 
+                }
+
+            }
         });
 
         drawingPanel.addMouseMotionListener(new MouseMotionAdapter() {
@@ -102,34 +125,24 @@ public class FloorPlanner extends JFrame {
            
             @Override
             public void mouseDragged(MouseEvent e) {
-                Boolean clickedRoom = false;
-                Boolean pressedRoom = false;
+                //Boolean clickedRoom = false;
+                //Boolean pressedRoom = false;
+                //int counter = 0;
                 Point clickPoint= e.getPoint();
                 if(!DrawingPanel.rooms.isEmpty()){
                     for (Room room: DrawingPanel.rooms){
                         
                         if (room.contains(clickPoint)) {
-                            checkx= clickPoint.x;
-                            checky = clickPoint.y;
-                            index = DrawingPanel.rooms.indexOf(room);
-                            System.out.println(index);
-                            System.out.println("Room pressed: " + room.type);
-                            //room.isSelected = true;
-                            pressedRoom = true; // Mark the room as selected
-                            drawingPanel.repaint();
-                            System.out.println(room.position.x+" "+room.position.y);
+                            //checkx= clickPoint.x;
+                            //checky = clickPoint.y;
                             diffx = clickPoint.x - room.position.x;
                             diffy = clickPoint.y - room.position.y;
-                            selectedItem = room.type;
-                            width = room.w;
-                            height = room.h;
-                            //selectedDirection = "drag"; 
-                            selectedRoom = room;                                                      
+                            break;                                                    
                         }
                     }
                     
                 }
-                if((clickPoint.x!=checkx||clickPoint.y!=checky)&&pressedRoom){
+                /*if((clickPoint.x!=checkx||clickPoint.y!=checky)&&pressedRoom){
                     System.out.println("Im here"+ index);
                     //selectedRoom.position.x=clickPoint.x-diffx;
                     //selectedRoom.position.y=clickPoint.y-diffy;
@@ -137,15 +150,24 @@ public class FloorPlanner extends JFrame {
                     drawingPanel.addRoom(selectedItem, width, height, selectedDirection,selectedPosition, drawingPanel, clickPoint.x-diffx, clickPoint.y-diffy);
                     selectedRoom=null;
                     
-                }drawingPanel.repaint();
+                }drawingPanel.repaint();*/
                 
                 
                 
                 if (selectedRoom != null) {
                     int newx = e.getX() - diffx;
                     int newy = e.getY() - diffy;
+                    int oldx = checkx;
+                    int oldy = checky;
                     selectedRoom.position.x = newx;
                     selectedRoom.position.y = newy;
+                    if(selectedRoom.checkOverlap()){
+                        JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(frame);
+                        OverlapDialog dialog = new OverlapDialog(parentFrame, "The new "+selectedRoom.type + " overlaps with an existing room. Please enter again!");
+                        dialog.setVisible(true);
+                        selectedRoom.position.x = oldx;
+                        selectedRoom.position.y = oldy;
+                    }
                     drawingPanel.repaint(); 
                 }
                 /*for (Room room: drawingPanel.rooms){
@@ -441,7 +463,7 @@ class OverlapDialog extends JDialog {
         panel.add(dismissButton, BorderLayout.SOUTH);
 
         add(panel);
-        setSize(300, 150);
+        setSize(450, 150);
         setLocationRelativeTo(parent);
     }
 }

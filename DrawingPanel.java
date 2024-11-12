@@ -78,8 +78,8 @@ public class DrawingPanel extends JPanel {
             System.out.println(new_room + " Was removed");
             System.out.println("After Overlap correction: " + DrawingPanel.rooms);
             JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(panel);
-    OverlapDialog dialog = new OverlapDialog(parentFrame, new_room + " overlaps with an existing room. Please reposition.");
-    dialog.setVisible(true);
+            OverlapDialog dialog = new OverlapDialog(parentFrame, "The new "+new_room.type + " overlaps with an existing room. Please enter again!");
+            dialog.setVisible(true);
         }
         
         
