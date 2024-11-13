@@ -30,6 +30,13 @@ public class FloorPlanner extends JFrame {
     public Room selectedRoom;
     public int diffx;
     public int diffy;
+    public int oldx,oldy;
+    public Timer timer;
+    public int xcoordinate,ycoordinate;
+    public boolean dragged=false;
+    public int count=0;
+    public int initialx,initialy;
+    public boolean clickedRoom=false;
     public FloorPlanner(){
         JFrame frame = new JFrame();
         frame.setSize(800,800);
@@ -42,140 +49,96 @@ public class FloorPlanner extends JFrame {
         drawingPanel = new DrawingPanel();
         drawingPanel.setVisible(true);
        
-        drawingPanel.addMouseListener(new MouseAdapter() {
-            
-            
+        
+        timer = new Timer(1, new ActionListener() {
             @Override
-            public void mouseClicked(MouseEvent event) {
-                Point clickPoint = event.getPoint(); // Get the location where the user clicked
-                System.out.println("---------------");
-                System.out.println(clickPoint.x);
-                
-                Boolean clickedRoom = false;
-                @SuppressWarnings("unused")
-                Boolean pressedRoom = false;
-                System.out.println(drawingPanel.getWidth()+" "+drawingPanel.getHeight());
-                if(!DrawingPanel.rooms.isEmpty()){
-                    for (Room room: DrawingPanel.rooms){
-                        room.isSelected=false;
-                        if (room.contains(clickPoint)) {
-                            
-                            System.out.println("Room selected: " + room.type);
-                            room.isSelected = true;
-                            clickedRoom = true; // Mark the room as selected
-                            drawingPanel.repaint();
-                            System.out.println(room.type);
-                            checkx= clickPoint.x;
-                            checky = clickPoint.y;
-                            index = DrawingPanel.rooms.indexOf(room);
-                            System.out.println(index);
-                            System.out.println("Room pressed: " + room.type);
-                            //room.isSelected = true;
-                            pressedRoom = true; // Mark the room as selected
-                            drawingPanel.repaint();
-                            System.out.println(room.position.x+" "+room.position.y);
-                            diffx = clickPoint.x - room.position.x;
-                            diffy = clickPoint.y - room.position.y;
-                            selectedItem = room.type;
-                            width = room.w;
-                            height = room.h;
-                            selectedDirection = "drag"; 
-                            selectedRoom = room;  
-                            System.out.println("I'm in clicked"); 
-                            //break; // Exit loop once the clicked room is found
-                        }
-                    }
-                    if(clickedRoom==false){
-                        for (Room room: drawingPanel.rooms){
-                            room.isSelected=false;
-                            drawingPanel.repaint();
-                            System.out.println("Clicked canvas!");
-                        }
-
-                    }
-                }  
-            }
-            
-                        
-        });
-        drawingPanel.addMouseListener(new MouseAdapter(){
-            public void MouseReleased(MouseEvent e){
-                 if (selectedRoom != null) {
-                    int newx = e.getX() - diffx;
-                    int newy = e.getY() - diffy;
-                    int oldx = checkx;
-                    int oldy = checky;
-                    selectedRoom.position.x = newx;
-                    selectedRoom.position.y = newy;
-                    if(selectedRoom.checkOverlap()){
-                        JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(frame);
-                        OverlapDialog dialog = new OverlapDialog(parentFrame, "The new "+selectedRoom.type + " overlaps with an existing room. Please enter again!");
-                        dialog.setVisible(true);
-                        selectedRoom.position.x = oldx;
-                        selectedRoom.position.y = oldy;
-                    }
-                    drawingPanel.repaint(); 
-                }
-
-            }
-        });
-
-        drawingPanel.addMouseMotionListener(new MouseMotionAdapter() {
+            public void actionPerformed(ActionEvent e) {
+                // Code to run while the mouse is pressed
+                drawingPanel.addMouseMotionListener(new MouseMotionAdapter() {
             
            
-            @Override
-            public void mouseDragged(MouseEvent e) {
-                //Boolean clickedRoom = false;
-                //Boolean pressedRoom = false;
-                //int counter = 0;
-                Point clickPoint= e.getPoint();
-                if(!DrawingPanel.rooms.isEmpty()){
-                    for (Room room: DrawingPanel.rooms){
+                    @Override
+                    public void mouseDragged(MouseEvent event) {
+                        // Start the timer when the mouse is pressed
                         
-                        if (room.contains(clickPoint)) {
-                            //checkx= clickPoint.x;
-                            //checky = clickPoint.y;
-                            diffx = clickPoint.x - room.position.x;
-                            diffy = clickPoint.y - room.position.y;
-                            break;                                                    
-                        }
+                        Point clickPoint = event.getPoint();
+                        xcoordinate=clickPoint.x;
+                        ycoordinate=clickPoint.y; 
+                        //System.out.println("Running... Count: " + count);
                     }
-                    
+                });
+                System.out.println("Xcoordinate "+xcoordinate+" "+initialx);
+                if((xcoordinate!=0||ycoordinate!=0)&&(xcoordinate!=initialx||ycoordinate!=initialy)){
+                    selectedRoom.position.x = xcoordinate-diffx;
+                    selectedRoom.position.y =ycoordinate-diffy;
                 }
-                /*if((clickPoint.x!=checkx||clickPoint.y!=checky)&&pressedRoom){
-                    System.out.println("Im here"+ index);
-                    //selectedRoom.position.x=clickPoint.x-diffx;
-                    //selectedRoom.position.y=clickPoint.y-diffy;
-                    DrawingPanel.rooms.remove(index);
-                    drawingPanel.addRoom(selectedItem, width, height, selectedDirection,selectedPosition, drawingPanel, clickPoint.x-diffx, clickPoint.y-diffy);
-                    selectedRoom=null;
-                    
-                }drawingPanel.repaint();*/
+                drawingPanel.repaint();
+                System.out.println(xcoordinate+" "+ycoordinate);
+                System.out.println("Running... Count: " + count);
+                count++;
                 
-                
-                
-                if (selectedRoom != null) {
-                    int newx = e.getX() - diffx;
-                    int newy = e.getY() - diffy;
-                    int oldx = checkx;
-                    int oldy = checky;
-                    selectedRoom.position.x = newx;
-                    selectedRoom.position.y = newy;
-                    if(selectedRoom.checkOverlap()){
-                        JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(frame);
-                        OverlapDialog dialog = new OverlapDialog(parentFrame, "The new "+selectedRoom.type + " overlaps with an existing room. Please enter again!");
-                        dialog.setVisible(true);
-                        selectedRoom.position.x = oldx;
-                        selectedRoom.position.y = oldy;
-                    }
-                    drawingPanel.repaint(); 
-                }
-                /*for (Room room: drawingPanel.rooms){
-                    room.isSelected = false;
-                }*/
-
             }
         });
+
+        drawingPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                // Start the timer when the mouse is pressed
+                System.out.println("Starting Pressed");
+                Point clickPoint = e.getPoint();
+                
+                for(Room room: DrawingPanel.rooms){
+                    if(room.contains(clickPoint)){
+                        room.isSelected = true;
+                        drawingPanel.repaint();
+                        index = DrawingPanel.rooms.indexOf(room);
+                        diffx = clickPoint.x - room.position.x;
+                        diffy = clickPoint.y - room.position.y;
+                        oldx= room.position.x;
+                        oldy = room.position.y;
+                        selectedItem = room.type;
+                        width = room.w;
+                        height = room.h;
+                        selectedDirection = "drag"; 
+                        selectedRoom = room;  
+                        clickedRoom = true;
+                        initialx = clickPoint.x;
+                        initialy = clickPoint.y;
+                        timer.start();
+                    }
+                }
+                if(!clickedRoom){
+                    for (Room room: drawingPanel.rooms){
+                        room.isSelected=false;
+                        drawingPanel.repaint();
+                        
+                    }
+                }
+                
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                // Stop the timer when the mouse is released
+                timer.stop();
+                if(selectedRoom.checkOverlap()){
+                    JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(frame);
+                    OverlapDialog dialog = new OverlapDialog(parentFrame, "The new "+selectedRoom.type + " overlaps with an existing room. Please enter again!");
+                    dialog.setVisible(true);
+                    System.out.println("Overlap!");
+                    selectedRoom.position.x = oldx;
+                    selectedRoom.position.y = oldy;
+                }
+                xcoordinate=0;
+                ycoordinate=0;
+                drawingPanel.repaint(); 
+                System.out.println("Mouse released. Final count: " + count);
+                count = 0; // Reset the count
+            }
+        });
+
+        
+    
         
         
         JMenuBar menuBar = new JMenuBar();
