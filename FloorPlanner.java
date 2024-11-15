@@ -1,10 +1,7 @@
-import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.FontMetrics;
 import java.awt.Frame;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -15,12 +12,12 @@ import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.MatteBorder;
+
 // me big lawda
 public class FloorPlanner extends JFrame {
     private DrawingPanel drawingPanel; 
@@ -33,6 +30,13 @@ public class FloorPlanner extends JFrame {
     public Room selectedRoom;
     public int diffx;
     public int diffy;
+    public int oldx,oldy;
+    public Timer timer;
+    public int xcoordinate,ycoordinate;
+    public boolean dragged=false;
+    public int count=0;
+    public int initialx,initialy;
+    public boolean clickedRoom=false;
     public FloorPlanner(){
         JFrame frame = new JFrame();
         frame.setSize(800,800);
@@ -45,116 +49,96 @@ public class FloorPlanner extends JFrame {
         drawingPanel = new DrawingPanel();
         drawingPanel.setVisible(true);
        
-        drawingPanel.addMouseListener(new MouseAdapter() {
-            
-            
+        
+        timer = new Timer(1, new ActionListener() {
             @Override
-            public void mouseClicked(MouseEvent event) {
-                Point clickPoint = event.getPoint(); // Get the location where the user clicked
-                System.out.println("---------------");
-                System.out.println(clickPoint.x);
-                
-                Boolean clickedRoom = false;
-                Boolean pressedRoom = false;
-                System.out.println(drawingPanel.getWidth()+" "+drawingPanel.getHeight());
-                if(!drawingPanel.rooms.isEmpty()){
-                    for (Room room: drawingPanel.rooms){
-                        room.isSelected=false;
-                        if (room.contains(clickPoint)) {
-                            
-                            System.out.println("Room selected: " + room.type);
-                            room.isSelected = true;
-                            clickedRoom = true; // Mark the room as selected
-                            drawingPanel.repaint();
-                            System.out.println(room.type);
-                            checkx= clickPoint.x;
-                            checky = clickPoint.y;
-                            index = drawingPanel.rooms.indexOf(room);
-                            System.out.println(index);
-                            System.out.println("Room pressed: " + room.type);
-                            //room.isSelected = true;
-                            pressedRoom = true; // Mark the room as selected
-                            drawingPanel.repaint();
-                            System.out.println(room.position.x+" "+room.position.y);
-                            diffx = clickPoint.x - room.position.x;
-                            diffy = clickPoint.y - room.position.y;
-                            selectedItem = room.type;
-                            width = room.w;
-                            height = room.h;
-                            selectedDirection = "drag"; 
-                            selectedRoom = room;   
-                            //break; // Exit loop once the clicked room is found
-                        }
-                    }
-                    if(clickedRoom==false){
-                        for (Room room: drawingPanel.rooms){
-                            room.isSelected=false;
-                            drawingPanel.repaint();
-                            System.out.println("Clicked canvas!");
-                        }
-
-                    }
-                }  
-            }
-                        
-        });
-
-        drawingPanel.addMouseMotionListener(new MouseMotionAdapter() {
+            public void actionPerformed(ActionEvent e) {
+                // Code to run while the mouse is pressed
+                drawingPanel.addMouseMotionListener(new MouseMotionAdapter() {
             
            
-            public void mouseDragged(MouseEvent e) {
-                Boolean clickedRoom = false;
-                Boolean pressedRoom = false;
-                Point clickPoint= e.getPoint();
-                if(!drawingPanel.rooms.isEmpty()){
-                    for (Room room: drawingPanel.rooms){
+                    @Override
+                    public void mouseDragged(MouseEvent event) {
+                        // Start the timer when the mouse is pressed
                         
-                        if (room.contains(clickPoint)) {
-                            checkx= clickPoint.x;
-                            checky = clickPoint.y;
-                            index = drawingPanel.rooms.indexOf(room);
-                            System.out.println(index);
-                            System.out.println("Room pressed: " + room.type);
-                            //room.isSelected = true;
-                            pressedRoom = true; // Mark the room as selected
-                            drawingPanel.repaint();
-                            System.out.println(room.position.x+" "+room.position.y);
-                            diffx = clickPoint.x - room.position.x;
-                            diffy = clickPoint.y - room.position.y;
-                            selectedItem = room.type;
-                            width = room.w;
-                            height = room.h;
-                            //selectedDirection = "drag"; 
-                            selectedRoom = room;                                                      
-                        }
+                        Point clickPoint = event.getPoint();
+                        xcoordinate=clickPoint.x;
+                        ycoordinate=clickPoint.y; 
+                        //System.out.println("Running... Count: " + count);
                     }
-                    
+                });
+                System.out.println("Xcoordinate "+xcoordinate+" "+initialx);
+                if((xcoordinate!=0||ycoordinate!=0)&&(xcoordinate!=initialx||ycoordinate!=initialy)){
+                    selectedRoom.position.x = xcoordinate-diffx;
+                    selectedRoom.position.y =ycoordinate-diffy;
                 }
-                if((clickPoint.x!=checkx||clickPoint.y!=checky)&&pressedRoom){
-                    System.out.println("Im here"+ index);
-                    //selectedRoom.position.x=clickPoint.x-diffx;
-                    //selectedRoom.position.y=clickPoint.y-diffy;
-                    drawingPanel.rooms.remove(index);
-                    drawingPanel.addRoom(selectedItem, width, height, selectedDirection,selectedPosition, drawingPanel, clickPoint.x-diffx, clickPoint.y-diffy);
-                    selectedRoom=null;
-                    
-                }drawingPanel.repaint();
+                drawingPanel.repaint();
+                System.out.println(xcoordinate+" "+ycoordinate);
+                System.out.println("Running... Count: " + count);
+                count++;
                 
-                
-                
-                if (selectedRoom != null) {
-                    int newx = e.getX() - diffx;
-                    int newy = e.getY() - diffy;
-                    selectedRoom.position.x = newx;
-                    selectedRoom.position.y = newy;
-                    drawingPanel.repaint(); 
-                }
-                /*for (Room room: drawingPanel.rooms){
-                    room.isSelected = false;
-                }*/
-
             }
         });
+
+        drawingPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                // Start the timer when the mouse is pressed
+                System.out.println("Starting Pressed");
+                Point clickPoint = e.getPoint();
+                
+                for(Room room: DrawingPanel.rooms){
+                    if(room.contains(clickPoint)){
+                        room.isSelected = true;
+                        drawingPanel.repaint();
+                        index = DrawingPanel.rooms.indexOf(room);
+                        diffx = clickPoint.x - room.position.x;
+                        diffy = clickPoint.y - room.position.y;
+                        oldx= room.position.x;
+                        oldy = room.position.y;
+                        selectedItem = room.type;
+                        width = room.w;
+                        height = room.h;
+                        selectedDirection = "drag"; 
+                        selectedRoom = room;  
+                        clickedRoom = true;
+                        initialx = clickPoint.x;
+                        initialy = clickPoint.y;
+                        timer.start();
+                    }
+                }
+                if(!clickedRoom){
+                    for (Room room: drawingPanel.rooms){
+                        room.isSelected=false;
+                        drawingPanel.repaint();
+                        
+                    }
+                }
+                
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                // Stop the timer when the mouse is released
+                timer.stop();
+                if(selectedRoom.checkOverlap()){
+                    JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(frame);
+                    OverlapDialog dialog = new OverlapDialog(parentFrame, "The new "+selectedRoom.type + " overlaps with an existing room. Please enter again!");
+                    dialog.setVisible(true);
+                    System.out.println("Overlap!");
+                    selectedRoom.position.x = oldx;
+                    selectedRoom.position.y = oldy;
+                }
+                xcoordinate=0;
+                ycoordinate=0;
+                drawingPanel.repaint(); 
+                System.out.println("Mouse released. Final count: " + count);
+                count = 0; // Reset the count
+            }
+        });
+
+        
+    
         
         
         JMenuBar menuBar = new JMenuBar();
@@ -172,27 +156,18 @@ public class FloorPlanner extends JFrame {
         fileMenu.add(exportItem);
         fileMenu.add(exitItem);
 
-        exportItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Screenshot.takeScreenshot(drawingPanel);
-            }
+        exportItem.addActionListener((ActionEvent e) -> {
+            Screenshot.takeScreenshot(drawingPanel);
         });
 
-        exitItem.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                frame.dispose();
-            }
+        exitItem.addActionListener((ActionEvent e) -> {
+            frame.dispose();
         });
 
-        saveItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ArrayList<String> a=new ArrayList<>();
-                for(Room room: drawingPanel.rooms){
-                    
-                }
+        saveItem.addActionListener((ActionEvent e) -> {
+            ArrayList<String> a=new ArrayList<>();
+            for(Room room: DrawingPanel.rooms){
+                
             }
         });
 
@@ -290,44 +265,32 @@ public class FloorPlanner extends JFrame {
 
 
 
-        north.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                north.setBackground(Color.YELLOW);
-                south.setBackground(Color.decode("#dddddd"));
-                east.setBackground(Color.decode("#dddddd"));
-                west.setBackground(Color.decode("#dddddd"));
-            }
+        north.addActionListener((var e) -> {
+            north.setBackground(Color.YELLOW);
+            south.setBackground(Color.decode("#dddddd"));
+            east.setBackground(Color.decode("#dddddd"));
+            west.setBackground(Color.decode("#dddddd"));
         });
 
-        south.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                south.setBackground(Color.YELLOW);
-                north.setBackground(Color.decode("#dddddd"));
-                east.setBackground(Color.decode("#dddddd"));
-                west.setBackground(Color.decode("#dddddd"));
-            }
+        south.addActionListener((ActionEvent e) -> {
+            south.setBackground(Color.YELLOW);
+            north.setBackground(Color.decode("#dddddd"));
+            east.setBackground(Color.decode("#dddddd"));
+            west.setBackground(Color.decode("#dddddd"));
         });
 
-        east.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                east.setBackground(Color.YELLOW);
-                south.setBackground(Color.decode("#dddddd"));
-                north.setBackground(Color.decode("#dddddd"));
-                west.setBackground(Color.decode("#dddddd"));
-            }
+        east.addActionListener((ActionEvent e) -> {
+            east.setBackground(Color.YELLOW);
+            south.setBackground(Color.decode("#dddddd"));
+            north.setBackground(Color.decode("#dddddd"));
+            west.setBackground(Color.decode("#dddddd"));
         });
 
-        west.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                west.setBackground(Color.YELLOW);
-                south.setBackground(Color.decode("#dddddd"));
-                east.setBackground(Color.decode("#dddddd"));
-                north.setBackground(Color.decode("#dddddd"));
-            }
+        west.addActionListener((ActionEvent e) -> {
+            west.setBackground(Color.YELLOW);
+            south.setBackground(Color.decode("#dddddd"));
+            east.setBackground(Color.decode("#dddddd"));
+            north.setBackground(Color.decode("#dddddd"));
         });
 
         JButton addRoom = new JButton("+ Add");
@@ -340,32 +303,27 @@ public class FloorPlanner extends JFrame {
         delRoom.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
         optionsPanel.add(delRoom);
 
-        ActionListener directionListener = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JButton clickedButton = (JButton) e.getSource();
-                selectedDirection = clickedButton.getText();
-            }
+        ActionListener directionListener = (ActionEvent e) -> {
+            JButton clickedButton = (JButton) e.getSource();
+            selectedDirection = clickedButton.getText();
         };
+        
         north.addActionListener(directionListener);
         south.addActionListener(directionListener);
         east.addActionListener(directionListener);
         west.addActionListener(directionListener);
 
 
-        ActionListener positionListener = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JButton clickedButton = (JButton) e.getSource();
-                selectedPosition = clickedButton.getText();
-        
-                // Highlight the selected button and reset others
-                left.setBackground(Color.decode("#dddddd"));
-                centre.setBackground(Color.decode("#dddddd"));
-                right.setBackground(Color.decode("#dddddd"));
-        
-                clickedButton.setBackground(Color.YELLOW); // Highlight the selected button
-            }
+        ActionListener positionListener = (ActionEvent e) -> {
+            JButton clickedButton = (JButton) e.getSource();
+            selectedPosition = clickedButton.getText();
+            
+            // Highlight the selected button and reset others
+            left.setBackground(Color.decode("#dddddd"));
+            centre.setBackground(Color.decode("#dddddd"));
+            right.setBackground(Color.decode("#dddddd"));
+            
+            clickedButton.setBackground(Color.YELLOW); // Highlight the selected button
         };
         
         
@@ -373,46 +331,36 @@ public class FloorPlanner extends JFrame {
         centre.addActionListener(positionListener);
         right.addActionListener(positionListener);
 
-        room.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JComboBox<String> source = (JComboBox<String>) e.getSource();
-                selectedItem = (String) source.getSelectedItem();
-            }
+        room.addActionListener((ActionEvent e) -> {
+            JComboBox<String> source = (JComboBox<String>) e.getSource();
+            selectedItem = (String) source.getSelectedItem();
         });
 
-        addRoom.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(Objects.equals(getWidth.getText(), "")){
-                    width = 100;
-                } else {
-                    width = Integer.parseInt(getWidth.getText());
-                }
-                if(Objects.equals(getHeight.getText(), "")){
-                    height = 100;
-                } else {
-                    height = Integer.parseInt(getHeight.getText());
-                }
-
-                drawingPanel.addRoom(selectedItem, width, height, selectedDirection,selectedPosition, drawingPanel, 0, 0);
-                System.out.println(selectedItem+" "+width+" "+height+" "+ selectedDirection);
-                System.out.println(drawingPanel.rooms);
-                selectedDirection = "";
-                west.setBackground(Color.decode("#dddddd"));
-                south.setBackground(Color.decode("#dddddd"));
-                east.setBackground(Color.decode("#dddddd"));
-                north.setBackground(Color.decode("#dddddd"));
+        addRoom.addActionListener((ActionEvent e) -> {
+            if(Objects.equals(getWidth.getText(), "")){
+                width = 100;
+            } else {
+                width = Integer.parseInt(getWidth.getText());
             }
+            if(Objects.equals(getHeight.getText(), "")){
+                height = 100;
+            } else {
+                height = Integer.parseInt(getHeight.getText());
+            }
+            
+            drawingPanel.addRoom(selectedItem, width, height, selectedDirection,selectedPosition, drawingPanel, 0, 0);
+            System.out.println(selectedItem+" "+width+" "+height+" "+ selectedDirection);
+            System.out.println(DrawingPanel.rooms);
+            selectedDirection = "";
+            west.setBackground(Color.decode("#dddddd"));
+            south.setBackground(Color.decode("#dddddd"));
+            east.setBackground(Color.decode("#dddddd"));
+            north.setBackground(Color.decode("#dddddd"));
         });
 
 
-        delRoom.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                drawingPanel.delRoom();
-                
-            }
+        delRoom.addActionListener((ActionEvent e) -> {
+            drawingPanel.delRoom();
         });
 
         
@@ -425,298 +373,6 @@ public class FloorPlanner extends JFrame {
 
     public static void main(String[] args) {
         new FloorPlanner();
-    }
-}
-
-
-
-class Room {
-    String type;
-    Point position;
-    public int w = 100;
-    public int h = 100;
-    public String direction;
-    boolean isSelected;
-
-    Room(String type, Point position, int w, int h, String direction) {
-        this.type = type;
-        this.position = position;
-        this.w = w;
-        this.h = h;
-        this.direction = direction;
-        this.isSelected = false;
-    }
-    public boolean contains(Point p) {
-        
-        this.isSelected=p.x >= this.position.x && p.x <= this.position.x + w && p.y >= this.position.y && p.y <= this.position.y + h;
-        
-        return this.isSelected;
-    }
-
-    public boolean checkOverlap() {
-        int overlap =0;
-        for (Room roomInList : DrawingPanel.rooms) {
-            if (this != roomInList &&
-                this.position.x < roomInList.position.x + roomInList.w &&
-                this.position.x + this.w > roomInList.position.x &&
-                this.position.y < roomInList.position.y + roomInList.h &&
-                this.position.y + this.h > roomInList.position.y) {
-                overlap++;
-            }
-        }
-        return overlap!=0;
-    }
-
-}
-
-class DrawingPanel extends JPanel {
-    public static List<Room> rooms = new ArrayList<>();
-    static int x = 100;
-    static int y = 100;
-    static int hprev=0,wprev=0;
-    static int xscale=100,yscale=100;
-    public void addXScale(int x){
-        System.out.println("In the scale function"+x+" "+y);
-        xscale = x;
-        repaint();
-       
-    }
-    public void addYScale(int y){
-        yscale = y;
-        repaint();
-    }
-    
-    // Method to add room and trigger repaint
-    public void addRoom(String room, int width, int height, String direction,String posn, JPanel panel, int x1, int y1) {
-        
-        for(Room roomtype: rooms){
-            if (roomtype.isSelected){
-
-                hprev = roomtype.h;
-                wprev = roomtype.w;
-                x=roomtype.position.x;
-                y=roomtype.position.y;
-            }
-        }
-        
-        if(rooms.isEmpty()){
-            y = panel.getHeight()/2;
-            x = panel.getWidth()/2;
-        }
-        else{
-            switch (direction) {
-                case "E":
-                    x += wprev; // Move right by the width of the previous room
-                    switch (posn) {
-                        case "L/U":
-                            if (height == hprev) {
-                                y += (height / 3); // Adjust Y if heights are equal
-                            } else if (height < hprev) {
-                                break; // No change if new height is smaller
-                            } else {
-                                y -= (height-hprev); // Adjust Y for larger height
-                            }
-                            break;
-                        case "C":
-                            if (height == hprev) {
-                                break; // No change if heights are equal
-                            } else if (height < hprev) {
-                                y += (hprev-height)/2; // Move up if new height is smaller
-                            } else {
-                                y -= (height-hprev)/2;// Move down if new height is larger
-                            }
-                            break;
-                        case "R/D":
-                            if (height == hprev) {
-                                y -= (height / 3); // Adjust Y if heights are equal
-                            } else if (height < hprev) {
-                                y += (hprev-height); // Move up if new height is smaller
-                            } else {
-                                break; // No change if new height is larger
-                            }
-                            break;
-                    }
-                    break;
-    
-                case "W":
-                    x -= width; // Move left by the width of the new room
-                    switch (posn) {
-                        case "L/U":
-                            if (height == hprev) {
-                                y += (height / 3); // Adjust Y if heights are equal
-                            } else if (height < hprev) {
-                                break; // No change if new height is smaller
-                            } else {
-                                y -= (height-hprev); // Adjust Y for larger height
-                            }
-                            break;
-                        case "C":
-                            if (height == hprev) {
-                                break; // No change if heights are equal
-                            } else if (height < hprev) {
-                                y += (hprev-height)/2; // Move up if new height is smaller
-                            } else {
-                                y -= (height-hprev)/2;; // Move down if new height is larger
-                            }
-                            break;
-                        case "R/D":
-                            if (height == hprev) {
-                                y -= (height / 3); // Adjust Y if heights are equal
-                            } else if (height < hprev) {
-                                y += (hprev-height); // Move up if new height is smaller
-                            } else {
-                                break; // No change if new height is larger
-                            }
-                            break;
-                    }
-                    break;
-    
-                case "N":
-                    y -= height; // Move up by the height of the new room
-                    switch (posn) {
-                        case "L/U":
-                            if (width == wprev) {
-                                x -= (width / 3); // Adjust X for equal width
-                            } else if (width < wprev) {
-                                break; // No change if new width is smaller
-                            } else {
-                                x -= (width - wprev) ; // Center for larger width
-                            }
-                            break;
-                        case "C":
-                            x += (wprev - width) / 2; // Center horizontally
-                            break;
-                        case "R/D":
-                            if (width == wprev) {
-                                x += (width / 3); // Adjust X for equal width
-                            } else if (width < wprev) {
-                                x += (wprev - width); // Align to left for smaller width
-                            } else {
-                                break; // No change if new width is larger
-                            }
-                            break;
-                    }
-                    break;
-    
-                case "S":
-                    y += hprev; // Move down by the height of the previous room
-                    switch (posn) {
-                        case "L/U" -> {
-                            if (width == wprev) {
-                                x -= (width / 3); // Adjust X for equal width
-                            } else if (width < wprev) {
-                                break; // No change if new width is smaller
-                            } else {
-                                x -= (width - wprev); // Align to left for larger width
-                            }
-                    }
-                        case "C" -> x += (wprev - width) / 2; // Center horizontally
-                        case "R/D" -> {
-                            if (width == wprev) {
-                                x += (width / 3); // Adjust X for equal width
-                            } else if (width < wprev) {
-                                x += (wprev-width); // Align to right for smaller width
-                            } else {
-                                break; // No change if new width is larger
-                            }
-                    }
-                    }
-                    break;
-
-    
-                default:
-                    if (x + wprev < 1260) {
-                        x += wprev; // Move right if within bounds
-                    } else {
-                        x = 631; // Reset x position if out of bounds
-                        y += hprev; // Move down by the height of the previous room
-                    }
-                    break;
-            }
-        }
-        int columns = panel.getWidth()/2;
-        int rows = panel.getHeight()/2;
-      
-        Point pos = new Point(x, y);
-
-        Room new_room = new Room(room, pos, width, height, direction);
-      
-        rooms.add(new_room);
-
-        if(new_room.checkOverlap()){
-            System.out.println("Before Overlap correction: " + DrawingPanel.rooms);
-            System.out.println(new_room + " OVERLAPS!!!!!");/////////////////////
-            DrawingPanel.rooms.removeLast();
-            switch (direction) {
-                case "E" -> x -= (wprev);
-                case "W" -> x += (width);
-                case "N" -> y += (height);
-                case "S" -> y -= (hprev);
-                default -> x -= (wprev+1);
-            }
-            System.out.println(new_room + " Was removed");
-            System.out.println("After Overlap correction: " + DrawingPanel.rooms);
-            JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(panel);
-    OverlapDialog dialog = new OverlapDialog(parentFrame, new_room + " overlaps with an existing room. Please reposition.");
-    dialog.setVisible(true);
-        }
-        
-        
-        repaint();
-        hprev = height;
-        wprev = width;
-        System.out.println(rooms);
-    }
-    public void delRoom(){
-        
-        for (int i = 0; i < rooms.size(); i++) {
-            if(rooms.get(i).isSelected){
-                rooms.remove(i);
-            }
-            repaint();
-        }
-    }
-
-
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        Graphics2D g2 = (Graphics2D) g;
-        for (Room room : rooms) {
-            switch(room.type) {
-                case "Bedroom":
-                    g.setColor(Color.decode("#00cc00"));
-                    break;
-                case "Bathroom":
-                    g.setColor(Color.decode("#0066ff"));
-                    break;
-                case "Living Room":   
-                    g.setColor(Color.decode("#ff3399"));
-                    break;
-                case "Dining Room":
-                    g.setColor(Color.decode("#ffff00"));
-                    break;
-                case "Kitchen":
-                    g.setColor(Color.decode("#ff0000"));
-                    break;
-            }
-            g.fillRect(room.position.x, room.position.y, room.w, room.h);
-            
-            if(room.isSelected==true){
-                
-                
-                g2.setStroke(new BasicStroke(5)); 
-            }
-            else{
-                
-                g2.setStroke(new BasicStroke(1));
-            }
-            g.setColor(Color.BLACK);
-            g2.drawRect(room.position.x, room.position.y, room.w, room.h); // 1px border for rooms
-            g2.setColor(Color.BLACK);
-            FontMetrics fm = g.getFontMetrics();
-            g.drawString(room.type, (room.w - fm.stringWidth(room.type))/2+room.position.x, (room.h - fm.getHeight())/2 + fm.getAscent()+room.position.y);
-        } 
     }
 }
 
@@ -753,6 +409,7 @@ class Screenshot{
 
 
 class OverlapDialog extends JDialog {
+    
     public OverlapDialog(Frame parent, String message) {
         super(parent, "Overlap Detected", true);
         
@@ -763,15 +420,13 @@ class OverlapDialog extends JDialog {
 
         // Add a dismiss button
         JButton dismissButton = new JButton("Dismiss");
-        dismissButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
+        dismissButton.addActionListener((ActionEvent e) -> {
+            dispose();
         });
         panel.add(dismissButton, BorderLayout.SOUTH);
 
         add(panel);
-        setSize(300, 150);
+        setSize(450, 150);
         setLocationRelativeTo(parent);
     }
 }
