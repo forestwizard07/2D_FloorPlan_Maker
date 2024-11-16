@@ -74,8 +74,6 @@ public class FloorPlanner extends JFrame {
                 }
                 drawingPanel.repaint();
                 System.out.println(xcoordinate+" "+ycoordinate);
-                System.out.println("Running... Count: " + count);
-                count++;
                 
             }
         });
@@ -123,7 +121,7 @@ public class FloorPlanner extends JFrame {
                 timer.stop();
                 if(selectedRoom.checkOverlap()){
                     JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(frame);
-                    OverlapDialog dialog = new OverlapDialog(parentFrame, "The new "+selectedRoom.type + " overlaps with an existing room. Please enter again!");
+                    OverlapDialog dialog = new OverlapDialog(parentFrame, "The "+selectedRoom.type + " overlaps with an existing room. Please try again!");
                     dialog.setVisible(true);
                     System.out.println("Overlap!");
                     selectedRoom.position.x = oldx;
@@ -132,8 +130,6 @@ public class FloorPlanner extends JFrame {
                 xcoordinate=0;
                 ycoordinate=0;
                 drawingPanel.repaint(); 
-                System.out.println("Mouse released. Final count: " + count);
-                count = 0; // Reset the count
             }
         });
 
@@ -240,8 +236,8 @@ public class FloorPlanner extends JFrame {
 
         JPanel roomPosition = new JPanel();
         optionsPanel.add(roomPosition, BorderLayout.SOUTH);
-        roomDirection.setBackground(Color.decode("#999999"));
-        roomDirection.setLayout(new GridLayout(1,5,10,10));
+        roomPosition.setBackground(Color.decode("#999999"));
+        roomPosition.setLayout(new GridLayout(1,4,10,10));
 
         JLabel position = new JLabel("Position:");
         roomPosition.add(position);
@@ -293,12 +289,12 @@ public class FloorPlanner extends JFrame {
             north.setBackground(Color.decode("#dddddd"));
         });
 
-        JButton addRoom = new JButton("+ Add");
+        JButton addRoom = new JButton("+ | Add");
         addRoom.setBackground(Color.decode("#dddddd"));
         addRoom.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
         optionsPanel.add(addRoom);
 
-        JButton delRoom = new JButton("+ Delete");
+        JButton delRoom = new JButton("- Delete");
         delRoom.setBackground(Color.decode("#dddddd"));
         delRoom.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
         optionsPanel.add(delRoom);
