@@ -3,6 +3,7 @@ import java.awt.Color;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -330,7 +331,35 @@ public class FloorPlanner extends JFrame {
 
 
 
+        addFurniture.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                for(Room room: drawingPanel.rooms){
+                    if(room.isSelected){
+                        int x=room.position.x + room.w/2;
+                        int y=room.position.y + room.h/2;
+                        ImageIcon originalIcon = new ImageIcon("image.png");
+                        Image originalImage = originalIcon.getImage();
 
+                        // Scale the image down to a fixed size
+                        int width = 30; // Adjust as needed
+                        int height = 30; // Adjust as needed
+                        Image scaledImage = originalImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+
+                        // Create a JLabel with the scaled image
+                        JLabel imageLabel = new JLabel(new ImageIcon(scaledImage));
+                        imageLabel.setBounds(x, y, width, height); // Position and size
+
+                        // Add the image label to the panel
+                        drawingPanel.add(imageLabel);
+                        drawingPanel.repaint();
+
+
+
+                    }
+                }
+            }
+        });
 
         north.addActionListener((var e) -> {
             north.setBackground(Color.YELLOW);
