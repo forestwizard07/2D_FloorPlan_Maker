@@ -136,7 +136,7 @@ public class FloorPlanner extends JFrame {
         
     
         
-        
+
         JMenuBar menuBar = new JMenuBar();
         
         
@@ -172,20 +172,88 @@ public class FloorPlanner extends JFrame {
         Border borderThin = BorderFactory.createLineBorder(Color.BLACK, 1);
         menuBar.setBorder(borderThin);
         menuBar.setBackground(Color.decode("#999999"));
-
+        JPanel furniturePanel = new JPanel();
         JPanel optionsPanel = new JPanel();
         JPanel placeHolder = new JPanel();
+        JPanel furnitureplaceholder = new JPanel();
+        furnitureplaceholder.add(furniturePanel);
         placeHolder.setLayout(new BorderLayout());
-
-        optionsPanel.setLayout(new GridLayout(10,2,10,10));
+        furnitureplaceholder.setLayout(new GridLayout(2,5,10,10));
+        optionsPanel.setLayout(new GridLayout(12,2,10,10));
         optionsPanel.setBorder(new MatteBorder(2, 0, 0, 0, Color.BLACK));
+        furniturePanel.setLayout(new GridLayout(4,5,10,10));
         placeHolder.setBorder(new MatteBorder(0, 2, 2, 2, Color.BLACK));
         optionsPanel.setBackground(Color.decode("#999999"));
         placeHolder.setBackground(Color.decode("#999999"));
 
         placeHolder.add(optionsPanel, BorderLayout.SOUTH);
+        placeHolder.add(furniturePanel, BorderLayout.NORTH);
         
         
+        JLabel addfurniture = new JLabel("Furniture/Fixtures");
+        furniturePanel.add(addfurniture);
+        JPanel furniture = new JPanel();
+        furniture.setLayout(new GridLayout(2,5,10,10));
+        furniture.setBackground(Color.decode("#999999"));
+        
+        JButton bed = new JButton("Bed");
+        bed.setBackground(Color.decode("#dddddd"));
+        bed.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+        furniture.add(bed);
+
+        JButton chair = new JButton("Chair");
+        chair.setBackground(Color.decode("#dddddd"));
+        chair.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+        furniture.add(chair);
+
+        JButton table = new JButton("Table");
+        table.setBackground(Color.decode("#dddddd"));
+        table.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+        furniture.add(table);
+
+        JButton sofa = new JButton("Sofa");
+        sofa.setBackground(Color.decode("#dddddd"));
+        sofa.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+        furniture.add(sofa);
+
+        JButton dining = new JButton("Dining");
+        dining.setBackground(Color.decode("#dddddd"));
+        dining.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+        furniture.add(dining);
+
+        JButton commode = new JButton("Commode");
+        commode.setBackground(Color.decode("#dddddd"));
+        commode.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+        furniture.add(commode);
+
+        JButton basin = new JButton("Washbasin");
+        basin.setBackground(Color.decode("#dddddd"));
+        basin.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+        furniture.add(basin);
+
+        JButton shower = new JButton("Shower");
+        shower.setBackground(Color.decode("#dddddd"));
+        shower.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+        furniture.add(shower);
+
+        JButton sink = new JButton("Sink");
+        sink.setBackground(Color.decode("#dddddd"));
+        sink.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+        furniture.add(sink);
+
+        JButton stove = new JButton("Stove");
+        stove.setBackground(Color.decode("#dddddd"));
+        stove.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+        furniture.add(stove);
+
+        JButton addFurniture = new JButton("Add Furniture");
+        addFurniture.setBackground(Color.decode("#999999"));
+        addFurniture.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+        furniture.add(addFurniture);
+
+
+        
+        furniturePanel.add(furniture);
         JLabel heighttext = new JLabel("Enter Height:");
         optionsPanel.add(heighttext);
         JTextField getHeight = new JTextField(20);
