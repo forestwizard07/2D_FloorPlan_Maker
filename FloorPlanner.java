@@ -82,6 +82,7 @@ public class FloorPlanner extends JFrame {
 
         drawingPanel.addMouseListener(new MouseAdapter() {
             @Override
+            @SuppressWarnings("static-access")
             public void mousePressed(MouseEvent e) {
                 // Start the timer when the mouse is pressed
                 System.out.println("Starting Pressed");
@@ -166,9 +167,7 @@ public class FloorPlanner extends JFrame {
 
         saveItem.addActionListener((ActionEvent e) -> {
             ArrayList<String> a=new ArrayList<>();
-            for(Room room: DrawingPanel.rooms){
-                
-            }
+            
         });
 
         menuBar.add(fileMenu);
