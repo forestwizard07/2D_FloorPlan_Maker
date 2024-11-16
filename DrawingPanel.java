@@ -4,16 +4,20 @@ import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 
 public class DrawingPanel extends JPanel {
     public static List<Room> rooms = new ArrayList<>();
+    public static List<Furniture> furniture = new ArrayList<>();
     static int x = 100;
     static int y = 100;
     static int hprev=0,wprev=0;
@@ -66,7 +70,7 @@ public class DrawingPanel extends JPanel {
 
         if(new_room.checkOverlap()){
             System.out.println("Before Overlap correction: " + DrawingPanel.rooms);
-            System.out.println(new_room + " OVERLAPS!!!!!");/////////////////////
+            System.out.println(new_room + " OVERLAPS!!!!!");
             (DrawingPanel.rooms).remove(DrawingPanel.rooms.size()-1);
             switch (direction) {
                 case "E" -> x -= (wprev);
@@ -98,8 +102,25 @@ public class DrawingPanel extends JPanel {
         }
     }
 
+    public void addFurniture(String type, Room parentroom, JPanel panel, int x1, int y1) {
+        Furniture new_furniture = new Furniture(type, parentroom, x1, y1);
+        parentroom.furniturelist.add(new_furniture);
 
-    @Override
+        ImageIcon originalIcon = new ImageIcon("double_bed.png");
+        Image originalImage = originalIcon.getImage();
+        int width = 30; // Adjust as needed
+        int height = 30; // Adjust as needed
+        Image scaledImage = originalImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        JLabel imageLabel = new JLabel(new ImageIcon(scaledImage));
+        imageLabel.setBounds(x1, y1, width, height); 
+        add(imageLabel);
+        repaint();
+        
+    }
+    
+    
+    
+    @Override  
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
@@ -127,7 +148,8 @@ public class DrawingPanel extends JPanel {
             g2.setColor(Color.BLACK);
             FontMetrics fm = g.getFontMetrics();
             g.drawString(room.type, (room.w - fm.stringWidth(room.type))/2+room.position.x, (room.h - fm.getHeight())/2 + fm.getAscent()+room.position.y);
-        } 
+        }
+        
     }
 
     private void adjustPositionByDirection(String direction, int width, int height, int wprev, int hprev) {

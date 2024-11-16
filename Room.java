@@ -1,4 +1,6 @@
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Room {
@@ -8,7 +10,7 @@ public class Room {
     public int h = 100;
     public String direction;
     public boolean isSelected;
-
+    public static List<Furniture> furniturelist = new ArrayList<>(); 
     Room(String type, Point position, int w, int h, String direction) {
         this.type = type;
         this.position = position;
