@@ -175,16 +175,17 @@ public class FloorPlanner extends JFrame {
         JPanel furniturePanel = new JPanel();
         JPanel optionsPanel = new JPanel();
         JPanel placeHolder = new JPanel();
-        JPanel furnitureplaceholder = new JPanel();
-        furnitureplaceholder.add(furniturePanel);
+
+
         placeHolder.setLayout(new BorderLayout());
-        furnitureplaceholder.setLayout(new GridLayout(2,5,10,10));
+
         optionsPanel.setLayout(new GridLayout(12,2,10,10));
         optionsPanel.setBorder(new MatteBorder(2, 0, 0, 0, Color.BLACK));
-        furniturePanel.setLayout(new GridLayout(4,5,10,10));
+        furniturePanel.setLayout(new GridLayout(3,1,10,10));
         placeHolder.setBorder(new MatteBorder(0, 2, 2, 2, Color.BLACK));
         optionsPanel.setBackground(Color.decode("#999999"));
         placeHolder.setBackground(Color.decode("#999999"));
+        furniturePanel.setBackground(Color.decode("#999999"));
 
         placeHolder.add(optionsPanel, BorderLayout.SOUTH);
         placeHolder.add(furniturePanel, BorderLayout.NORTH);
@@ -247,13 +248,15 @@ public class FloorPlanner extends JFrame {
         furniture.add(stove);
 
         JButton addFurniture = new JButton("Add Furniture");
-        addFurniture.setBackground(Color.decode("#999999"));
+        addFurniture.setBackground(Color.decode("#dddddd"));
         addFurniture.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
-        furniture.add(addFurniture);
+        
+        furniturePanel.add(furniture);
+        furniturePanel.add(addFurniture);
 
 
         
-        furniturePanel.add(furniture);
+        
         JLabel heighttext = new JLabel("Enter Height:");
         optionsPanel.add(heighttext);
         JTextField getHeight = new JTextField(20);
