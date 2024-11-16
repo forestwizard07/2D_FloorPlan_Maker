@@ -74,8 +74,6 @@ public class FloorPlanner extends JFrame {
                 }
                 drawingPanel.repaint();
                 System.out.println(xcoordinate+" "+ycoordinate);
-                System.out.println("Running... Count: " + count);
-                count++;
                 
             }
         });
@@ -95,6 +93,7 @@ public class FloorPlanner extends JFrame {
                         index = DrawingPanel.rooms.indexOf(room);
                         diffx = clickPoint.x - room.position.x;
                         diffy = clickPoint.y - room.position.y;
+                        
                         oldx= room.position.x;
                         oldy = room.position.y;
                         selectedItem = room.type;
@@ -124,7 +123,7 @@ public class FloorPlanner extends JFrame {
                 timer.stop();
                 if(selectedRoom.checkOverlap()){
                     JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(frame);
-                    OverlapDialog dialog = new OverlapDialog(parentFrame, "The new "+selectedRoom.type + " overlaps with an existing room. Please enter again!");
+                    OverlapDialog dialog = new OverlapDialog(parentFrame, "The "+selectedRoom.type + " overlaps with an existing room. Please try again!");
                     dialog.setVisible(true);
                     System.out.println("Overlap!");
                     selectedRoom.position.x = oldx;
@@ -133,15 +132,13 @@ public class FloorPlanner extends JFrame {
                 xcoordinate=0;
                 ycoordinate=0;
                 drawingPanel.repaint(); 
-                System.out.println("Mouse released. Final count: " + count);
-                count = 0; // Reset the count
             }
         });
 
         
     
         
-        
+
         JMenuBar menuBar = new JMenuBar();
         
         
@@ -175,18 +172,89 @@ public class FloorPlanner extends JFrame {
         Border borderThin = BorderFactory.createLineBorder(Color.BLACK, 1);
         menuBar.setBorder(borderThin);
         menuBar.setBackground(Color.decode("#999999"));
-
+        JPanel furniturePanel = new JPanel();
         JPanel optionsPanel = new JPanel();
         JPanel placeHolder = new JPanel();
+
+
         placeHolder.setLayout(new BorderLayout());
 
-        optionsPanel.setLayout(new GridLayout(10,2,10,10));
+        optionsPanel.setLayout(new GridLayout(12,2,10,10));
         optionsPanel.setBorder(new MatteBorder(2, 0, 0, 0, Color.BLACK));
+        furniturePanel.setLayout(new GridLayout(3,1,10,10));
         placeHolder.setBorder(new MatteBorder(0, 2, 2, 2, Color.BLACK));
         optionsPanel.setBackground(Color.decode("#999999"));
         placeHolder.setBackground(Color.decode("#999999"));
+        furniturePanel.setBackground(Color.decode("#999999"));
 
         placeHolder.add(optionsPanel, BorderLayout.SOUTH);
+        placeHolder.add(furniturePanel, BorderLayout.NORTH);
+        
+        
+        JLabel addfurniture = new JLabel("Furniture/Fixtures");
+        furniturePanel.add(addfurniture);
+        JPanel furniture = new JPanel();
+        furniture.setLayout(new GridLayout(2,5,10,10));
+        furniture.setBackground(Color.decode("#999999"));
+        
+        JButton bed = new JButton("Bed");
+        bed.setBackground(Color.decode("#dddddd"));
+        bed.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+        furniture.add(bed);
+
+        JButton chair = new JButton("Chair");
+        chair.setBackground(Color.decode("#dddddd"));
+        chair.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+        furniture.add(chair);
+
+        JButton table = new JButton("Table");
+        table.setBackground(Color.decode("#dddddd"));
+        table.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+        furniture.add(table);
+
+        JButton sofa = new JButton("Sofa");
+        sofa.setBackground(Color.decode("#dddddd"));
+        sofa.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+        furniture.add(sofa);
+
+        JButton dining = new JButton("Dining");
+        dining.setBackground(Color.decode("#dddddd"));
+        dining.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+        furniture.add(dining);
+
+        JButton commode = new JButton("Commode");
+        commode.setBackground(Color.decode("#dddddd"));
+        commode.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+        furniture.add(commode);
+
+        JButton basin = new JButton("Washbasin");
+        basin.setBackground(Color.decode("#dddddd"));
+        basin.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+        furniture.add(basin);
+
+        JButton shower = new JButton("Shower");
+        shower.setBackground(Color.decode("#dddddd"));
+        shower.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+        furniture.add(shower);
+
+        JButton sink = new JButton("Sink");
+        sink.setBackground(Color.decode("#dddddd"));
+        sink.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+        furniture.add(sink);
+
+        JButton stove = new JButton("Stove");
+        stove.setBackground(Color.decode("#dddddd"));
+        stove.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+        furniture.add(stove);
+
+        JButton addFurniture = new JButton("Add Furniture");
+        addFurniture.setBackground(Color.decode("#dddddd"));
+        addFurniture.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+        
+        furniturePanel.add(furniture);
+        furniturePanel.add(addFurniture);
+
+
         
         
         JLabel heighttext = new JLabel("Enter Height:");
@@ -239,8 +307,8 @@ public class FloorPlanner extends JFrame {
 
         JPanel roomPosition = new JPanel();
         optionsPanel.add(roomPosition, BorderLayout.SOUTH);
-        roomDirection.setBackground(Color.decode("#999999"));
-        roomDirection.setLayout(new GridLayout(1,5,10,10));
+        roomPosition.setBackground(Color.decode("#999999"));
+        roomPosition.setLayout(new GridLayout(1,4,10,10));
 
         JLabel position = new JLabel("Position:");
         roomPosition.add(position);
@@ -262,7 +330,30 @@ public class FloorPlanner extends JFrame {
 
 
 
+        addFurniture.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                boolean furniturecheck=false;
+                for(Room room: drawingPanel.rooms){
+                    if(room.isSelected){
+                        int x=room.position.x + room.w/2;
+                        int y=room.position.y + room.h/2;
+                        
+                        
+                        // Add the image label to the panel
+                        drawingPanel.addFurniture("Bed", room, drawingPanel, x, y);
+                        furniturecheck = true;
 
+                    }
+                    
+                }
+                if(!furniturecheck){
+                    JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(frame);
+                    OverlapDialog dialog = new OverlapDialog(parentFrame, "Please select a room to add the furniture!");
+                    dialog.setVisible(true);
+                }
+            }
+        });
 
         north.addActionListener((var e) -> {
             north.setBackground(Color.YELLOW);
@@ -292,12 +383,12 @@ public class FloorPlanner extends JFrame {
             north.setBackground(Color.decode("#dddddd"));
         });
 
-        JButton addRoom = new JButton("+ Add");
+        JButton addRoom = new JButton("+ | Add");
         addRoom.setBackground(Color.decode("#dddddd"));
         addRoom.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
         optionsPanel.add(addRoom);
 
-        JButton delRoom = new JButton("+ Delete");
+        JButton delRoom = new JButton("- Delete");
         delRoom.setBackground(Color.decode("#dddddd"));
         delRoom.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
         optionsPanel.add(delRoom);
