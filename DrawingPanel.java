@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
@@ -20,6 +19,8 @@ public class DrawingPanel extends JPanel {
     public static List<Furniture> furniture = new ArrayList<>();
     static int x = 100;
     static int y = 100;
+    Image image;
+    ImagePanel imagePanel = new ImagePanel();
     static int hprev=0,wprev=0;
     @SuppressWarnings("unused")
     static int xscale = 100;
@@ -105,15 +106,6 @@ public class DrawingPanel extends JPanel {
     public void addFurniture(String type, Room parentroom, JPanel panel, int x1, int y1) {
         Furniture new_furniture = new Furniture(type, parentroom, x1, y1);
         parentroom.furniturelist.add(new_furniture);
-
-        ImageIcon originalIcon = new ImageIcon("double_bed.png");
-        Image originalImage = originalIcon.getImage();
-        int width = 30; // Adjust as needed
-        int height = 30; // Adjust as needed
-        Image scaledImage = originalImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-        JLabel imageLabel = new JLabel(new ImageIcon(scaledImage));
-        imageLabel.setBounds(x1, y1, width, height); 
-        add(imageLabel);
         repaint();
         
     }
@@ -124,6 +116,7 @@ public class DrawingPanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
+        
         for (Room room : rooms) {
             switch(room.type) {
                 case "Bedroom" -> g.setColor(Color.decode("#00cc00"));
@@ -148,8 +141,19 @@ public class DrawingPanel extends JPanel {
             g2.setColor(Color.BLACK);
             FontMetrics fm = g.getFontMetrics();
             g.drawString(room.type, (room.w - fm.stringWidth(room.type))/2+room.position.x, (room.h - fm.getHeight())/2 + fm.getAscent()+room.position.y);
+
+            for(Furniture f: room.furniturelist){
+                image = new ImageIcon("Furniture no bg/sofa_livingroom.png").getImage(); 
+                int width = 60; // Adjust as needed
+                int height = 60; // Adjust as needed
+                //scaledImage = originalImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+                g.drawImage(image, f.x, f.y, width, height, this);
+                
+                
+            }
         }
         
+
     }
 
     private void adjustPositionByDirection(String direction, int width, int height, int wprev, int hprev) {
