@@ -73,7 +73,7 @@ public class FloorPlanner extends JFrame {
                     selectedRoom.position.y =ycoordinate-diffy;
                     
                     for(Furniture furniture : selectedRoom.furniturelist){
-                        System.out.println(furniture.x);
+                        System.out.println(furniture.type);
                         furniture.x= selectedRoom.position.x+furniture.relativex;
                         furniture.y= selectedRoom.position.y+furniture.relativey;
                         

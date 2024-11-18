@@ -4,6 +4,7 @@ public class Furniture{
     Room container;
     int x,y;
     int relativex,relativey;
+    String filepath;
     Furniture(String furtype,Room room,int xcoord, int ycoord){
         this.type = furtype;
         this.container = room;

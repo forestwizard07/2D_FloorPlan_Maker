@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
@@ -115,9 +114,10 @@ public class DrawingPanel extends JPanel {
         return null; // Return null if no room is selected
     }
 
+    String relativePath;
+
     public void addFurniture(String type, Room parentroom, JPanel panel, int x1, int y1) {
-        Furniture new_furniture = new Furniture(type, parentroom, x1, y1);
-        parentroom.furniturelist.add(new_furniture);
+        
     
         String filename = "";
     
@@ -191,20 +191,21 @@ public class DrawingPanel extends JPanel {
                 }
                 break;
         }
-    
+        Furniture new_furniture = new Furniture(type, parentroom, x1, y1);
+        
         String currentDir = System.getProperty("user.dir");
     
         // Construct the relative path
-        String relativePath = currentDir + File.separator + "assets" + File.separator + filename;
-    
-    
-        File file = new File(relativePath);
+        relativePath = currentDir + File.separator + "assets" + File.separator + filename;
+        new_furniture.filepath=relativePath;
+        parentroom.furniturelist.add(new_furniture);
+        File file = new File(new_furniture.filepath);
         if (!file.exists()) {
             System.out.println("Image file not found: " + filename);
             return; // Exit if image file is not found
         }
     
-        ImageIcon originalIcon = new ImageIcon(relativePath);
+        /*ImageIcon originalIcon = new ImageIcon(relativePath);
         Image originalImage = originalIcon.getImage();
         int width = 0; // Adjust as needed
         int height = 0; // Adjust as needed
@@ -214,11 +215,11 @@ public class DrawingPanel extends JPanel {
         }
         Image scaledImage = originalImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
         JLabel imageLabel = new JLabel(new ImageIcon(scaledImage));
-        imageLabel.setBounds(x1, y1, width, height);
+        imageLabel.setBounds(x1, y1, width, height);*/
 
-        panel.add(imageLabel); // Add the image to the panel
-        panel.revalidate();    // Revalidate the panel layout
-        panel.repaint();       // Repaint the panel
+        //panel.add(imageLabel); // Add the image to the panel
+        revalidate();    // Revalidate the panel layout
+        repaint();       // Repaint the panel
     }
     
     
@@ -253,9 +254,9 @@ public class DrawingPanel extends JPanel {
             g.drawString(room.type, (room.w - fm.stringWidth(room.type))/2+room.position.x, (room.h - fm.getHeight())/2 + fm.getAscent()+room.position.y);
 
             for(Furniture f: room.furniturelist){
-                image = new ImageIcon("Furniture no bg/sofa_livingroom.png").getImage(); 
-                int width = 60; // Adjust as needed
-                int height = 60; // Adjust as needed
+                image = new ImageIcon(f.filepath).getImage(); 
+                int width = 30; // Adjust as needed
+                int height = 30; // Adjust as needed
                 //scaledImage = originalImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
                 g.drawImage(image, f.x, f.y, width, height, this);
                 
