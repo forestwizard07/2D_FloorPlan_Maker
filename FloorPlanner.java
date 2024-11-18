@@ -79,7 +79,8 @@ public class FloorPlanner extends JFrame {
                         System.out.println(furniture.type);
                         
                         furniture.x= selectedRoom.position.x+furniture.relativex;
-                        furniture.y= selectedRoom.position.y+furniture.relativey;                     
+                        furniture.y= selectedRoom.position.y+furniture.relativey;  
+                                           
                         
                     }
                 }else if((xcoordinate!=0||ycoordinate!=0)&&(xcoordinate!=initialx||ycoordinate!=initialy)&&(selectedRoom.isSelectedwofurniture)){
@@ -136,7 +137,7 @@ public class FloorPlanner extends JFrame {
                         initialy = clickPoint.y;
                         for(Furniture furniture: selectedRoom.furniturelist){
                             furniture.relativex=furniture.x-selectedRoom.position.x;
-                            furniture.relativex=furniture.y-selectedRoom.position.y;
+                            furniture.relativey=furniture.y-selectedRoom.position.y;
                         }
                         timer.start();
                     }
@@ -151,6 +152,7 @@ public class FloorPlanner extends JFrame {
                                 initialx = clickPoint.x;
                                 initialy = clickPoint.y;
                                 selectedFurniture = item;
+                                
                                 timer.start();
                             }
                         }
