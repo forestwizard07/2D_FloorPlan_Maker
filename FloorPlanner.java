@@ -197,52 +197,52 @@ public class FloorPlanner extends JFrame {
         furniture.setLayout(new GridLayout(2,5,10,10));
         furniture.setBackground(Color.decode("#999999"));
         
-        JButton bed = new JButton("Bed");
+        JToggleButton bed = new JToggleButton("Bed");
         bed.setBackground(Color.decode("#dddddd"));
         bed.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
         furniture.add(bed);
 
-        JButton chair = new JButton("Chair");
+        JToggleButton chair = new JToggleButton("Chair");
         chair.setBackground(Color.decode("#dddddd"));
         chair.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
         furniture.add(chair);
 
-        JButton table = new JButton("Table");
+        JToggleButton table = new JToggleButton("Table");
         table.setBackground(Color.decode("#dddddd"));
         table.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
         furniture.add(table);
 
-        JButton sofa = new JButton("Sofa");
+        JToggleButton sofa = new JToggleButton("Sofa");
         sofa.setBackground(Color.decode("#dddddd"));
         sofa.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
         furniture.add(sofa);
 
-        JButton dining = new JButton("Dining");
+        JToggleButton dining = new JToggleButton("Dining");
         dining.setBackground(Color.decode("#dddddd"));
         dining.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
         furniture.add(dining);
 
-        JButton commode = new JButton("Commode");
+        JToggleButton commode = new JToggleButton("Commode");
         commode.setBackground(Color.decode("#dddddd"));
         commode.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
         furniture.add(commode);
 
-        JButton basin = new JButton("Washbasin");
+        JToggleButton basin = new JToggleButton("Washbasin");
         basin.setBackground(Color.decode("#dddddd"));
         basin.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
         furniture.add(basin);
 
-        JButton shower = new JButton("Shower");
+        JToggleButton shower = new JToggleButton("Shower");
         shower.setBackground(Color.decode("#dddddd"));
         shower.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
         furniture.add(shower);
 
-        JButton sink = new JButton("Sink");
+        JToggleButton sink = new JToggleButton("Sink");
         sink.setBackground(Color.decode("#dddddd"));
         sink.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
         furniture.add(sink);
 
-        JButton stove = new JButton("Stove");
+        JToggleButton stove = new JToggleButton("Stove");
         stove.setBackground(Color.decode("#dddddd"));
         stove.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
         furniture.add(stove);
@@ -254,7 +254,29 @@ public class FloorPlanner extends JFrame {
         furniturePanel.add(furniture);
         furniturePanel.add(addFurniture);
 
+        ButtonGroup furniturebuttons = new ButtonGroup();
 
+        furniturebuttons.add(bed);
+        furniturebuttons.add(chair);
+        furniturebuttons.add(sofa);
+        furniturebuttons.add(table);
+        furniturebuttons.add(dining);
+        furniturebuttons.add(commode);
+        furniturebuttons.add(basin);
+        furniturebuttons.add(shower);
+        furniturebuttons.add(sink);
+        furniturebuttons.add(stove);
+
+        bed.setActionCommand("bed");
+        chair.setActionCommand("chair");
+        table.setActionCommand("table");
+        sofa.setActionCommand("sofa");
+        dining.setActionCommand("dining");
+        commode.setActionCommand("commode");
+        basin.setActionCommand("basin");
+        shower.setActionCommand("shower");
+        sink.setActionCommand("sink");
+        stove.setActionCommand("stove");
         
         
         JLabel heighttext = new JLabel("Enter Height:");
@@ -333,16 +355,40 @@ public class FloorPlanner extends JFrame {
         addFurniture.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                String type="rawr";
                 boolean furniturecheck=false;
                 for(Room room: drawingPanel.rooms){
                     if(room.isSelected){
-                        int x=room.position.x + room.w/2;
-                        int y=room.position.y + room.h/2;
-                        
-                        
+                        ButtonModel selectedModel = furniturebuttons.getSelection();
+                        if (selectedModel != null) {
+                            String actionCommand = selectedModel.getActionCommand();
+                            // Use a switch statement to handle which button was pressed
+                            switch (actionCommand) {
+                                case "bed" -> type = "bed";
+                                case "chair" -> type = "chair";
+                                case "sofa" -> type = "sofa";
+                                case "table" -> type = "table";
+                                case "commode" -> type = "commode";
+                                case "sink" -> type = "sink";
+                                case "basin" -> type = "basin";
+                                case "shower" -> type = "shower";
+                                case "dining" -> type = "dining";
+                                case "stove" -> type = "stove";
+                            }
+                        } else {
+                            System.out.println("No button was pressed.");
+                        }
+
+                        int centerX = room.position.x + room.w / 2 - width / 2;
+                        int centerY = room.position.y + room.h / 2 - height / 2;
+
+                        drawingPanel.setLayout(null);
                         // Add the image label to the panel
-                        drawingPanel.addFurniture("Bed", room, drawingPanel, x, y);
+                        drawingPanel.addFurniture(type, room, drawingPanel, centerX, centerY);
                         furniturecheck = true;
+                        System.out.println(type);
+                        System.out.println(room.furniturelist);
+                        furniturebuttons.clearSelection();
 
                     }
                     
@@ -352,8 +398,14 @@ public class FloorPlanner extends JFrame {
                     OverlapDialog dialog = new OverlapDialog(parentFrame, "Please select a room to add the furniture!");
                     dialog.setVisible(true);
                 }
+
+                
             }
+
+
         });
+
+        
 
         north.addActionListener((var e) -> {
             north.setBackground(Color.YELLOW);
