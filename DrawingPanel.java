@@ -191,6 +191,32 @@ public class DrawingPanel extends JPanel {
                 }
                 break;
         }
+
+        int furnitureWidth = 30;
+        int furnitureHeight = 30;
+        int gap = 5;
+
+        // Calculate maximum columns based on room width
+        int maxCols = parentroom.w / (furnitureWidth + gap);
+
+        // Get the number of furniture items already in the room
+        int furnitureCount = parentroom.furniturelist.size();
+
+        // Calculate row and column for the new furniture
+        int row = furnitureCount / maxCols;
+        int col = furnitureCount % maxCols;
+
+        // Calculate the x, y position for the furniture
+        x1 = parentroom.position.x + col * (furnitureWidth + gap);
+        y1 = parentroom.position.y + row * (furnitureHeight + gap);
+
+        // Ensure the furniture does not exceed room bounds
+        if (x + furnitureWidth > parentroom.position.x + parentroom.w || 
+            y + furnitureHeight > parentroom.position.y + parentroom.h) {
+            System.out.println("Cannot add furniture: Not enough space in the room.");
+            return; // Exit if there's no space
+        }
+
         Furniture new_furniture = new Furniture(type, parentroom, x1, y1);
         
         String currentDir = System.getProperty("user.dir");
