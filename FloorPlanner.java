@@ -28,6 +28,7 @@ public class FloorPlanner extends JFrame {
     public int checkx,checky;
     public boolean displayGrid=false;
     public Room selectedRoom;
+    public Furniture selectedFurniture;
     public int diffx;
     public int diffy;
     public int oldx,oldy;
@@ -36,6 +37,7 @@ public class FloorPlanner extends JFrame {
     public boolean dragged=false;
     public int count=0;
     public int initialx,initialy;
+    public int oldfurniturex,oldfurniturey;
     public boolean clickedRoom=false;
     public FloorPlanner(){
         JFrame frame = new JFrame();
@@ -56,7 +58,7 @@ public class FloorPlanner extends JFrame {
                 // Code to run while the mouse is pressed
                 drawingPanel.addMouseMotionListener(new MouseMotionAdapter() {
             
-           
+
                     @Override
                     public void mouseDragged(MouseEvent event) {
                         // Start the timer when the mouse is pressed
@@ -77,7 +79,7 @@ public class FloorPlanner extends JFrame {
                         System.out.println(furniture.type);
                         
                         furniture.x= selectedRoom.position.x+furniture.relativex;
-                        furniture.y= selectedRoom.position.y+furniture.relativey;
+                        furniture.y= selectedRoom.position.y+furniture.relativey;                     
                         
                     }
                 }else if((xcoordinate!=0||ycoordinate!=0)&&(xcoordinate!=initialx||ycoordinate!=initialy)&&(selectedRoom.isSelectedwofurniture)){
@@ -87,7 +89,10 @@ public class FloorPlanner extends JFrame {
                     for(Furniture furniture : selectedRoom.furniturelist){
                         if(furniture.selected){
                             furniture.x = xcoordinate-diffx;
-                            furniture.y =ycoordinate-diffy;
+                            furniture.y = ycoordinate-diffy;
+
+                            
+                            
                             
                         }
                     }
@@ -141,8 +146,11 @@ public class FloorPlanner extends JFrame {
                             if(item.selected){
                                 diffx=clickPoint.x - item.x;
                                 diffy=clickPoint.y - item.y;
+                                oldfurniturex= item.x;
+                                oldfurniturey = item.y;
                                 initialx = clickPoint.x;
                                 initialy = clickPoint.y;
+                                selectedFurniture = item;
                                 timer.start();
                             }
                         }
@@ -177,6 +185,7 @@ public class FloorPlanner extends JFrame {
                     }
 
                 }
+                
                 xcoordinate=0;
                 ycoordinate=0;
                 drawingPanel.repaint(); 

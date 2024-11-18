@@ -17,5 +17,8 @@ public class Furniture{
         this.w=width;
         this.h=height;
     }
+    public boolean checkOutOfRoom(){
 
+        return this.x < container.position.x || (this.x+this.w)>(container.position.x+container.w) || this.y<container.position.y || (this.y+this.h) > (container.position.y+container.h);
+    }
 }
