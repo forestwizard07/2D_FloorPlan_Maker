@@ -307,6 +307,12 @@ public class DrawingPanel extends JPanel {
                 //int width = 30; // Adjust as needed
                 //int height = 30; // Adjust as needed
                 //scaledImage = originalImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+                if(f.selected==true){
+                    g2.setStroke(new BasicStroke(3)); 
+                    g.setColor(Color.BLACK);
+                    g2.drawRect(f.x, f.y, f.w, f.h);
+                }
+                g2.setColor(Color.BLACK);
                 g.drawImage(image, f.x, f.y, f.w, f.h, this);
                 
                 
