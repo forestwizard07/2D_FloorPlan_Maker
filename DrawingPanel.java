@@ -117,7 +117,7 @@ public class DrawingPanel extends JPanel {
     String relativePath;
 
     public void addFurniture(String type, Room parentroom, JPanel panel, int x1, int y1) {
-        
+        int width=30,height=30;
     
         String filename = "";
     
@@ -126,78 +126,101 @@ public class DrawingPanel extends JPanel {
         switch (type) {
             case "bed":
                 if (roomType == "Bedroom") {
+                    width = 60;
+                    height = 90;
                     filename = "bed_bedroom.png";
                     validRoom = true;
                 }
                 break;
             case "chair":
                 if (roomType == "Bedroom") {
+                    width=38;
+                    height=38;
                     filename = "chair_bedroom.png";
                     validRoom = true;
                 } else if (roomType == "Living Room") {
+                    width=38;
+                    height=38;
                     filename = "chair_livingroom.png";
                     validRoom = true;
                 }
                 break;
             case "sofa":
                 if (roomType == "Living Room") {
+                    width=105;
+                    height=53;
                     filename = "sofa_livingroom.png";
                     validRoom = true;
                 }
                 break;
             case "table":
                 if (roomType == "Bedroom") {
+                    width=60;
+                    height=38;
                     filename = "table_bedroom.png";
                     validRoom = true;
                 } else if (roomType == "Living Room") {
+                    width=45;
+                    height=45;
                     filename = "table_livingroom.png";
                     validRoom = true;
                 }
                 break;
             case "commode":
                 if (roomType == "Bathroom") {
+                    width=38;
+                    height=53;
                     filename = "commode_bathroom.png";
                     validRoom = true;
                 }
                 break;
             case "sink":
                 if (roomType == "Kitchen") {
+                    width=45;
+                    height=45;
                     filename = "kitchensink_kitchen.png";
                     validRoom = true;
                 }
                 break;
             case "basin":
                 if (roomType == "Bathroom") {
+                    width=38;
+                    height=38;
                     filename = "washbasin_bathroom.png";
                     validRoom = true;
                 }
                 break;
             case "shower":
                 if (roomType == "Bathroom") {
+                    width=53;
+                    height=90;
                     filename = "shower_bathroom.png";
                     validRoom = true;
                 }
                 break;
             case "dining":
                 if (roomType == "Dining Room") {
+                    width=83;
+                    height=83;
                     filename = "diningset_diningroom.png";
                     validRoom = true;
                 }
                 break;
             case "stove":
                 if (roomType == "Kitchen") {
+                    width=68;
+                    height=38;
                     filename = "stove_kitchen.png";
                     validRoom = true; 
                 }
                 break;
         }
 
-        int furnitureWidth = 30;
-        int furnitureHeight = 30;
+        
         int gap = 5;
 
         // Calculate maximum columns based on room width
-        int maxCols = parentroom.w / (furnitureWidth + gap);
+        int maxCols = parentroom.w / (width + gap);
 
         // Get the number of furniture items already in the room
         int furnitureCount = parentroom.furniturelist.size();
@@ -207,17 +230,17 @@ public class DrawingPanel extends JPanel {
         int col = furnitureCount % maxCols;
 
         // Calculate the x, y position for the furniture
-        x1 = parentroom.position.x + col * (furnitureWidth + gap);
-        y1 = parentroom.position.y + row * (furnitureHeight + gap);
+        x1 = parentroom.position.x + col * (width + gap);
+        y1 = parentroom.position.y + row * (height + gap);
 
         // Ensure the furniture does not exceed room bounds
-        if (x + furnitureWidth > parentroom.position.x + parentroom.w || 
-            y + furnitureHeight > parentroom.position.y + parentroom.h) {
+        if (x + width > parentroom.position.x + parentroom.w || 
+            y + height > parentroom.position.y + parentroom.h) {
             System.out.println("Cannot add furniture: Not enough space in the room.");
             return; // Exit if there's no space
         }
 
-        Furniture new_furniture = new Furniture(type, parentroom, x1, y1);
+        Furniture new_furniture = new Furniture(type, parentroom, x1, y1, width,height);
         
         String currentDir = System.getProperty("user.dir");
     
@@ -281,10 +304,10 @@ public class DrawingPanel extends JPanel {
 
             for(Furniture f: room.furniturelist){
                 image = new ImageIcon(f.filepath).getImage(); 
-                int width = 30; // Adjust as needed
-                int height = 30; // Adjust as needed
+                //int width = 30; // Adjust as needed
+                //int height = 30; // Adjust as needed
                 //scaledImage = originalImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-                g.drawImage(image, f.x, f.y, width, height, this);
+                g.drawImage(image, f.x, f.y, f.w, f.h, this);
                 
                 
             }
