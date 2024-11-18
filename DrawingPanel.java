@@ -234,8 +234,8 @@ public class DrawingPanel extends JPanel {
         y1 = parentroom.position.y + row * (height + gap);
 
         // Ensure the furniture does not exceed room bounds
-        if (x + width > parentroom.position.x + parentroom.w || 
-            y + height > parentroom.position.y + parentroom.h) {
+        if (x1 + width > parentroom.position.x + parentroom.w || 
+            y1 + height > parentroom.position.y + parentroom.h) {
             System.out.println("Cannot add furniture: Not enough space in the room.");
             return; // Exit if there's no space
         }

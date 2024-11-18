@@ -6,8 +6,8 @@ import java.util.List;
 public class Room {
     String type;
     Point position;
-    public int w = 100;
-    public int h = 100;
+    public int w = 150;
+    public int h = 150;
     public String direction;
     public boolean isSelected;
     public boolean isSelectedwofurniture;

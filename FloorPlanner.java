@@ -416,6 +416,7 @@ public class FloorPlanner extends JFrame {
                 boolean furniturecheck=false;
                 for(Room room: drawingPanel.rooms){
                     if(room.isSelected){
+                        System.out.println("test "+room.type);
                         ButtonModel selectedModel = furniturebuttons.getSelection();
                         if (selectedModel != null) {
                             String actionCommand = selectedModel.getActionCommand();
@@ -537,12 +538,12 @@ public class FloorPlanner extends JFrame {
 
         addRoom.addActionListener((ActionEvent e) -> {
             if(Objects.equals(getWidth.getText(), "")){
-                width = 100;
+                width = 150;
             } else {
                 width = Integer.parseInt(getWidth.getText());
             }
             if(Objects.equals(getHeight.getText(), "")){
-                height = 100;
+                height = 150;
             } else {
                 height = Integer.parseInt(getHeight.getText());
             }
