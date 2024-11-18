@@ -4,7 +4,9 @@ public class Furniture{
     Room container;
     int x,y;
     int relativex,relativey;
+    int w=30,h=30;
     String filepath;
+    boolean selected; //
     Furniture(String furtype,Room room,int xcoord, int ycoord){
         this.type = furtype;
         this.container = room;

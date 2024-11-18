@@ -68,17 +68,34 @@ public class FloorPlanner extends JFrame {
                     }
                 });
                 System.out.println("Xcoordinate "+xcoordinate+" "+initialx);
-                if((xcoordinate!=0||ycoordinate!=0)&&(xcoordinate!=initialx||ycoordinate!=initialy)){
+                if((xcoordinate!=0||ycoordinate!=0)&&(xcoordinate!=initialx||ycoordinate!=initialy)&&(selectedRoom.isSelected)){
+                    
                     selectedRoom.position.x = xcoordinate-diffx;
                     selectedRoom.position.y =ycoordinate-diffy;
                     
                     for(Furniture furniture : selectedRoom.furniturelist){
                         System.out.println(furniture.type);
+                        
                         furniture.x= selectedRoom.position.x+furniture.relativex;
                         furniture.y= selectedRoom.position.y+furniture.relativey;
                         
                     }
+                }else if((xcoordinate!=0||ycoordinate!=0)&&(xcoordinate!=initialx||ycoordinate!=initialy)&&(selectedRoom.isSelectedwofurniture)){
+                    
+                    
+                    
+                    for(Furniture furniture : selectedRoom.furniturelist){
+                        if(furniture.selected){
+                            furniture.x = xcoordinate-diffx;
+                            furniture.y =ycoordinate-diffy;
+                            
+                        }
+                    }
                 }
+                
+
+
+
                 drawingPanel.repaint();
                 
                 
@@ -94,7 +111,8 @@ public class FloorPlanner extends JFrame {
                 Point clickPoint = e.getPoint();
                 
                 for(Room room: DrawingPanel.rooms){
-                    if(room.contains(clickPoint)){
+                    room.contains(clickPoint);
+                    if(room.isSelected){
                         room.isSelected = true;
                         drawingPanel.repaint();
                         index = DrawingPanel.rooms.indexOf(room);
@@ -111,7 +129,23 @@ public class FloorPlanner extends JFrame {
                         clickedRoom = true;
                         initialx = clickPoint.x;
                         initialy = clickPoint.y;
+                        for(Furniture furniture: selectedRoom.furniturelist){
+                            furniture.relativex=furniture.x-selectedRoom.position.x;
+                            furniture.relativex=furniture.y-selectedRoom.position.y;
+                        }
                         timer.start();
+                    }
+                    else if(room.isSelectedwofurniture){
+                        selectedRoom=room;
+                        for(Furniture item: selectedRoom.furniturelist){
+                            if(item.selected){
+                                diffx=clickPoint.x - item.x;
+                                diffy=clickPoint.y - item.y;
+                                initialx = clickPoint.x;
+                                initialy = clickPoint.y;
+                                timer.start();
+                            }
+                        }
                     }
                 }
                 if(!clickedRoom){

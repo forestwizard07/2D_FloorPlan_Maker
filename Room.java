@@ -10,6 +10,7 @@ public class Room {
     public int h = 100;
     public String direction;
     public boolean isSelected;
+    public boolean isSelectedwofurniture;
     public List<Furniture> furniturelist = new ArrayList<>(); 
     Room(String type, Point position, int w, int h, String direction) {
         this.type = type;
@@ -18,10 +19,20 @@ public class Room {
         this.h = h;
         this.direction = direction;
         this.isSelected = false;
+        this.isSelectedwofurniture=false;
     }
     public boolean contains(Point p) {
-        
-        this.isSelected=p.x >= this.position.x && p.x <= this.position.x + w && p.y >= this.position.y && p.y <= this.position.y + h;
+        boolean k=p.x >= this.position.x && p.x <= this.position.x + w && p.y >= this.position.y && p.y <= this.position.y + h;
+        this.isSelectedwofurniture=k;
+        boolean k1 = false;
+        if(!furniturelist.isEmpty()){
+            for(Furniture item: furniturelist){
+                k1=p.x >= item.x && p.x <= item.x + item.w && p.y >= item.y && p.y <= item.y + item.h;
+                item.selected=k1;
+            }
+        }
+
+        this.isSelected=k && !k1;
         
         return this.isSelected;
     }
