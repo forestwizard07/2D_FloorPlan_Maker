@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
@@ -104,7 +105,7 @@ public class DrawingPanel extends JPanel {
         }
     }
 
-<<<<<<< HEAD
+
     public String getSelectedRoomType() {
         for (Room room : DrawingPanel.rooms) {
             if (room.isSelected) {
@@ -115,118 +116,110 @@ public class DrawingPanel extends JPanel {
     }
 
     public void addFurniture(String type, Room parentroom, JPanel panel, int x1, int y1) {
-    Furniture new_furniture = new Furniture(type, parentroom, x1, y1);
-    parentroom.furniturelist.add(new_furniture);
-
-    String filename = "";
-
-    String roomType = getSelectedRoomType();
-    boolean validRoom = false;
-    switch (type) {
-        case "bed":
-            if (roomType == "Bedroom") {
-                filename = "bed_bedroom.png";
-                validRoom = true;
-            }
-            break;
-        case "chair":
-            if (roomType == "Bedroom") {
-                filename = "chair_bedroom.png";
-                validRoom = true;
-            } else if (roomType == "Living Room") {
-                filename = "chair_livingroom.png";
-                validRoom = true;
-            }
-            break;
-        case "sofa":
-            if (roomType == "Living Room") {
-                filename = "sofa_livingroom.png";
-                validRoom = true;
-            }
-            break;
-        case "table":
-            if (roomType == "Bedroom") {
-                filename = "table_bedroom.png";
-                validRoom = true;
-            } else if (roomType == "Living Room") {
-                filename = "table_livingroom.png";
-                validRoom = true;
-            }
-            break;
-        case "commode":
-            if (roomType == "Bathroom") {
-                filename = "commode_bathroom.png";
-                validRoom = true;
-            }
-            break;
-        case "sink":
-            if (roomType == "Kitchen") {
-                filename = "kitchensink_kitchen.png";
-                validRoom = true;
-            }
-            break;
-        case "basin":
-            if (roomType == "Bathroom") {
-                filename = "washbasin_bathroom.png";
-                validRoom = true;
-            }
-            break;
-        case "shower":
-            if (roomType == "Bathroom") {
-                filename = "shower_bathroom.png";
-                validRoom = true;
-            }
-            break;
-        case "dining":
-            if (roomType == "Dining Room") {
-                filename = "diningset_diningroom.png";
-                validRoom = true;
-            }
-            break;
-        case "stove":
-            if (roomType == "Kitchen") {
-                filename = "stove_kitchen.png";
-                validRoom = true; 
-            }
-            break;
-    }
-
-    String currentDir = System.getProperty("user.dir");
-
-    // Construct the relative path
-    String relativePath = currentDir + File.separator + "assets" + File.separator + filename;
-
-
-    File file = new File(relativePath);
-    if (!file.exists()) {
-        System.out.println("Image file not found: " + filename);
-        return; // Exit if image file is not found
-    }
-
-    ImageIcon originalIcon = new ImageIcon(relativePath);
-    Image originalImage = originalIcon.getImage();
-    int width = 0; // Adjust as needed
-    int height = 0; // Adjust as needed
-    if(validRoom){
-        width = 30; // Adjust as needed
-        height = 30; // Adjust as needed
-    }
-    Image scaledImage = originalImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-    JLabel imageLabel = new JLabel(new ImageIcon(scaledImage));
-    imageLabel.setBounds(x1, y1, width, height); 
-
-    panel.add(imageLabel); // Add the image to the panel
-    panel.revalidate();    // Revalidate the panel layout
-    panel.repaint();       // Repaint the panel
-=======
-    public void addFurniture(String type, Room parentroom, JPanel panel, int x1, int y1) {
         Furniture new_furniture = new Furniture(type, parentroom, x1, y1);
         parentroom.furniturelist.add(new_furniture);
-        repaint();
-        
->>>>>>> 7edffae9e17b24ef8fc4f27ed434e6d38f06ac51
-    }
     
+        String filename = "";
+    
+        String roomType = getSelectedRoomType();
+        boolean validRoom = false;
+        switch (type) {
+            case "bed":
+                if (roomType == "Bedroom") {
+                    filename = "bed_bedroom.png";
+                    validRoom = true;
+                }
+                break;
+            case "chair":
+                if (roomType == "Bedroom") {
+                    filename = "chair_bedroom.png";
+                    validRoom = true;
+                } else if (roomType == "Living Room") {
+                    filename = "chair_livingroom.png";
+                    validRoom = true;
+                }
+                break;
+            case "sofa":
+                if (roomType == "Living Room") {
+                    filename = "sofa_livingroom.png";
+                    validRoom = true;
+                }
+                break;
+            case "table":
+                if (roomType == "Bedroom") {
+                    filename = "table_bedroom.png";
+                    validRoom = true;
+                } else if (roomType == "Living Room") {
+                    filename = "table_livingroom.png";
+                    validRoom = true;
+                }
+                break;
+            case "commode":
+                if (roomType == "Bathroom") {
+                    filename = "commode_bathroom.png";
+                    validRoom = true;
+                }
+                break;
+            case "sink":
+                if (roomType == "Kitchen") {
+                    filename = "kitchensink_kitchen.png";
+                    validRoom = true;
+                }
+                break;
+            case "basin":
+                if (roomType == "Bathroom") {
+                    filename = "washbasin_bathroom.png";
+                    validRoom = true;
+                }
+                break;
+            case "shower":
+                if (roomType == "Bathroom") {
+                    filename = "shower_bathroom.png";
+                    validRoom = true;
+                }
+                break;
+            case "dining":
+                if (roomType == "Dining Room") {
+                    filename = "diningset_diningroom.png";
+                    validRoom = true;
+                }
+                break;
+            case "stove":
+                if (roomType == "Kitchen") {
+                    filename = "stove_kitchen.png";
+                    validRoom = true; 
+                }
+                break;
+        }
+    
+        String currentDir = System.getProperty("user.dir");
+    
+        // Construct the relative path
+        String relativePath = currentDir + File.separator + "assets" + File.separator + filename;
+    
+    
+        File file = new File(relativePath);
+        if (!file.exists()) {
+            System.out.println("Image file not found: " + filename);
+            return; // Exit if image file is not found
+        }
+    
+        ImageIcon originalIcon = new ImageIcon(relativePath);
+        Image originalImage = originalIcon.getImage();
+        int width = 0; // Adjust as needed
+        int height = 0; // Adjust as needed
+        if(validRoom){
+            width = 30; // Adjust as needed
+            height = 30; // Adjust as needed
+        }
+        Image scaledImage = originalImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        JLabel imageLabel = new JLabel(new ImageIcon(scaledImage));
+        imageLabel.setBounds(x1, y1, width, height);
+
+        panel.add(imageLabel); // Add the image to the panel
+        panel.revalidate();    // Revalidate the panel layout
+        panel.repaint();       // Repaint the panel
+    }
     
     
     @Override  
