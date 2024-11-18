@@ -71,9 +71,16 @@ public class FloorPlanner extends JFrame {
                 if((xcoordinate!=0||ycoordinate!=0)&&(xcoordinate!=initialx||ycoordinate!=initialy)){
                     selectedRoom.position.x = xcoordinate-diffx;
                     selectedRoom.position.y =ycoordinate-diffy;
+                    
+                    for(Furniture furniture : selectedRoom.furniturelist){
+                        System.out.println(furniture.x);
+                        furniture.x= selectedRoom.position.x+furniture.relativex;
+                        furniture.y= selectedRoom.position.y+furniture.relativey;
+                        
+                    }
                 }
                 drawingPanel.repaint();
-                System.out.println(xcoordinate+" "+ycoordinate);
+                
                 
             }
         });
@@ -128,6 +135,13 @@ public class FloorPlanner extends JFrame {
                     System.out.println("Overlap!");
                     selectedRoom.position.x = oldx;
                     selectedRoom.position.y = oldy;
+                    for(Furniture furniture : selectedRoom.furniturelist){
+                        //System.out.println(furniture.x);
+                        furniture.x= selectedRoom.position.x+furniture.relativex;
+                        furniture.y= selectedRoom.position.y+furniture.relativey;
+                        //drawingPanel.repaint();
+                    }
+
                 }
                 xcoordinate=0;
                 ycoordinate=0;
@@ -179,7 +193,7 @@ public class FloorPlanner extends JFrame {
 
         placeHolder.setLayout(new BorderLayout());
 
-        optionsPanel.setLayout(new GridLayout(12,2,10,10));
+        optionsPanel.setLayout(new GridLayout(10,2,10,10));
         optionsPanel.setBorder(new MatteBorder(2, 0, 0, 0, Color.BLACK));
         furniturePanel.setLayout(new GridLayout(3,1,10,10));
         placeHolder.setBorder(new MatteBorder(0, 2, 2, 2, Color.BLACK));
@@ -440,7 +454,7 @@ public class FloorPlanner extends JFrame {
         addRoom.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
         optionsPanel.add(addRoom);
 
-        JButton delRoom = new JButton("- Delete");
+        JButton delRoom = new JButton("- | Delete");
         delRoom.setBackground(Color.decode("#dddddd"));
         delRoom.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
         optionsPanel.add(delRoom);
