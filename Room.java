@@ -27,8 +27,8 @@ public class Room {
         boolean k1 = false;
         if(!furniturelist.isEmpty()){
             for(Furniture item: furniturelist){
-                k1=p.x >= item.x && p.x <= item.x + item.w && p.y >= item.y && p.y <= item.y + item.h;
-                item.selected=k1;
+                k1=k1 || p.x >= item.x && p.x <= item.x + item.w && p.y >= item.y && p.y <= item.y + item.h;
+                item.selected=p.x >= item.x && p.x <= item.x + item.w && p.y >= item.y && p.y <= item.y + item.h;
             }
         }
 
