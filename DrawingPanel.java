@@ -217,9 +217,6 @@ public class DrawingPanel extends JPanel {
         }
 
         
-
-
-        
         int gap = 5;
 
         // Calculate maximum columns based on room width
@@ -273,6 +270,7 @@ public class DrawingPanel extends JPanel {
         revalidate();    // Revalidate the panel layout
         repaint();       // Repaint the panel
     }
+    
     public void delFurniture(){
         for (int i = 0; i < rooms.size(); i++) {
             if(rooms.get(i).isSelectedwofurniture){
@@ -285,7 +283,6 @@ public class DrawingPanel extends JPanel {
             repaint();
         }
     }
-    
     @Override  
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

@@ -79,8 +79,7 @@ public class FloorPlanner extends JFrame {
                         System.out.println(furniture.type);
                         
                         furniture.x= selectedRoom.position.x+furniture.relativex;
-                        furniture.y= selectedRoom.position.y+furniture.relativey;  
-                                           
+                        furniture.y= selectedRoom.position.y+furniture.relativey;                     
                         
                     }
                 }else if((xcoordinate!=0||ycoordinate!=0)&&(xcoordinate!=initialx||ycoordinate!=initialy)&&(selectedRoom.isSelectedwofurniture)){
@@ -152,7 +151,6 @@ public class FloorPlanner extends JFrame {
                                 initialx = clickPoint.x;
                                 initialy = clickPoint.y;
                                 selectedFurniture = item;
-                                
                                 timer.start();
                             }
                         }
@@ -187,11 +185,7 @@ public class FloorPlanner extends JFrame {
                     }
 
                 }
-                if(selectedFurniture.checkOutOfRoom()){
-                    selectedFurniture.x=oldfurniturex;
-                    selectedFurniture.y=oldfurniturey;
-
-                }
+                
                 xcoordinate=0;
                 ycoordinate=0;
                 drawingPanel.repaint(); 
@@ -313,10 +307,11 @@ public class FloorPlanner extends JFrame {
         JButton addFurniture = new JButton("Add Furniture");
         addFurniture.setBackground(Color.decode("#dddddd"));
         addFurniture.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
-
+        
+        
         JButton delFurniture = new JButton("Delete Furniture");
-        addFurniture.setBackground(Color.decode("#dddddd"));
-        addFurniture.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+        delFurniture.setBackground(Color.decode("#dddddd"));
+        delFurniture.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
         furniturePanel.setLayout(new GridLayout(4, 1, 10, 10));
         furniturePanel.add(furniture);
         furniturePanel.add(addFurniture);
@@ -418,7 +413,12 @@ public class FloorPlanner extends JFrame {
         right.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
         roomPosition.add(right);
 
-
+        delFurniture.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                drawingPanel.delFurniture();
+            }
+        });
 
         addFurniture.addActionListener(new ActionListener() {
             @Override
@@ -472,13 +472,6 @@ public class FloorPlanner extends JFrame {
             }
 
 
-        });
-
-        delFurniture.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e){
-                drawingPanel.delFurniture();
-            }
         });
 
         
