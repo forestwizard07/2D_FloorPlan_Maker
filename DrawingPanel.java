@@ -310,8 +310,11 @@ public class DrawingPanel extends JPanel {
             g.setColor(Color.BLACK);
             g2.drawRect(room.position.x, room.position.y, room.w, room.h); // 1px border for rooms
             g2.setColor(Color.BLACK);
-            FontMetrics fm = g.getFontMetrics();
-            g.drawString(room.type, (room.w - fm.stringWidth(room.type))/2+room.position.x, (room.h - fm.getHeight())/2 + fm.getAscent()+room.position.y);
+            if(room.furniturelist.isEmpty()){
+                FontMetrics fm = g.getFontMetrics();
+                g.drawString(room.type, (room.w - fm.stringWidth(room.type))/2+room.position.x, (room.h - fm.getHeight())/2 + fm.getAscent()+room.position.y);
+            }
+            
 
             for(Furniture f: room.furniturelist){
                 image = new ImageIcon(f.filepath).getImage(); 

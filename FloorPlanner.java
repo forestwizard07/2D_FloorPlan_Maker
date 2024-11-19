@@ -185,6 +185,10 @@ public class FloorPlanner extends JFrame {
                     }
 
                 }
+                if(selectedFurniture.checkOutOfRoom()){
+                    selectedFurniture.x = oldfurniturex;
+                    selectedFurniture.y = oldfurniturey;
+                }
                 
                 xcoordinate=0;
                 ycoordinate=0;
@@ -312,10 +316,17 @@ public class FloorPlanner extends JFrame {
         JButton delFurniture = new JButton("Delete Furniture");
         delFurniture.setBackground(Color.decode("#dddddd"));
         delFurniture.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
-        furniturePanel.setLayout(new GridLayout(4, 1, 10, 10));
+
+        JButton rotFurniture = new JButton("Rotate Furniture");
+        rotFurniture.setBackground(Color.decode("#dddddd"));
+        rotFurniture.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+
+
+        furniturePanel.setLayout(new GridLayout(5, 1, 10, 10));
         furniturePanel.add(furniture);
         furniturePanel.add(addFurniture);
         furniturePanel.add(delFurniture);    //DELETE FURNITURE BUTTON
+        furniturePanel.add(rotFurniture);
 
         ButtonGroup furniturebuttons = new ButtonGroup();
 
