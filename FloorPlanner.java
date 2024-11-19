@@ -150,7 +150,9 @@ public class FloorPlanner extends JFrame {
                                 oldfurniturey = item.y;
                                 initialx = clickPoint.x;
                                 initialy = clickPoint.y;
+                                
                                 selectedFurniture = item;
+                                System.out.println("Test this : "+selectedFurniture);
                                 timer.start();
                             }
                         }
@@ -183,12 +185,16 @@ public class FloorPlanner extends JFrame {
                         furniture.y= selectedRoom.position.y+furniture.relativey;
                         //drawingPanel.repaint();
                     }
+                    
 
                 }
-                if(selectedFurniture.checkOutOfRoom()){
-                    selectedFurniture.x = oldfurniturex;
-                    selectedFurniture.y = oldfurniturey;
+                if(selectedFurniture!=null){
+                    if(selectedFurniture.checkOutOfRoom()){
+                        selectedFurniture.x = oldfurniturex;
+                        selectedFurniture.y = oldfurniturey;
+                    }
                 }
+                
                 
                 xcoordinate=0;
                 ycoordinate=0;
