@@ -116,7 +116,7 @@ public class DrawingPanel extends JPanel {
 
     String relativePath;
 
-    public void addFurniture(String type, Room parentroom, JPanel panel, int x1, int y1) {
+    public int addFurniture(String type, Room parentroom, JPanel panel, int x1, int y1) {
         int width=30,height=30;
     
         String filename = "";
@@ -217,58 +217,65 @@ public class DrawingPanel extends JPanel {
         }
 
         
-        int gap = 5;
-
-        // Calculate maximum columns based on room width
-        int maxCols = parentroom.w / (width + gap);
-
-        // Get the number of furniture items already in the room
-        int furnitureCount = parentroom.furniturelist.size();
-
-        // Calculate row and column for the new furniture
-        int row = furnitureCount / maxCols;
-        int col = furnitureCount % maxCols;
-
-        // Calculate the x, y position for the furniture
-        x1 = parentroom.position.x + col * (width + gap);
-        y1 = parentroom.position.y + row * (height + gap);
-
-        // Ensure the furniture does not exceed room bounds
-        if (x1 + width > parentroom.position.x + parentroom.w || 
-            y1 + height > parentroom.position.y + parentroom.h) {
-            System.out.println("Cannot add furniture: Not enough space in the room.");
-            return; // Exit if there's no space
-        }
-
-        Furniture new_furniture = new Furniture(type, parentroom, x1, y1, width,height);
-        
-        String currentDir = System.getProperty("user.dir");
-    
-        // Construct the relative path
-        relativePath = currentDir + File.separator + "assets" + File.separator + filename;
-        new_furniture.filepath=relativePath;
-        parentroom.furniturelist.add(new_furniture);
-        File file = new File(new_furniture.filepath);
-        if (!file.exists()) {
-            System.out.println("Image file not found: " + filename);
-            return; // Exit if image file is not found
-        }
-    
-        /*ImageIcon originalIcon = new ImageIcon(relativePath);
-        Image originalImage = originalIcon.getImage();
-        int width = 0; // Adjust as needed
-        int height = 0; // Adjust as needed
         if(validRoom){
-            width = 30; // Adjust as needed
-            height = 30; // Adjust as needed
-        }
-        Image scaledImage = originalImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-        JLabel imageLabel = new JLabel(new ImageIcon(scaledImage));
-        imageLabel.setBounds(x1, y1, width, height);*/
+            int gap = 5;
 
-        //panel.add(imageLabel); // Add the image to the panel
-        revalidate();    // Revalidate the panel layout
-        repaint();       // Repaint the panel
+            // Calculate maximum columns based on room width
+            int maxCols = parentroom.w / (width + gap);
+
+            // Get the number of furniture items already in the room
+            int furnitureCount = parentroom.furniturelist.size();
+
+            // Calculate row and column for the new furniture
+            int row = furnitureCount / maxCols;
+            int col = furnitureCount % maxCols;
+
+            // Calculate the x, y position for the furniture
+            x1 = parentroom.position.x + col * (width + gap);
+            y1 = parentroom.position.y + row * (height + gap);
+
+            // Ensure the furniture does not exceed room bounds
+            if (x1 + width > parentroom.position.x + parentroom.w || 
+                y1 + height > parentroom.position.y + parentroom.h) {
+                System.out.println("Cannot add furniture: Not enough space in the room.");
+                return 1; // Exit if there's no space
+            }
+
+            Furniture new_furniture = new Furniture(type, parentroom, x1, y1, width,height);
+            
+            String currentDir = System.getProperty("user.dir");
+        
+            // Construct the relative path
+            relativePath = currentDir + File.separator + "assets" + File.separator + filename;
+            new_furniture.filepath=relativePath;
+            parentroom.furniturelist.add(new_furniture);
+            File file = new File(new_furniture.filepath);
+            if (!file.exists()) {
+                System.out.println("Image file not found: " + filename);
+                return 2; // Exit if image file is not found
+            }
+        
+            /*ImageIcon originalIcon = new ImageIcon(relativePath);
+            Image originalImage = originalIcon.getImage();
+            int width = 0; // Adjust as needed
+            int height = 0; // Adjust as needed
+            if(validRoom){
+                width = 30; // Adjust as needed
+                height = 30; // Adjust as needed
+            }
+            Image scaledImage = originalImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+            JLabel imageLabel = new JLabel(new ImageIcon(scaledImage));
+            imageLabel.setBounds(x1, y1, width, height);*/
+
+            //panel.add(imageLabel); // Add the image to the panel
+            revalidate();    // Revalidate the panel layout
+            repaint(); 
+            return 0;
+        }
+        
+            return 3;
+        
+        
     }
     
     public void delFurniture(){

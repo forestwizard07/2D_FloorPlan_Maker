@@ -1,6 +1,7 @@
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JPanel;
 
 
 public class Room {
@@ -56,7 +57,20 @@ public class Room {
                 }
             }
         }
+        
         return false; // No overlaps found
+    }
+
+    public boolean checkOutOfBounds(JPanel panel){
+        for(Room r : DrawingPanel.rooms){
+            int screenWidth = panel.getWidth();
+            int screenHeight = panel.getHeight();
+            
+            if((r.w+r.position.x>screenWidth)||(r.h+r.position.y>screenHeight)||(r.position.x<0)||(r.position.y<0)){
+                return true;
+            } 
+        }
+        return false;
     }
 
 }

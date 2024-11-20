@@ -172,10 +172,11 @@ public class FloorPlanner extends JFrame {
             public void mouseReleased(MouseEvent e) {
                 // Stop the timer when the mouse is released
                 timer.stop();
-                if(selectedRoom.checkOverlap()){
-                    JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(frame);
-                    OverlapDialog dialog = new OverlapDialog(parentFrame, "The "+selectedRoom.type + " overlaps with an existing room. Please try again!");
-                    dialog.setVisible(true);
+                if(selectedRoom.checkOverlap()||selectedRoom.checkOutOfBounds(drawingPanel)){
+                    if(selectedRoom.checkOutOfBounds(drawingPanel))
+                        JOptionPane.showMessageDialog( frame, "The room was dragged out of bounds!", "Out of Bounds", JOptionPane.ERROR_MESSAGE ); 
+                    else
+                        JOptionPane.showMessageDialog( frame, "The selected room is overlapping with an existing room!", "Overlap", JOptionPane.ERROR_MESSAGE );
                     System.out.println("Overlap!");
                     selectedRoom.position.x = oldx;
                     selectedRoom.position.y = oldy;
@@ -189,13 +190,13 @@ public class FloorPlanner extends JFrame {
 
                 }
                 if(selectedFurniture!=null){
-                    if(selectedFurniture.checkOutOfRoom()){
+                    if(selectedFurniture.checkOutOfRoom()||selectedFurniture.furnitureOverlap()){
                         selectedFurniture.x = oldfurniturex;
                         selectedFurniture.y = oldfurniturey;
                     }
                 }
                 
-                
+                System.out.println("X: "+selectedRoom.position.x+"|| y: "+selectedRoom.position.y);
                 xcoordinate=0;
                 ycoordinate=0;
                 drawingPanel.repaint(); 
@@ -470,7 +471,27 @@ public class FloorPlanner extends JFrame {
 
                         drawingPanel.setLayout(null);
                         // Add the image label to the panel
-                        drawingPanel.addFurniture(type, room, drawingPanel, centerX, centerY);
+                        int b = drawingPanel.addFurniture(type, room, drawingPanel, centerX, centerY);
+                        //Add error message if the furniture is not added
+                        switch (b) {
+                            case 3:
+                                {
+                                    JOptionPane.showMessageDialog( frame, type+" cannot be added in "+room.type, "Incorrect Furniture Type", JOptionPane.ERROR_MESSAGE );
+                                    break;
+                                }
+                            case 1:
+                                {
+                                    JOptionPane.showMessageDialog( frame, "The requested furniture image was not found", "Image not Found", JOptionPane.ERROR_MESSAGE );
+                                    break;
+                                }
+                            case 2:
+                                {
+                                    JOptionPane.showMessageDialog( frame, "There is not enough space in this room to add a "+type, "Not Enough Space", JOptionPane.ERROR_MESSAGE );
+                                    break;
+                                }
+                            default:
+                                break;
+                        }
                         furniturecheck = true;
                         System.out.println(type);
                         System.out.println(room.furniturelist);
@@ -480,9 +501,7 @@ public class FloorPlanner extends JFrame {
                     
                 }
                 if(!furniturecheck){
-                    JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(frame);
-                    OverlapDialog dialog = new OverlapDialog(parentFrame, "Please select a room to add the furniture!");
-                    dialog.setVisible(true);
+                    JOptionPane.showMessageDialog( frame, "Please select a room to add furniture in!", "Select Room", JOptionPane.ERROR_MESSAGE );
                 }
 
                 
