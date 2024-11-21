@@ -213,6 +213,11 @@ public class FloorPlanner extends JFrame {
                         furniture.y= selectedRoom.position.y+furniture.relativey;
                         //drawingPanel.repaint();
                     }
+                    for(Windoor w : selectedRoom.windoorlist){                        
+                        w.x= selectedRoom.position.x+w.wrelativex;
+                        w.y= selectedRoom.position.y+w.wrelativey;                     
+                        
+                    }
                     
 
                 }
