@@ -79,9 +79,6 @@ public class FloorPlanner extends JFrame {
                     
                     selectedRoom.position.x = xcoordinate-diffx;
                     selectedRoom.position.y =ycoordinate-diffy;
-                    
- 
-
                     if(snapButton.isSelected()){/////////////////////////////////////////////////////////////
                         if(selectedRoom.position.x-coordinate[0]-coordinate[2]>0 && selectedRoom.position.x-coordinate[0]-coordinate[2]<20 && (selectedRoom.position.y+selectedRoom.h>coordinate[1] && coordinate[1]+coordinate[3]>selectedRoom.position.y)){
                             selectedRoom.position.x=coordinate[0]+coordinate[2];
@@ -99,6 +96,11 @@ public class FloorPlanner extends JFrame {
                         
                         furniture.x= selectedRoom.position.x+furniture.relativex;
                         furniture.y= selectedRoom.position.y+furniture.relativey;                     
+                        
+                    }
+                    for(Windoor w : selectedRoom.windoorlist){                        
+                        w.x= selectedRoom.position.x+w.wrelativex;
+                        w.y= selectedRoom.position.y+w.wrelativey;                     
                         
                     }
 
@@ -151,6 +153,10 @@ public class FloorPlanner extends JFrame {
                         for(Furniture furniture: selectedRoom.furniturelist){
                             furniture.relativex=furniture.x-selectedRoom.position.x;
                             furniture.relativey=furniture.y-selectedRoom.position.y;
+                        }
+                        for(Windoor w: selectedRoom.windoorlist){
+                            w.wrelativex = w.x - selectedRoom.position.x;
+                            w.wrelativey = w.y - selectedRoom.position.y;
                         }
                         timer.start();
                     }
@@ -295,7 +301,7 @@ public class FloorPlanner extends JFrame {
         JPanel furniture = new JPanel();
         
         furniture.setBackground(Color.decode("#999999"));
-        
+        furniture.setLayout(new GridLayout(2,5,10,10));
         JToggleButton bed = new JToggleButton("Bed");
         bed.setBackground(Color.decode("#dddddd"));
         bed.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
