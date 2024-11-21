@@ -43,4 +43,8 @@ public class Furniture{
         }
         return false;
     }
+    public void rotate() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'rotate'");
+    }
 }
