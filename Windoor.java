@@ -1,17 +1,23 @@
-public class Windoor{
+
+import java.io.Serializable;
+
+public class Windoor implements Serializable{
     String type; //"window", "door"
     Room room;
     int x,y;
     int wall;
     int w = 25;
     int h = 2;
-    boolean selected; //
+    boolean selected; 
+    int wrelativex,wrelativey;
     Windoor(String type,Room room,int xcoord, int ycoord, int wall){
         this.type = type;
         this.room = room;
         this.x = xcoord;
         this.y = ycoord;
         this.wall = wall;
+        this.wrelativex =this.x-room.position.x;
+        this.wrelativey = this.y-room.position.y;
     }
 
     //wall = 0, 1, 2, 3 is N, E, S, W
