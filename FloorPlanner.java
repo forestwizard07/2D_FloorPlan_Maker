@@ -92,8 +92,6 @@ public class FloorPlanner extends JFrame {
                             furniture.y = ycoordinate-diffy;
 
                             
-                            
-                            
                         }
                     }
                 }
@@ -249,7 +247,7 @@ public class FloorPlanner extends JFrame {
 
         optionsPanel.setLayout(new GridLayout(10,2,10,10));
         optionsPanel.setBorder(new MatteBorder(2, 0, 0, 0, Color.BLACK));
-        furniturePanel.setLayout(new GridLayout(3,1,10,10));
+        furniturePanel.setLayout(new GridLayout(7,1,10,10));
         placeHolder.setBorder(new MatteBorder(0, 2, 2, 2, Color.BLACK));
         optionsPanel.setBackground(Color.decode("#999999"));
         placeHolder.setBackground(Color.decode("#999999"));
@@ -328,12 +326,15 @@ public class FloorPlanner extends JFrame {
         rotFurniture.setBackground(Color.decode("#dddddd"));
         rotFurniture.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
 
+        JToggleButton snapButton = new JToggleButton("OFF");
+        snapButton.setBackground(Color.decode("#dddddd"));
 
-        furniturePanel.setLayout(new GridLayout(5, 1, 10, 10));
+        furniturePanel.setLayout(new GridLayout(7, 1, 10, 10));
         furniturePanel.add(furniture);
         furniturePanel.add(addFurniture);
-        furniturePanel.add(delFurniture);    //DELETE FURNITURE BUTTON
+        furniturePanel.add(delFurniture);    //DELETE FRUNITURE BUTTON
         furniturePanel.add(rotFurniture);
+        furniturePanel.add(snapButton);
 
         ButtonGroup furniturebuttons = new ButtonGroup();
 
@@ -358,6 +359,36 @@ public class FloorPlanner extends JFrame {
         shower.setActionCommand("shower");
         sink.setActionCommand("sink");
         stove.setActionCommand("stove");
+
+        //WINDOW AND DOOR BUTTONS
+
+        JToggleButton window = new JToggleButton("Window");
+        sink.setBackground(Color.decode("#dddddd"));
+        sink.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+        furniture.add(sink);
+
+        JToggleButton door = new JToggleButton("Door");
+        stove.setBackground(Color.decode("#dddddd"));
+        stove.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+        furniture.add(stove);
+
+        JButton addWindow = new JButton("Add Window/Door");
+        addFurniture.setBackground(Color.decode("#dddddd"));
+        addFurniture.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+        
+        
+        JButton delWindow = new JButton("Delete Window/Door");
+        delFurniture.setBackground(Color.decode("#dddddd"));
+        delFurniture.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+
+        window.setActionCommand("bed");
+        door.setActionCommand("chair");
+
+        ButtonGroup windowbuttons = new ButtonGroup();
+
+        windowbuttons.add(door);
+        windowbuttons.add(window);
+
         
         
         JLabel heighttext = new JLabel("Enter Height:");
@@ -437,6 +468,19 @@ public class FloorPlanner extends JFrame {
                 drawingPanel.delFurniture();
             }
         });
+
+        snapButton.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                if (snapButton.isSelected()) {
+                    snapButton.setText("ON");
+                    snapButton.setBackground(Color.decode("#999999")); // Change to green when ON
+                } else {
+                    snapButton.setText("OFF");
+                    snapButton.setBackground(Color.decode("#dddddd"));   // Change to red when OFF
+                }
+            }
+        });
+
 
         addFurniture.addActionListener(new ActionListener() {
             @Override
