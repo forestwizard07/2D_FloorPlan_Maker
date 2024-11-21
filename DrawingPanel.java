@@ -359,7 +359,7 @@ public class DrawingPanel extends JPanel {
 
             for (Windoor windoor : room.windoorlist) {
                 if (windoor.type.equals("window")) {
-                    g.setColor(Color.BLUE); // Use blue for windows
+                    g.setColor(Color.decode("#00cc00")); // Use blue for windows
                 } else if (windoor.type.equals("door")) {
                     g.setColor(Color.ORANGE); // Use orange for doors
                 }
@@ -398,11 +398,11 @@ public class DrawingPanel extends JPanel {
     private void adjustLeftOrUpAlignment(String direction, int width, int height, int wprev, int hprev) {
         switch (direction) {
             case "E", "W" -> {
-                if (height == hprev) y += height / 3;
+                if (height == hprev) y -= height / 2;
                 else if (height > hprev) y -= (height - hprev);
             }
             case "N", "S" -> {
-                if (width == wprev) x -= width / 3;
+                if (width == wprev) x -= width / 2;
                 else if (width > wprev) x -= (width - wprev);
             }
         }
@@ -420,11 +420,11 @@ public class DrawingPanel extends JPanel {
     private void adjustRightOrDownAlignment(String direction, int width, int height, int wprev, int hprev) {
         switch (direction) {
             case "E", "W" -> {
-                if (height == hprev) y -= height / 3;
+                if (height == hprev) y += height / 2;
                 else if (height < hprev) y += (hprev - height);
             }
             case "N", "S" -> {
-                if (width == wprev) x += width / 3;
+                if (width == wprev) x += width / 2;
                 else if (width < wprev) x += (wprev - width);
             }
         }
