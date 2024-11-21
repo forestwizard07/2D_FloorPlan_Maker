@@ -38,6 +38,7 @@ public class FloorPlanner extends JFrame {
     public int initialx,initialy;
     public int oldfurniturex,oldfurniturey;
     public boolean clickedRoom=false;
+    public static int rotcount=1;
     public FloorPlanner(){
         JFrame frame = new JFrame();
         frame.setSize(800,800);
@@ -339,6 +340,41 @@ public class FloorPlanner extends JFrame {
         JButton rotFurniture = new JButton("Rotate Furniture");
         rotFurniture.setBackground(Color.decode("#dddddd"));
         rotFurniture.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+        rotFurniture.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+                if (selectedFurniture != null) {
+                    // Swap the width and height on every click
+                    int temp = selectedFurniture.w;
+                    selectedFurniture.w = selectedFurniture.h;
+                    selectedFurniture.h = temp;
+        
+                    // Update the image path based on the rotation count
+                    int rotationIndex = rotcount % 4;
+                    System.out.println("Rotation index"+ rotationIndex);
+                    String newImagePath = switch (rotationIndex) {
+                        case 1 -> "assets/1bed_bedroom.png";
+                        case 2 -> "assets/2bed_bedroom.png";
+                        case 3 -> "assets/3bed_bedroom.png";
+                        default -> "assets/bed_bedroom.png";
+                    };
+        
+                    // Set the new image path
+                    selectedFurniture.filepath = newImagePath;
+        
+                    // Increment the counter
+                    rotcount++;
+        
+                    // Repaint the drawing panel to reflect the new image and dimensions
+                    drawingPanel.repaint();
+                } else {
+                    JOptionPane.showMessageDialog(frame, "No furniture selected to rotate!",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        
 
         JToggleButton snapButton = new JToggleButton("OFF");
         snapButton.setBackground(Color.decode("#dddddd"));
