@@ -1,5 +1,7 @@
+import java.io.Serializable;
 
-public class Furniture{
+public class Furniture implements Serializable{
+    private static final long serialVersionUID = 1L;
     String type;
     Room container;
     int x,y;
