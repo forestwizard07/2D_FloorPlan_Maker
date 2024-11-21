@@ -39,11 +39,9 @@ public class FloorPlanner extends JFrame {
     public int initialx,initialy;
     public int oldfurniturex,oldfurniturey;
     public boolean clickedRoom=false;
-<<<<<<< HEAD
-    public int[] coordinate={-1,-1,-1,-1}; 
-=======
+
     public static int rotcount=1;
->>>>>>> 89a00b45b7a10788fb2f213a5107543bb17e2f7b
+
     public FloorPlanner(){
         JFrame frame = new JFrame();
         frame.setSize(800,800);
@@ -56,15 +54,10 @@ public class FloorPlanner extends JFrame {
         frame.setBackground(Color.WHITE);
         drawingPanel = new DrawingPanel();
         drawingPanel.setVisible(true);
-<<<<<<< HEAD
-        JToggleButton snapButton = new JToggleButton("OFF");
-        snapButton.setBackground(Color.decode("#dddddd"));
-=======
 
         JToggleButton snapButton = new JToggleButton("OFF");
         snapButton.setBackground(Color.decode("#dddddd"));
 
->>>>>>> 89a00b45b7a10788fb2f213a5107543bb17e2f7b
         
         timer = new Timer(1, new ActionListener() {
             @Override
@@ -104,14 +97,8 @@ public class FloorPlanner extends JFrame {
                         }else if(coordinate[1]>selectedRoom.position.y && coordinate[1]-selectedRoom.position.y-selectedRoom.h<20 && selectedRoom.position.x+selectedRoom.w>coordinate[0] && selectedRoom.position.x<coordinate[0]+coordinate[2]){
                             selectedRoom.position.y=coordinate[1]-selectedRoom.h;
                         }
-<<<<<<< HEAD
 
 
-
-
-
-                    }
-=======
                     }
 
                     for(Furniture furniture : selectedRoom.furniturelist){
@@ -122,7 +109,6 @@ public class FloorPlanner extends JFrame {
                         
                     }
 
->>>>>>> 89a00b45b7a10788fb2f213a5107543bb17e2f7b
                 }else if((xcoordinate!=0||ycoordinate!=0)&&(xcoordinate!=initialx||ycoordinate!=initialy)&&(selectedRoom.isSelectedwofurniture)){
                     
                     
@@ -394,10 +380,6 @@ public class FloorPlanner extends JFrame {
         });
         
 
-<<<<<<< HEAD
-        
-=======
->>>>>>> 89a00b45b7a10788fb2f213a5107543bb17e2f7b
 
         furniturePanel.setLayout(new GridLayout(7, 1, 10, 10));
         furniturePanel.add(furniture);
