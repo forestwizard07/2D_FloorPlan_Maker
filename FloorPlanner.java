@@ -92,8 +92,6 @@ public class FloorPlanner extends JFrame {
                             furniture.y = ycoordinate-diffy;
 
                             
-                            
-                            
                         }
                     }
                 }
