@@ -119,7 +119,7 @@ public class DrawingPanel extends JPanel {
 
 
     public String getSelectedRoomType() {
-        for (Room room : DrawingPanel.rooms) {
+        for (Room room : rooms) {
             if (room.isSelected) {
                 return room.type; // Return the type of the selected room
             }
@@ -135,10 +135,12 @@ public class DrawingPanel extends JPanel {
         String filename = "";
     
         String roomType = getSelectedRoomType();
+        System.out.println("Test this : "+ type);
+
         boolean validRoom = false;
         switch (type) {
             case "bed":
-                if (roomType == "Bedroom") {
+                if ("Bedroom".equals(roomType)) {
                     width = 60;
                     height = 90;
                     filename = "bed_bedroom.png";
@@ -147,12 +149,12 @@ public class DrawingPanel extends JPanel {
                 }
                 break;
             case "chair":
-                if (roomType == "Bedroom") {
+                if ("Bedroom".equals(roomType)) {
                     width=38;
                     height=38;
                     filename = "chair_bedroom.png";
                     validRoom = true;
-                } else if (roomType == "Living Room") {
+                } else if ("Living Room".equals(roomType)) {
                     width=38;
                     height=38;
                     filename = "chair_livingroom.png";
@@ -160,7 +162,7 @@ public class DrawingPanel extends JPanel {
                 }
                 break;
             case "sofa":
-                if (roomType == "Living Room") {
+                if ("Living Room".equals(roomType)) {
                     width=105;
                     height=53;
                     filename = "sofa_livingroom.png";
@@ -168,12 +170,12 @@ public class DrawingPanel extends JPanel {
                 }
                 break;
             case "table":
-                if (roomType == "Bedroom") {
+                if ("Bedroom".equals(roomType)) {
                     width=60;
                     height=38;
                     filename = "table_bedroom.png";
                     validRoom = true;
-                } else if (roomType == "Living Room") {
+                } else if ("Living Room".equals(roomType)) {
                     width=45;
                     height=45;
                     filename = "table_livingroom.png";
@@ -181,7 +183,7 @@ public class DrawingPanel extends JPanel {
                 }
                 break;
             case "commode":
-                if (roomType == "Bathroom") {
+                if ("Bathroom".equals(roomType)) {
                     width=38;
                     height=53;
                     filename = "commode_bathroom.png";
@@ -189,7 +191,7 @@ public class DrawingPanel extends JPanel {
                 }
                 break;
             case "sink":
-                if (roomType == "Kitchen") {
+                if ("Kitchen".equals(roomType)) {
                     width=45;
                     height=45;
                     filename = "kitchensink_kitchen.png";
@@ -197,7 +199,7 @@ public class DrawingPanel extends JPanel {
                 }
                 break;
             case "basin":
-                if (roomType == "Bathroom") {
+                if ("Bathroom".equals(roomType)) {
                     width=38;
                     height=38;
                     filename = "washbasin_bathroom.png";
@@ -205,7 +207,7 @@ public class DrawingPanel extends JPanel {
                 }
                 break;
             case "shower":
-                if (roomType == "Bathroom") {
+                if ("Bathroom".equals(roomType)) {
                     width=53;
                     height=90;
                     filename = "shower_bathroom.png";
@@ -213,7 +215,7 @@ public class DrawingPanel extends JPanel {
                 }
                 break;
             case "dining":
-                if (roomType == "Dining Room") {
+                if ("Dining Room".equals(roomType)) {
                     width=83;
                     height=83;
                     filename = "diningset_diningroom.png";
@@ -221,7 +223,7 @@ public class DrawingPanel extends JPanel {
                 }
                 break;
             case "stove":
-                if (roomType == "Kitchen") {
+                if ("Kitchen".equals(roomType)) {
                     width=68;
                     height=38;
                     filename = "stove_kitchen.png";
@@ -261,6 +263,7 @@ public class DrawingPanel extends JPanel {
         
             // Construct the relative path
             relativePath = currentDir + File.separator + "assets" + File.separator + filename;
+            new_furniture.filename = filename;
             new_furniture.filepath=relativePath;
             parentroom.furniturelist.add(new_furniture);
             File file = new File(new_furniture.filepath);

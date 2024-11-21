@@ -1,3 +1,4 @@
+import java.io.File;
 import java.io.Serializable;
 
 public class Furniture implements Serializable{
@@ -7,8 +8,9 @@ public class Furniture implements Serializable{
     int x,y;
     int relativex,relativey;
     int w,h;
-    String filepath;
-    boolean selected; //
+    String filepath,filename;
+    boolean selected;
+    int rotcount=1;
     Furniture(String furtype,Room room,int xcoord, int ycoord, int width, int height){
         this.type = furtype;
         this.container = room;
@@ -46,8 +48,34 @@ public class Furniture implements Serializable{
         return false;
     }
     public void rotate() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'rotate'");
-    }
+        if (this != null) {
+                    // Swap the width and height on every click
+                    int temp = this.w;
+                    this.w = this.h;
+                    this.h = temp;
+                    String newImagePath;
+                    // Update the image path based on the rotation count
+                    int rotationIndex = this.rotcount % 4;
+                    String strrotcount = String.valueOf(rotationIndex);
 
+                    System.out.println("Rotation index"+ rotationIndex);
+                    
+                    
+                    newImagePath = strrotcount.concat(this.filename);
+        
+                    String currentDir = System.getProperty("user.dir");
+        
+            // Construct the relative path
+                    String relativePath = currentDir + File.separator + "assets" + File.separator + newImagePath;
+                    
+                    // Set the new image path
+                    this.filepath = relativePath;
+        
+                    // Increment the counter
+                    this.rotcount++;
+        
+                    // Repaint the drawing panel to reflect the new image and dimensions
+                    
+                } 
+    }
 }
