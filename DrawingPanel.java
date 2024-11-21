@@ -153,6 +153,7 @@ public class DrawingPanel extends JPanel {
                     height = 90;
                     filename = "bed_bedroom.png";
                     validRoom = true;
+                    
                 }
                 break;
             case "chair":
