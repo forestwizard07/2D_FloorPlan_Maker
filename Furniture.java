@@ -45,4 +45,8 @@ public class Furniture implements Serializable{
         }
         return false;
     }
+    public void rotate() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'rotate'");
+    }
 }

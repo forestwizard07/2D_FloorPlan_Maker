@@ -45,7 +45,6 @@ public class DrawingPanel extends JPanel {
     static int x = 100;
     static int y = 100;
     Image image;
-    ImagePanel imagePanel = new ImagePanel();
     static int hprev=0,wprev=0;
     @SuppressWarnings("unused")
     static int xscale = 100;
