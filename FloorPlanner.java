@@ -239,6 +239,7 @@ public class FloorPlanner extends JFrame {
         menuBar.setBorder(borderThin);
         menuBar.setBackground(Color.decode("#999999"));
         JPanel furniturePanel = new JPanel();
+        JPanel windoorPanel = new JPanel();
         JPanel optionsPanel = new JPanel();
         JPanel placeHolder = new JPanel();
 
@@ -260,7 +261,7 @@ public class FloorPlanner extends JFrame {
         JLabel addfurniture = new JLabel("Furniture/Fixtures");
         furniturePanel.add(addfurniture);
         JPanel furniture = new JPanel();
-        furniture.setLayout(new GridLayout(2,5,10,10));
+        
         furniture.setBackground(Color.decode("#999999"));
         
         JToggleButton bed = new JToggleButton("Bed");
@@ -335,6 +336,7 @@ public class FloorPlanner extends JFrame {
         furniturePanel.add(delFurniture);    //DELETE FRUNITURE BUTTON
         furniturePanel.add(rotFurniture);
         furniturePanel.add(snapButton);
+        furniturePanel.add(windoorPanel);
 
         ButtonGroup furniturebuttons = new ButtonGroup();
 
@@ -388,6 +390,13 @@ public class FloorPlanner extends JFrame {
 
         windowbuttons.add(door);
         windowbuttons.add(window);
+
+        windoorPanel.setLayout(new GridLayout(2, 2, 10, 10));
+        windoorPanel.add(window);
+        windoorPanel.add(door);
+        windoorPanel.add(addWindow);
+        windoorPanel.add(delWindow);
+
 
         
         

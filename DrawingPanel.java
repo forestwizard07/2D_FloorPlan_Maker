@@ -361,6 +361,20 @@ public class DrawingPanel extends JPanel {
                 
                 
             }
+
+            for (Windoor windoor : room.windoorlist) {
+                if (windoor.type.equals("window")) {
+                    g.setColor(Color.BLUE); // Use blue for windows
+                } else if (windoor.type.equals("door")) {
+                    g.setColor(Color.ORANGE); // Use orange for doors
+                }
+                g.fillRect(windoor.x, windoor.y, windoor.w, 10); // Example: Height fixed to 10
+                if (windoor.selected) {
+                    g.setColor(Color.BLACK);
+                    g2.setStroke(new BasicStroke(2));
+                    g2.drawRect(windoor.x, windoor.y, windoor.w, 10);
+                }
+            }
         }
         
 
@@ -420,5 +434,39 @@ public class DrawingPanel extends JPanel {
             }
         }
     }
+
+    public void addWindoor(String type, Room parentRoom, int wall, int width) {
+        // Validate room selection
+        if (parentRoom == null) {
+            System.out.println("No room selected to add " + type + ".");
+            return;
+        }
+    
+        // Create a new Windoor object
+        Windoor windoor = new Windoor(type, parentRoom, 0, 0, width, wall);
+    
+        // Calculate position based on wall
+        windoor.givePos(wall);
+    
+        // Check if it fits within the wall dimensions
+        if (wall == 0 || wall == 2) { // Top or Bottom wall
+            if (windoor.x + windoor.w > parentRoom.position.x + parentRoom.w) {
+                System.out.println(type + " exceeds room width.");
+                return;
+            }
+        } else { // Left or Right wall
+            if (windoor.y + windoor.w > parentRoom.position.y + parentRoom.h) {
+                System.out.println(type + " exceeds room height.");
+                return;
+            }
+        }
+    
+        // Add Windoor to room
+        parentRoom.addWindoor(windoor);
+    
+        // Trigger repaint
+        repaint();
+    }
+    
     
 }
