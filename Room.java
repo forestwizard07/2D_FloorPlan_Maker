@@ -14,7 +14,9 @@ public class Room implements Serializable {
     public String direction;
     public boolean isSelected;
     public boolean isSelectedwofurniture;
-    public List<Furniture> furniturelist = new ArrayList<>(); 
+    public List<Furniture> furniturelist = new ArrayList<>();
+    public List<Windoor> windoorlist = new ArrayList<>();
+
     Room(String type, Point position, int w, int h, String direction) {
         this.type = type;
         this.position = position;
@@ -73,6 +75,10 @@ public class Room implements Serializable {
             } 
         }
         return false;
+    }
+
+    public void addWindoor(Windoor windoor) {
+        this.windoorlist.add(windoor);
     }
 
 }
