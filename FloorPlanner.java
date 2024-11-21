@@ -249,7 +249,7 @@ public class FloorPlanner extends JFrame {
 
         optionsPanel.setLayout(new GridLayout(10,2,10,10));
         optionsPanel.setBorder(new MatteBorder(2, 0, 0, 0, Color.BLACK));
-        furniturePanel.setLayout(new GridLayout(3,1,10,10));
+        furniturePanel.setLayout(new GridLayout(7,1,10,10));
         placeHolder.setBorder(new MatteBorder(0, 2, 2, 2, Color.BLACK));
         optionsPanel.setBackground(Color.decode("#999999"));
         placeHolder.setBackground(Color.decode("#999999"));
@@ -328,12 +328,15 @@ public class FloorPlanner extends JFrame {
         rotFurniture.setBackground(Color.decode("#dddddd"));
         rotFurniture.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
 
+        JToggleButton snapButton = new JToggleButton("OFF");
+        snapButton.setBackground(Color.decode("#dddddd"));
 
-        furniturePanel.setLayout(new GridLayout(5, 1, 10, 10));
+        furniturePanel.setLayout(new GridLayout(7, 1, 10, 10));
         furniturePanel.add(furniture);
         furniturePanel.add(addFurniture);
         furniturePanel.add(delFurniture);    //DELETE FRUNITURE BUTTON
         furniturePanel.add(rotFurniture);
+        furniturePanel.add(snapButton);
 
         ButtonGroup furniturebuttons = new ButtonGroup();
 
@@ -467,6 +470,19 @@ public class FloorPlanner extends JFrame {
                 drawingPanel.delFurniture();
             }
         });
+
+        snapButton.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                if (snapButton.isSelected()) {
+                    snapButton.setText("ON");
+                    snapButton.setBackground(Color.decode("#999999")); // Change to green when ON
+                } else {
+                    snapButton.setText("OFF");
+                    snapButton.setBackground(Color.decode("#dddddd"));   // Change to red when OFF
+                }
+            }
+        });
+
 
         addFurniture.addActionListener(new ActionListener() {
             @Override
