@@ -32,6 +32,7 @@ public class FloorPlanner extends JFrame {
     public int diffy;
     public int oldx,oldy;
     public Timer timer;
+    public int[] coordinate = {-1, -1, -1, -1};
     public int xcoordinate,ycoordinate;
     public boolean dragged=false;
     public int count=0;
@@ -51,7 +52,10 @@ public class FloorPlanner extends JFrame {
         frame.setBackground(Color.WHITE);
         drawingPanel = new DrawingPanel();
         drawingPanel.setVisible(true);
-        
+
+        JToggleButton snapButton = new JToggleButton("OFF");
+        snapButton.setBackground(Color.decode("#dddddd"));
+
         
         timer = new Timer(1, new ActionListener() {
             @Override
@@ -83,6 +87,20 @@ public class FloorPlanner extends JFrame {
                         furniture.y= selectedRoom.position.y+furniture.relativey;                     
                         
                     }
+
+                    if(snapButton.isSelected()){/////////////////////////////////////////////////////////////
+                        if(selectedRoom.position.x-coordinate[0]-coordinate[2]>0 && selectedRoom.position.x-coordinate[0]-coordinate[2]<20 && (selectedRoom.position.y+selectedRoom.h>coordinate[1] && coordinate[1]+coordinate[3]>selectedRoom.position.y)){
+                            selectedRoom.position.x=coordinate[0]+coordinate[2];
+                        }else if(coordinate[0]>selectedRoom.position.x && coordinate[0]-selectedRoom.position.x-selectedRoom.w>0 && coordinate[0]-selectedRoom.position.x-selectedRoom.w<20 && (selectedRoom.position.y+selectedRoom.h>coordinate[1] && coordinate[1]+coordinate[3]>selectedRoom.position.y)){
+                            selectedRoom.position.x=coordinate[0]-selectedRoom.w;
+                        }else if(selectedRoom.position.y-coordinate[1]-coordinate[3]<20 && selectedRoom.position.y-coordinate[1]-coordinate[3]>0 && selectedRoom.position.x+selectedRoom.w>coordinate[0] && selectedRoom.position.x<coordinate[0]+coordinate[2]){
+                            selectedRoom.position.y=coordinate[1]+coordinate[3];
+                        }else if(coordinate[1]>selectedRoom.position.y && coordinate[1]-selectedRoom.position.y-selectedRoom.h<20 && selectedRoom.position.x+selectedRoom.w>coordinate[0] && selectedRoom.position.x<coordinate[0]+coordinate[2]){
+                            selectedRoom.position.y=coordinate[1]-selectedRoom.h;
+                        }
+                    }
+
+
                 }else if((xcoordinate!=0||ycoordinate!=0)&&(xcoordinate!=initialx||ycoordinate!=initialy)&&(selectedRoom.isSelectedwofurniture)){
                     
                     
@@ -354,8 +372,6 @@ public class FloorPlanner extends JFrame {
         });
         
 
-        JToggleButton snapButton = new JToggleButton("OFF");
-        snapButton.setBackground(Color.decode("#dddddd"));
 
         furniturePanel.setLayout(new GridLayout(7, 1, 10, 10));
         furniturePanel.add(furniture);
@@ -514,9 +530,21 @@ public class FloorPlanner extends JFrame {
                 if (snapButton.isSelected()) {
                     snapButton.setText("ON");
                     snapButton.setBackground(Color.decode("#999999")); // Change to green when ON
+                    for(Room room:drawingPanel.rooms){
+                        if(room.isSelected){        //x,y,w,h
+                            coordinate[0]=room.position.x;
+                            coordinate[1]=room.position.y;
+                            coordinate[2]=room.w;
+                            coordinate[3]=room.h;
+                        }
+                    }
                 } else {
                     snapButton.setText("OFF");
                     snapButton.setBackground(Color.decode("#dddddd"));   // Change to red when OFF
+                    coordinate[0]=-1;
+                    coordinate[1]=-1;
+                    coordinate[2]=-1;
+                    coordinate[3]=-1;
                 }
             }
         });
