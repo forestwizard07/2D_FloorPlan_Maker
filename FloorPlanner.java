@@ -43,13 +43,14 @@ public class FloorPlanner extends JFrame {
         frame.setSize(800,800);
         // Set the JFrame to full screen mode
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        
+        //load the previous rooms
+       
         frame.setTitle("2D Floor Planner");
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         frame.setBackground(Color.WHITE);
         drawingPanel = new DrawingPanel();
         drawingPanel.setVisible(true);
-       
+        
         
         timer = new Timer(1, new ActionListener() {
             @Override
@@ -94,10 +95,6 @@ public class FloorPlanner extends JFrame {
                         }
                     }
                 }
-                
-
-
-
                 drawingPanel.repaint();
                 
                 
@@ -209,12 +206,13 @@ public class FloorPlanner extends JFrame {
         
         JMenu fileMenu = new JMenu("File");
         frame.add(drawingPanel, BorderLayout.CENTER);
-
-        JMenuItem newItem = new JMenuItem("New");
+        JMenuItem newItem = new JMenuItem("New Drawing Board");
+        JMenuItem openItem = new JMenuItem("Open previously saved file");
         JMenuItem saveItem = new JMenuItem("Save");
         JMenuItem exportItem = new JMenuItem("Export as PNG");
         JMenuItem exitItem = new JMenuItem("Exit");
         fileMenu.add(newItem);
+        fileMenu.add(openItem);
         fileMenu.add(saveItem);
         fileMenu.add(exportItem);
         fileMenu.add(exitItem);
@@ -228,10 +226,25 @@ public class FloorPlanner extends JFrame {
         });
 
         saveItem.addActionListener((ActionEvent e) -> {
-            drawingPanel.saveRoomsToFile("save.ser");
-
-            
+            Room.saveRoomsToFile(drawingPanel.rooms); 
+            System.out.println("Save");          
         });
+
+        
+        openItem.addActionListener((ActionEvent e) -> {
+            Room.loadRoomsFromFile();
+            drawingPanel.repaint(); 
+            System.out.println("Load file");         
+        });
+
+        newItem.addActionListener((ActionEvent e) -> {
+            drawingPanel.rooms.clear();  
+            drawingPanel.masterfurniture.clear();
+            drawingPanel.repaint();;      
+        });
+
+
+        
 
         menuBar.add(fileMenu);
 
@@ -662,7 +675,8 @@ public class FloorPlanner extends JFrame {
         delRoom.addActionListener((ActionEvent e) -> {
             drawingPanel.delRoom();
         });
-
+        Room.loadRoomsFromFile();
+        drawingPanel.repaint(); 
         
 
         frame.add(placeHolder, BorderLayout.EAST);

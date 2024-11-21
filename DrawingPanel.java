@@ -8,10 +8,8 @@ import java.awt.Image;
 import java.awt.Point;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.ImageIcon;
@@ -22,16 +20,8 @@ import javax.swing.SwingUtilities;
 
 public class DrawingPanel extends JPanel {
     public static List<Room> rooms = new ArrayList<>();
-    public static List<Furniture> furniture = new ArrayList<>();
+    public static List<Furniture> masterfurniture = new ArrayList<>();
 
-    public static void saveRoomsToFile(String filename) {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename))) {
-            oos.writeObject(rooms);
-            System.out.println("Rooms saved to file: " + filename);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     // Method to load rooms list from a file
     public static void loadRoomsFromFile(String filename) {
@@ -312,6 +302,7 @@ public class DrawingPanel extends JPanel {
             }
             repaint();
         }
+        
     }
     @Override  
     protected void paintComponent(Graphics g) {
