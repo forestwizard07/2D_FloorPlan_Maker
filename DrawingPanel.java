@@ -22,6 +22,9 @@ public class DrawingPanel extends JPanel {
     public static List<Room> rooms = new ArrayList<>();
     public static List<Furniture> masterfurniture = new ArrayList<>();
 
+    int windoorX = 0;
+    int windoorY = 0;
+
 
     // Method to load rooms list from a file
     public static void loadRoomsFromFile(String filename) {
@@ -430,7 +433,7 @@ public class DrawingPanel extends JPanel {
         }
     }
 
-    public void addWindoor(String type, Room parentRoom, int wall, int width) {
+    public void addWindoor(String type, Room parentRoom, int wall, String posn, String direction) {
         // Validate room selection
         if (parentRoom == null) {
             System.out.println("No room selected to add " + type + ".");
@@ -438,10 +441,13 @@ public class DrawingPanel extends JPanel {
         }
     
         // Create a new Windoor object
-        Windoor windoor = new Windoor(type, parentRoom, 0, 0, width, wall);
+        Windoor windoor = new Windoor(type, parentRoom, windoorX, windoorY, wall);
     
         // Calculate position based on wall
         windoor.givePos(wall);
+
+        // Adjust position by alignment
+        adjustWindoorPositionByAlignment(windoor, posn, parentRoom.w, parentRoom.h);
     
         // Check if it fits within the wall dimensions
         if (wall == 0 || wall == 2) { // Top or Bottom wall
@@ -455,6 +461,8 @@ public class DrawingPanel extends JPanel {
                 return;
             }
         }
+
+        System.out.println("Pressed position: "+ posn);
     
         // Add Windoor to room
         parentRoom.addWindoor(windoor);
@@ -462,6 +470,43 @@ public class DrawingPanel extends JPanel {
         // Trigger repaint
         repaint();
     }
+
+    private void adjustWindoorPositionByAlignment(Windoor windoor, String posn, int roomWidth, int roomHeight) {
+        switch (posn) {
+            case "L/U": // Align Left (horizontal) or Up (vertical)
+                if (windoor.wall == 0) { // Top wall
+                    windoor.x = windoor.room.position.x;
+                } else if (windoor.wall == 1) { // Right wall
+                    windoor.y = windoor.room.position.y;
+                } else if (windoor.wall == 2) { // Bottom wall
+                    windoor.x = windoor.room.position.x;
+                } else if (windoor.wall == 3) { // Left wall
+                    windoor.y = windoor.room.position.y;
+                }
+                break;
+            case "C": // Center alignment
+                if (windoor.wall == 0 || windoor.wall == 2) { // Top or Bottom wall
+                    windoor.x = windoor.room.position.x + (roomWidth - windoor.w) / 2;
+                } else if (windoor.wall == 1 || windoor.wall == 3) { // Right or Left wall
+                    windoor.y = windoor.room.position.y + (roomHeight - windoor.h) / 2;
+                }
+                break;
+            case "R/D": // Align Right (horizontal) or Down (vertical)
+                if (windoor.wall == 0) { // Top wall
+                    windoor.x = windoor.room.position.x + roomWidth - windoor.w;
+                } else if (windoor.wall == 1) { // Right wall
+                    windoor.y = windoor.room.position.y + roomHeight - windoor.h;
+                } else if (windoor.wall == 2) { // Bottom wall
+                    windoor.x = windoor.room.position.x + roomWidth - windoor.w;
+                } else if (windoor.wall == 3) { // Left wall
+                    windoor.y = windoor.room.position.y + roomHeight - windoor.h;
+                }
+                break;
+        }
+        System.out.println("Positioning: " + posn + ", Wall: " + windoor.wall);
+
+    }
+    
     
     
 }

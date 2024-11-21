@@ -636,6 +636,8 @@ public class FloorPlanner extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String type="rawr";
                 int wall=0;
+                String direction = "";
+                String posn = "";
                 // boolean furniturecheck=false;
                 for(Room room: drawingPanel.rooms){
                     if(room.isSelected){
@@ -652,15 +654,31 @@ public class FloorPlanner extends JFrame {
                             switch (selectedDirection) {
                                 case ("N"):
                                     wall = 0;
+                                    direction = "N";
                                     break;
                                 case ("E"):
                                     wall = 1;
+                                    direction = "E";
                                     break;
                                 case ("S"):
                                     wall = 2;
+                                    direction = "S";
                                     break;
                                 case ("W"):
                                     wall = 3;
+                                    direction = "W";
+                                    break;
+                            }
+
+                            switch(selectedPosition){
+                                case ("L/U") :
+                                    posn = "L/U";
+                                    break;
+                                case ("C"):
+                                    posn = "C";
+                                    break;
+                                case ("R/D"):
+                                    posn = "R/D";
                                     break;
                             }
                         } else {
@@ -669,7 +687,7 @@ public class FloorPlanner extends JFrame {
 
 
                         drawingPanel.setLayout(null);
-                        drawingPanel.addWindoor(type, room, wall, 50);
+                        drawingPanel.addWindoor(type, room, wall, posn, direction);
                         System.out.println(type);
                         System.out.println(room.windoorlist);
                         windoorButtons.clearSelection();
