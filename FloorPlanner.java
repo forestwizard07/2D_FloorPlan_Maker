@@ -39,7 +39,9 @@ public class FloorPlanner extends JFrame {
     public int initialx,initialy;
     public int oldfurniturex,oldfurniturey;
     public boolean clickedRoom=false;
+
     public static int rotcount=1;
+
     public FloorPlanner(){
         JFrame frame = new JFrame();
         frame.setSize(800,800);
@@ -75,6 +77,9 @@ public class FloorPlanner extends JFrame {
                     }
                 });
                 System.out.println("Xcoordinate "+xcoordinate+" "+initialx);
+                
+
+
                 if((xcoordinate!=0||ycoordinate!=0)&&(xcoordinate!=initialx||ycoordinate!=initialy)&&(selectedRoom.isSelected)){
                     
                     selectedRoom.position.x = xcoordinate-diffx;
@@ -89,6 +94,8 @@ public class FloorPlanner extends JFrame {
                         }else if(coordinate[1]>selectedRoom.position.y && coordinate[1]-selectedRoom.position.y-selectedRoom.h<20 && selectedRoom.position.x+selectedRoom.w>coordinate[0] && selectedRoom.position.x<coordinate[0]+coordinate[2]){
                             selectedRoom.position.y=coordinate[1]-selectedRoom.h;
                         }
+
+
                     }
 
                     for(Furniture furniture : selectedRoom.furniturelist){
