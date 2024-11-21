@@ -54,14 +54,15 @@ public class Furniture implements Serializable{
                     this.w = this.h;
                     this.h = temp;
                     String newImagePath;
+                    String tempfilename;
                     // Update the image path based on the rotation count
                     int rotationIndex = this.rotcount % 4;
                     String strrotcount = String.valueOf(rotationIndex);
 
                     System.out.println("Rotation index"+ rotationIndex);
                     
-                    
-                    newImagePath = strrotcount.concat(this.filename);
+                    tempfilename = this.filename.substring(1);
+                    newImagePath = strrotcount.concat(tempfilename);
         
                     String currentDir = System.getProperty("user.dir");
         

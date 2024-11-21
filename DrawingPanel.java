@@ -260,7 +260,7 @@ public class DrawingPanel extends JPanel {
             Furniture new_furniture = new Furniture(type, parentroom, x1, y1, width,height);
             
             String currentDir = System.getProperty("user.dir");
-        
+            filename="0"+filename;
             // Construct the relative path
             relativePath = currentDir + File.separator + "assets" + File.separator + filename;
             new_furniture.filename = filename;
