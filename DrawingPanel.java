@@ -363,11 +363,11 @@ public class DrawingPanel extends JPanel {
                 } else if (windoor.type.equals("door")) {
                     g.setColor(Color.ORANGE); // Use orange for doors
                 }
-                g.fillRect(windoor.x, windoor.y, windoor.w, 10); // Example: Height fixed to 10
+                g.fillRect(windoor.x, windoor.y, windoor.w, windoor.h); // Example: Height fixed to 10
                 if (windoor.selected) {
                     g.setColor(Color.BLACK);
                     g2.setStroke(new BasicStroke(2));
-                    g2.drawRect(windoor.x, windoor.y, windoor.w, 10);
+                    g2.drawRect(windoor.x, windoor.y, windoor.w, windoor.h);
                 }
             }
         }
