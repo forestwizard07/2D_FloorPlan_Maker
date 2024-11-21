@@ -332,7 +332,7 @@ public class FloorPlanner extends JFrame {
         furniturePanel.setLayout(new GridLayout(5, 1, 10, 10));
         furniturePanel.add(furniture);
         furniturePanel.add(addFurniture);
-        furniturePanel.add(delFurniture);    //DELETE FURNITURE BUTTON
+        furniturePanel.add(delFurniture);    //DELETE FRUNITURE BUTTON
         furniturePanel.add(rotFurniture);
 
         ButtonGroup furniturebuttons = new ButtonGroup();
@@ -358,6 +358,36 @@ public class FloorPlanner extends JFrame {
         shower.setActionCommand("shower");
         sink.setActionCommand("sink");
         stove.setActionCommand("stove");
+
+        //WINDOW AND DOOR BUTTONS
+
+        JToggleButton window = new JToggleButton("Window");
+        sink.setBackground(Color.decode("#dddddd"));
+        sink.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+        furniture.add(sink);
+
+        JToggleButton door = new JToggleButton("Door");
+        stove.setBackground(Color.decode("#dddddd"));
+        stove.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+        furniture.add(stove);
+
+        JButton addWindow = new JButton("Add Window/Door");
+        addFurniture.setBackground(Color.decode("#dddddd"));
+        addFurniture.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+        
+        
+        JButton delWindow = new JButton("Delete Window/Door");
+        delFurniture.setBackground(Color.decode("#dddddd"));
+        delFurniture.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+
+        window.setActionCommand("bed");
+        door.setActionCommand("chair");
+
+        ButtonGroup windowbuttons = new ButtonGroup();
+
+        windowbuttons.add(door);
+        windowbuttons.add(window);
+
         
         
         JLabel heighttext = new JLabel("Enter Height:");
