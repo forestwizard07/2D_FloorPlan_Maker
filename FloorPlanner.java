@@ -11,7 +11,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Objects;
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -33,26 +32,39 @@ public class FloorPlanner extends JFrame {
     public int diffy;
     public int oldx,oldy;
     public Timer timer;
+    public int[] coordinate = {-1, -1, -1, -1};
     public int xcoordinate,ycoordinate;
     public boolean dragged=false;
     public int count=0;
     public int initialx,initialy;
     public int oldfurniturex,oldfurniturey;
     public boolean clickedRoom=false;
+<<<<<<< HEAD
     public int[] coordinate={-1,-1,-1,-1}; 
+=======
+    public static int rotcount=1;
+>>>>>>> 89a00b45b7a10788fb2f213a5107543bb17e2f7b
     public FloorPlanner(){
         JFrame frame = new JFrame();
         frame.setSize(800,800);
         // Set the JFrame to full screen mode
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        
+        //load the previous rooms
+       
         frame.setTitle("2D Floor Planner");
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         frame.setBackground(Color.WHITE);
         drawingPanel = new DrawingPanel();
         drawingPanel.setVisible(true);
+<<<<<<< HEAD
         JToggleButton snapButton = new JToggleButton("OFF");
         snapButton.setBackground(Color.decode("#dddddd"));
+=======
+
+        JToggleButton snapButton = new JToggleButton("OFF");
+        snapButton.setBackground(Color.decode("#dddddd"));
+
+>>>>>>> 89a00b45b7a10788fb2f213a5107543bb17e2f7b
         
         timer = new Timer(1, new ActionListener() {
             @Override
@@ -98,12 +110,18 @@ public class FloorPlanner extends JFrame {
                         }else if(coordinate[1]>selectedRoom.position.y && coordinate[1]-selectedRoom.position.y-selectedRoom.h<20 && selectedRoom.position.x+selectedRoom.w>coordinate[0] && selectedRoom.position.x<coordinate[0]+coordinate[2]){
                             selectedRoom.position.y=coordinate[1]-selectedRoom.h;
                         }
+<<<<<<< HEAD
 
 
 
 
 
                     }
+=======
+                    }
+
+
+>>>>>>> 89a00b45b7a10788fb2f213a5107543bb17e2f7b
                 }else if((xcoordinate!=0||ycoordinate!=0)&&(xcoordinate!=initialx||ycoordinate!=initialy)&&(selectedRoom.isSelectedwofurniture)){
                     
                     
@@ -117,10 +135,6 @@ public class FloorPlanner extends JFrame {
                         }
                     }
                 }
-                
-
-
-
                 drawingPanel.repaint();
                 
                 
@@ -232,12 +246,13 @@ public class FloorPlanner extends JFrame {
         
         JMenu fileMenu = new JMenu("File");
         frame.add(drawingPanel, BorderLayout.CENTER);
-
-        JMenuItem newItem = new JMenuItem("New");
+        JMenuItem newItem = new JMenuItem("New Drawing Board");
+        JMenuItem openItem = new JMenuItem("Open previously saved file");
         JMenuItem saveItem = new JMenuItem("Save");
         JMenuItem exportItem = new JMenuItem("Export as PNG");
         JMenuItem exitItem = new JMenuItem("Exit");
         fileMenu.add(newItem);
+        fileMenu.add(openItem);
         fileMenu.add(saveItem);
         fileMenu.add(exportItem);
         fileMenu.add(exitItem);
@@ -251,9 +266,25 @@ public class FloorPlanner extends JFrame {
         });
 
         saveItem.addActionListener((ActionEvent e) -> {
-            ArrayList<String> a=new ArrayList<>();
-            
+            Room.saveRoomsToFile(drawingPanel.rooms); 
+            System.out.println("Save");          
         });
+
+        
+        openItem.addActionListener((ActionEvent e) -> {
+            Room.loadRoomsFromFile();
+            drawingPanel.repaint(); 
+            System.out.println("Load file");         
+        });
+
+        newItem.addActionListener((ActionEvent e) -> {
+            drawingPanel.rooms.clear();  
+            drawingPanel.masterfurniture.clear();
+            drawingPanel.repaint();;      
+        });
+
+
+        
 
         menuBar.add(fileMenu);
 
@@ -282,7 +313,7 @@ public class FloorPlanner extends JFrame {
         JLabel addfurniture = new JLabel("Furniture/Fixtures");
         furniturePanel.add(addfurniture);
         JPanel furniture = new JPanel();
-        furniture.setLayout(new GridLayout(2,5,10,10));
+        
         furniture.setBackground(Color.decode("#999999"));
         
         JToggleButton bed = new JToggleButton("Bed");
@@ -347,15 +378,31 @@ public class FloorPlanner extends JFrame {
         JButton rotFurniture = new JButton("Rotate Furniture");
         rotFurniture.setBackground(Color.decode("#dddddd"));
         rotFurniture.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
-
+        rotFurniture.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                for(Room r: drawingPanel.rooms){
+                    for(Furniture f: r.furniturelist){
+                        if(f.selected){
+                            f.rotate();
+                        }
+                    }
+                }
+                drawingPanel.repaint();
+            }
+        });
         
+
+<<<<<<< HEAD
+        
+=======
+>>>>>>> 89a00b45b7a10788fb2f213a5107543bb17e2f7b
 
         furniturePanel.setLayout(new GridLayout(7, 1, 10, 10));
         furniturePanel.add(furniture);
         furniturePanel.add(addFurniture);
         furniturePanel.add(delFurniture);    //DELETE FRUNITURE BUTTON
         furniturePanel.add(rotFurniture);
-        furniturePanel.add(snapButton);
 
         ButtonGroup furniturebuttons = new ButtonGroup();
 
@@ -383,34 +430,47 @@ public class FloorPlanner extends JFrame {
 
         //WINDOW AND DOOR BUTTONS
 
-        JToggleButton window = new JToggleButton("Window");
-        sink.setBackground(Color.decode("#dddddd"));
-        sink.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
-        furniture.add(sink);
+        JPanel windoorPanel = new JPanel();
+        windoorPanel.setLayout(new GridLayout(2, 2, 10, 10)); // Adjusted rows for buttons
+        windoorPanel.setBackground(Color.decode("#999999")); // Background color
+        windoorPanel.setBorder(new MatteBorder(2, 0, 0, 0, Color.BLACK)); // Border for separation
 
-        JToggleButton door = new JToggleButton("Door");
-        stove.setBackground(Color.decode("#dddddd"));
-        stove.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
-        furniture.add(stove);
+        // Window and Door Buttons
+        JToggleButton windowButton = new JToggleButton("Window");
+        windowButton.setBackground(Color.decode("#dddddd"));
+        windowButton.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
 
-        JButton addWindow = new JButton("Add Window/Door");
-        addFurniture.setBackground(Color.decode("#dddddd"));
-        addFurniture.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+        JToggleButton doorButton = new JToggleButton("Door");
+        doorButton.setBackground(Color.decode("#dddddd"));
+        doorButton.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+
+        // Group buttons
+        ButtonGroup windoorButtons = new ButtonGroup();
+        windoorButtons.add(windowButton);
+        windoorButtons.add(doorButton);
+
+
+        JButton addWindowDoorButton = new JButton("Add Window/Door");
+        addWindowDoorButton.setBackground(Color.decode("#dddddd"));
+        addWindowDoorButton.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+
+        JButton deleteWindowDoorButton = new JButton("Delete Window/Door");
+        deleteWindowDoorButton.setBackground(Color.decode("#dddddd"));
+        deleteWindowDoorButton.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+
+        windoorPanel.add(new JLabel("Window/Door")); // Label for context
+        windoorPanel.add(windowButton); // Add window toggle button
+        windoorPanel.add(doorButton);   // Add door toggle button
+        windoorPanel.add(new JLabel("Snap to Grid:")); // Label for Snap
+        windoorPanel.add(snapButton); // Snap toggle button
+        windoorPanel.add(addWindowDoorButton); // Add button for adding window/door
+        windoorPanel.add(deleteWindowDoorButton); // Add button for deleting window/door
+
+        furniturePanel.add(windoorPanel);
+        furniturePanel.add(snapButton);
         
-        
-        JButton delWindow = new JButton("Delete Window/Door");
-        delFurniture.setBackground(Color.decode("#dddddd"));
-        delFurniture.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
-
-        window.setActionCommand("bed");
-        door.setActionCommand("chair");
-
-        ButtonGroup windowbuttons = new ButtonGroup();
-
-        windowbuttons.add(door);
-        windowbuttons.add(window);
-
-        
+        windowButton.setActionCommand("window");
+        doorButton.setActionCommand("door");
         
         JLabel heighttext = new JLabel("Enter Height:");
         optionsPanel.add(heighttext);
@@ -587,6 +647,38 @@ public class FloorPlanner extends JFrame {
 
         });
 
+
+        addWindowDoorButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String type="rawr";
+                // boolean furniturecheck=false;
+                for(Room room: drawingPanel.rooms){
+                    if(room.isSelected){
+                        System.out.println("test " + room.type);
+                        ButtonModel selectedModel = windoorButtons.getSelection();
+                        if (selectedModel != null) {
+                            String actionCommand = selectedModel.getActionCommand();
+                            // Use a switch statement to handle which button was pressed
+                            switch (actionCommand) {
+                                case "door" -> type = "door";
+                                case "window" -> type = "window";
+                            }
+                        } else {
+                            System.out.println("No button was pressed.");
+                        }
+
+
+                        drawingPanel.setLayout(null);
+                        drawingPanel.addWindoor(type, room, 1, 50);
+                        System.out.println(type);
+                        System.out.println(room.windoorlist);
+                        windoorButtons.clearSelection();
+                    }
+                }
+            }
+        });
+
         
 
         north.addActionListener((var e) -> {
@@ -686,7 +778,8 @@ public class FloorPlanner extends JFrame {
         delRoom.addActionListener((ActionEvent e) -> {
             drawingPanel.delRoom();
         });
-
+        Room.loadRoomsFromFile();
+        drawingPanel.repaint(); 
         
 
         frame.add(placeHolder, BorderLayout.EAST);

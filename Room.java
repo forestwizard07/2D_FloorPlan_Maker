@@ -1,4 +1,9 @@
 import java.awt.Point;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +19,9 @@ public class Room implements Serializable {
     public String direction;
     public boolean isSelected;
     public boolean isSelectedwofurniture;
-    public List<Furniture> furniturelist = new ArrayList<>(); 
+    public List<Furniture> furniturelist = new ArrayList<>();
+    public List<Windoor> windoorlist = new ArrayList<>();
+
     Room(String type, Point position, int w, int h, String direction) {
         this.type = type;
         this.position = position;
@@ -74,5 +81,36 @@ public class Room implements Serializable {
         }
         return false;
     }
+
+    public void addWindoor(Windoor windoor) {
+        this.windoorlist.add(windoor);
+    }
+
+    public static void saveRoomsToFile(List<Room> rooms) {
+        String filePath = "room.ser";
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filePath))) {
+            oos.writeObject(rooms);
+            System.out.println("Rooms saved successfully to " + filePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    
+
+    // Function to read the ArrayList of rooms from a .ser file
+    public static void loadRoomsFromFile() {
+        String filePath="room.ser";
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filePath))) {
+            DrawingPanel.rooms = (ArrayList<Room>) ois.readObject(); 
+            
+
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            System.out.println("Error loading the file");
+        }
+    }
+    
+
 
 }
