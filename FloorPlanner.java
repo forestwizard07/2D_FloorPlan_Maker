@@ -80,13 +80,7 @@ public class FloorPlanner extends JFrame {
                     selectedRoom.position.x = xcoordinate-diffx;
                     selectedRoom.position.y =ycoordinate-diffy;
                     
-                    for(Furniture furniture : selectedRoom.furniturelist){
-                        System.out.println(furniture.type);
-                        
-                        furniture.x= selectedRoom.position.x+furniture.relativex;
-                        furniture.y= selectedRoom.position.y+furniture.relativey;                     
-                        
-                    }
+ 
 
                     if(snapButton.isSelected()){/////////////////////////////////////////////////////////////
                         if(selectedRoom.position.x-coordinate[0]-coordinate[2]>0 && selectedRoom.position.x-coordinate[0]-coordinate[2]<20 && (selectedRoom.position.y+selectedRoom.h>coordinate[1] && coordinate[1]+coordinate[3]>selectedRoom.position.y)){
@@ -100,6 +94,13 @@ public class FloorPlanner extends JFrame {
                         }
                     }
 
+                    for(Furniture furniture : selectedRoom.furniturelist){
+                        System.out.println(furniture.type);
+                        
+                        furniture.x= selectedRoom.position.x+furniture.relativex;
+                        furniture.y= selectedRoom.position.y+furniture.relativey;                     
+                        
+                    }
 
                 }else if((xcoordinate!=0||ycoordinate!=0)&&(xcoordinate!=initialx||ycoordinate!=initialy)&&(selectedRoom.isSelectedwofurniture)){
                     
@@ -627,6 +628,7 @@ public class FloorPlanner extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String type="rawr";
+                int wall=0;
                 // boolean furniturecheck=false;
                 for(Room room: drawingPanel.rooms){
                     if(room.isSelected){
@@ -639,13 +641,28 @@ public class FloorPlanner extends JFrame {
                                 case "door" -> type = "door";
                                 case "window" -> type = "window";
                             }
+
+                            switch (selectedDirection) {
+                                case ("N"):
+                                    wall = 0;
+                                    break;
+                                case ("E"):
+                                    wall = 1;
+                                    break;
+                                case ("S"):
+                                    wall = 2;
+                                    break;
+                                case ("W"):
+                                    wall = 3;
+                                    break;
+                            }
                         } else {
                             System.out.println("No button was pressed.");
                         }
 
 
                         drawingPanel.setLayout(null);
-                        drawingPanel.addWindoor(type, room, 1, 50);
+                        drawingPanel.addWindoor(type, room, wall, 50);
                         System.out.println(type);
                         System.out.println(room.windoorlist);
                         windoorButtons.clearSelection();
