@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
@@ -494,9 +495,13 @@ public class DrawingPanel extends JPanel {
             System.out.println("No room selected to add " + type + ".");
             return;
         }
+
+        
     
         // Create a new Windoor object
         Windoor windoor = new Windoor(type, parentRoom, windoorX, windoorY, wall);
+
+        
     
         // Calculate position based on wall
         windoor.givePos(wall);
@@ -520,8 +525,14 @@ public class DrawingPanel extends JPanel {
         System.out.println("Pressed position: "+ posn);
     
         // Add Windoor to room
+        
+        for(Windoor w : parentRoom.windoorlist){
+            if(w.x==windoor.x&&w.y==windoor.y){
+                JOptionPane.showMessageDialog(this, "Windows/Doors are overlapping! Please try again!", "Overlap Detected", JOptionPane.ERROR_MESSAGE );
+                return;
+            }     
+        }
         parentRoom.addWindoor(windoor);
-    
         // Trigger repaint
         repaint();
     }
