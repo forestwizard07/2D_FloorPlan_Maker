@@ -1,4 +1,4 @@
 # OOPs_Project
-2D Floor Plan Maker
+2D Floor Plan Maker made completely using Java Swing.
 
 ![floor example](floorplan.png)
