@@ -1,5 +1,6 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.GridLayout;
@@ -296,10 +297,11 @@ public class FloorPlanner extends JFrame {
 
         placeHolder.setLayout(new BorderLayout());
 
-        optionsPanel.setLayout(new GridLayout(10,2,10,10));
+        optionsPanel.setLayout(new GridLayout(11,2,10,10));
         optionsPanel.setBorder(new MatteBorder(2, 0, 0, 0, Color.BLACK));
-        furniturePanel.setLayout(new GridLayout(7,1,10,10));
+        furniturePanel.setLayout(new GridLayout(12, 1, 10, 10));
         placeHolder.setBorder(new MatteBorder(0, 2, 2, 2, Color.BLACK));
+        furniturePanel.setBorder(new MatteBorder(0,0,0,0,Color.BLACK));
         optionsPanel.setBackground(Color.decode("#999999"));
         placeHolder.setBackground(Color.decode("#999999"));
         furniturePanel.setBackground(Color.decode("#999999"));
@@ -309,6 +311,7 @@ public class FloorPlanner extends JFrame {
         
         
         JLabel addfurniture = new JLabel("Furniture/Fixtures");
+        addfurniture.setFont(new Font("Serif", Font.BOLD, 20));
         furniturePanel.add(addfurniture);
         JPanel furniture = new JPanel();
         
@@ -364,18 +367,18 @@ public class FloorPlanner extends JFrame {
         stove.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
         furniture.add(stove);
 
-        JButton addFurniture = new JButton("Add Furniture");
+        JButton addFurniture = new JButton("+ Add Furniture");
         addFurniture.setBackground(Color.decode("#dddddd"));
         addFurniture.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
         
         
-        JButton delFurniture = new JButton("Delete Furniture");
+        JButton delFurniture = new JButton("- Delete Furniture");
         delFurniture.setBackground(Color.decode("#dddddd"));
         delFurniture.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
 
         JButton rotFurniture = new JButton("Rotate Furniture");
         rotFurniture.setBackground(Color.decode("#dddddd"));
-        rotFurniture.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+        rotFurniture.setBorder(new MatteBorder(1, 1, 2, 1, Color.BLACK));
         rotFurniture.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -392,7 +395,7 @@ public class FloorPlanner extends JFrame {
         
 
 
-        furniturePanel.setLayout(new GridLayout(7, 1, 10, 10));
+        
         furniturePanel.add(furniture);
         furniturePanel.add(addFurniture);
         furniturePanel.add(delFurniture);    //DELETE FRUNITURE BUTTON
@@ -425,9 +428,9 @@ public class FloorPlanner extends JFrame {
         //WINDOW AND DOOR BUTTONS
 
         JPanel windoorPanel = new JPanel();
-        windoorPanel.setLayout(new GridLayout(2, 2, 10, 10)); // Adjusted rows for buttons
+        windoorPanel.setLayout(new GridLayout(1, 2, 10, 20)); // Adjusted rows for buttons
         windoorPanel.setBackground(Color.decode("#999999")); // Background color
-        windoorPanel.setBorder(new MatteBorder(2, 0, 0, 0, Color.BLACK)); // Border for separation
+        windoorPanel.setBorder(new MatteBorder(0, 0, 0, 0, Color.BLACK)); // Border for separation
 
         // Window and Door Buttons
         JToggleButton windowButton = new JToggleButton("Window");
@@ -446,26 +449,36 @@ public class FloorPlanner extends JFrame {
 
         JButton addWindowDoorButton = new JButton("Add Window/Door");
         addWindowDoorButton.setBackground(Color.decode("#dddddd"));
-        addWindowDoorButton.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+        addWindowDoorButton.setBorder(new MatteBorder(1, 1, 2, 1, Color.BLACK));
 
-        JButton deleteWindowDoorButton = new JButton("Delete Window/Door");
-        deleteWindowDoorButton.setBackground(Color.decode("#dddddd"));
-        deleteWindowDoorButton.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
-
-        windoorPanel.add(new JLabel("Window/Door")); // Label for context
+        //JButton deleteWindowDoorButton = new JButton("Delete Window/Door");
+        //deleteWindowDoorButton.setBackground(Color.decode("#dddddd"));
+        //deleteWindowDoorButton.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+        JLabel addWindowDoor = new JLabel("Window/Door");
+        addWindowDoor.setFont(new Font("Serif", Font.BOLD, 20));
+        furniturePanel.add(addWindowDoor); // Label for context
         windoorPanel.add(windowButton); // Add window toggle button
         windoorPanel.add(doorButton);   // Add door toggle button
-        windoorPanel.add(new JLabel("Snap to Grid:")); // Label for Snap
-        windoorPanel.add(snapButton); // Snap toggle button
-        windoorPanel.add(addWindowDoorButton); // Add button for adding window/door
-        windoorPanel.add(deleteWindowDoorButton); // Add button for deleting window/door
+        
+         // Label for Snap
+         JLabel snapRoom = new JLabel("Snap to Room");
+         snapRoom.setFont(new Font("Serif", Font.BOLD, 20));
+        //windoorPanel.add(snapButton); // Snap toggle button
+         // Add button for adding window/door
+        //windoorPanel.add(deleteWindowDoorButton); // Add button for deleting window/door
 
         furniturePanel.add(windoorPanel);
+        furniturePanel.add(addWindowDoorButton);
+        furniturePanel.add(snapRoom);
         furniturePanel.add(snapButton);
         
         windowButton.setActionCommand("window");
         doorButton.setActionCommand("door");
         
+        JLabel roomPanelTitle = new JLabel("Room Panel");
+        roomPanelTitle.setFont(new Font("Serif", Font.BOLD, 20));
+        optionsPanel.add(roomPanelTitle);
+
         JLabel heighttext = new JLabel("Enter Height:");
         optionsPanel.add(heighttext);
         JTextField getHeight = new JTextField(20);
@@ -603,6 +616,8 @@ public class FloorPlanner extends JFrame {
                         drawingPanel.setLayout(null);
                         // Add the image label to the panel
                         int b = drawingPanel.addFurniture(type, room, drawingPanel, centerX, centerY);
+                        if(type.equals("rawr"))
+                            b = -1;
                         //Add error message if the furniture is not added
                         switch (b) {
                             case 3:
@@ -618,6 +633,11 @@ public class FloorPlanner extends JFrame {
                             case 2:
                                 {
                                     JOptionPane.showMessageDialog( frame, "There is not enough space in this room to add a "+type, "Not Enough Space", JOptionPane.ERROR_MESSAGE );
+                                    break;
+                                }
+                            case -1:
+                                {
+                                    JOptionPane.showMessageDialog( frame, "Please select a furniture type!", "Furniture not Selected!", JOptionPane.ERROR_MESSAGE );
                                     break;
                                 }
                             default:
@@ -704,6 +724,13 @@ public class FloorPlanner extends JFrame {
                         windoorButtons.clearSelection();
                     }
                 }
+                west.setBackground(Color.decode("#dddddd"));
+                south.setBackground(Color.decode("#dddddd"));
+                east.setBackground(Color.decode("#dddddd"));
+                north.setBackground(Color.decode("#dddddd"));
+                left.setBackground(Color.decode("#dddddd"));
+                right.setBackground(Color.decode("#dddddd"));
+                centre.setBackground(Color.decode("#dddddd"));
             }
         });
 
@@ -737,12 +764,12 @@ public class FloorPlanner extends JFrame {
             north.setBackground(Color.decode("#dddddd"));
         });
 
-        JButton addRoom = new JButton("+ | Add");
+        JButton addRoom = new JButton("+ | Add  Room");
         addRoom.setBackground(Color.decode("#dddddd"));
         addRoom.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
         optionsPanel.add(addRoom);
 
-        JButton delRoom = new JButton("- | Delete");
+        JButton delRoom = new JButton("- | Delete Room");
         delRoom.setBackground(Color.decode("#dddddd"));
         delRoom.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
         optionsPanel.add(delRoom);
@@ -800,6 +827,10 @@ public class FloorPlanner extends JFrame {
             south.setBackground(Color.decode("#dddddd"));
             east.setBackground(Color.decode("#dddddd"));
             north.setBackground(Color.decode("#dddddd"));
+            left.setBackground(Color.decode("#dddddd"));
+            right.setBackground(Color.decode("#dddddd"));
+            centre.setBackground(Color.decode("#dddddd"));
+            
         });
 
 

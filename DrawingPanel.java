@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.Stroke;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -315,7 +316,7 @@ public class DrawingPanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
-        
+        Stroke originalStroke = g2.getStroke();
         for (Room room : rooms) {
             switch(room.type) {
                 case "Bedroom" -> g.setColor(Color.decode("#00cc00"));
@@ -361,12 +362,66 @@ public class DrawingPanel extends JPanel {
             }
 
             for (Windoor windoor : room.windoorlist) {
-                if (windoor.type.equals("window")) {
-                    g.setColor(Color.decode("#00cc00")); // Use blue for windows
-                } else if (windoor.type.equals("door")) {
-                    g.setColor(Color.ORANGE); // Use orange for doors
-                }
-                g.fillRect(windoor.x, windoor.y, windoor.w, windoor.h); // Example: Height fixed to 10
+                
+                
+                    //g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                    switch(room.type) {
+                        case "Bedroom" -> g2.setColor(Color.decode("#00cc00"));
+                        case "Bathroom" -> g2.setColor(Color.decode("#0066ff"));
+                        case "Living Room" -> g2.setColor(Color.decode("#ff3399"));
+                        case "Dining Room" -> g2.setColor(Color.decode("#ffff00"));
+                        case "Kitchen" -> g2.setColor(Color.decode("#ff0000"));
+                    }
+                    g2.setStroke(originalStroke);
+                    g2.setStroke(new BasicStroke(3));
+                    switch (windoor.wall) {
+                        case 0: // North wall
+                            g2.drawLine(windoor.x, windoor.y+windoor.h, windoor.x+windoor.w, windoor.y+windoor.h);
+                            break;
+                        case 1: // East wall
+                            g2.drawLine(windoor.x, windoor.y, windoor.x, windoor.y+windoor.h);
+                            break;
+                        case 2: // South wall
+                            g2.drawLine(windoor.x, windoor.y, windoor.x+windoor.w, windoor.y);
+                            break;
+                            
+                        case 3: // West wall
+                            g2.drawLine(windoor.x+windoor.w, windoor.y, windoor.x+windoor.w, windoor.y+windoor.h);
+                            break;
+                            
+                    }
+                     // Use orange for doors
+                     if (windoor.type.equals("window")) {
+                    
+                        //g2.drawLine(windoor.x, windoor.y+windoor.h, windoor.x+windoor.w, windoor.y+windoor.h);
+                        float[] dashPattern = {4, 3}; // Lengths of the dashes and spaces 
+                        Stroke dashedStroke = new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, dashPattern, 0);
+                        g2.setStroke(dashedStroke);
+                        g2.setColor(Color.BLACK);
+                        switch (windoor.wall) {
+                            case 0: // North wall
+                                g2.drawLine(windoor.x, windoor.y+windoor.h, windoor.x+windoor.w, windoor.y+windoor.h);
+                                break;
+                            case 1: // East wall
+                                g2.drawLine(windoor.x, windoor.y, windoor.x, windoor.y+windoor.h);
+                                break;
+                            case 2: // South wall
+                                g2.drawLine(windoor.x, windoor.y, windoor.x+windoor.w, windoor.y);
+                                break;
+                                
+                            case 3: // West wall
+                                g2.drawLine(windoor.x+windoor.w, windoor.y, windoor.x+windoor.w, windoor.y+windoor.h);
+                                break;
+                                
+                        }
+                        
+                        System.out.println("Window height "+ windoor.h+"Window width"+ windoor.w);    
+                    }
+                    
+                
+                g2.setColor(Color.BLACK);
+                g2.setStroke(originalStroke);
+                 // Example: Height fixed to 10
                 if (windoor.selected) {
                     g.setColor(Color.BLACK);
                     g2.setStroke(new BasicStroke(2));
