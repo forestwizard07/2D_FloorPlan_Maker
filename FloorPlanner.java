@@ -667,8 +667,8 @@ public class FloorPlanner extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String type="rawr";
                 int wall=0;
-                String direction = "";
-                String posn = "";
+                String direction = "N";
+                String posn = "C";
                 // boolean furniturecheck=false;
                 for(Room room: drawingPanel.rooms){
                     if(room.isSelected){
