@@ -504,7 +504,7 @@ public class FloorPlanner extends JFrame {
         roomDirection.setBackground(Color.decode("#999999"));
         roomDirection.setLayout(new GridLayout(1,5,10,10));
 
-        JLabel direction = new JLabel("Direction");
+        JLabel direction = new JLabel("Direction:");
         roomDirection.add(direction);
 
         JButton north = new JButton("N");
@@ -532,7 +532,7 @@ public class FloorPlanner extends JFrame {
         roomPosition.setBackground(Color.decode("#999999"));
         roomPosition.setLayout(new GridLayout(1,4,10,10));
 
-        JLabel position = new JLabel("Position:");
+        JLabel position = new JLabel("Alignment:");
         roomPosition.add(position);
 
         JButton left = new JButton("L/U");
@@ -561,7 +561,7 @@ public class FloorPlanner extends JFrame {
             public void actionPerformed(ActionEvent e){
                 if (snapButton.isSelected()) {
                     snapButton.setText("ON");
-                    snapButton.setBackground(Color.decode("#999999")); // Change to green when ON
+                    snapButton.setBackground(Color.YELLOW); 
                     for(Room room:drawingPanel.rooms){
                         if(room.isSelected){        //x,y,w,h
                             coordinate[0]=room.position.x;
