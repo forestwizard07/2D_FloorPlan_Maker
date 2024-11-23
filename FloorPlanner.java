@@ -310,7 +310,7 @@ public class FloorPlanner extends JFrame {
         placeHolder.add(furniturePanel, BorderLayout.NORTH);
         
         
-        JLabel addfurniture = new JLabel("Furniture/Fixtures");
+        JLabel addfurniture = new JLabel("<html><u>Furniture/Fixtures</html></u>");
         addfurniture.setFont(new Font("Serif", Font.BOLD, 20));
         furniturePanel.add(addfurniture);
         JPanel furniture = new JPanel();
@@ -454,14 +454,14 @@ public class FloorPlanner extends JFrame {
         //JButton deleteWindowDoorButton = new JButton("Delete Window/Door");
         //deleteWindowDoorButton.setBackground(Color.decode("#dddddd"));
         //deleteWindowDoorButton.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
-        JLabel addWindowDoor = new JLabel("Window/Door");
+        JLabel addWindowDoor = new JLabel("<html><u>Window/Door</u></html>");
         addWindowDoor.setFont(new Font("Serif", Font.BOLD, 20));
         furniturePanel.add(addWindowDoor); // Label for context
         windoorPanel.add(windowButton); // Add window toggle button
         windoorPanel.add(doorButton);   // Add door toggle button
         
          // Label for Snap
-         JLabel snapRoom = new JLabel("Snap to Room");
+         JLabel snapRoom = new JLabel("<html><u>Snap to Room</html></u>");
          snapRoom.setFont(new Font("Serif", Font.BOLD, 20));
         //windoorPanel.add(snapButton); // Snap toggle button
          // Add button for adding window/door
@@ -475,7 +475,7 @@ public class FloorPlanner extends JFrame {
         windowButton.setActionCommand("window");
         doorButton.setActionCommand("door");
         
-        JLabel roomPanelTitle = new JLabel("Room Panel");
+        JLabel roomPanelTitle = new JLabel("<html><u>Room Panel</u></html>");
         roomPanelTitle.setFont(new Font("Serif", Font.BOLD, 20));
         optionsPanel.add(roomPanelTitle);
 
@@ -667,8 +667,8 @@ public class FloorPlanner extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String type="rawr";
                 int wall=0;
-                String direction = "";
-                String posn = "";
+                String direction = "N";
+                String posn = "C";
                 // boolean furniturecheck=false;
                 for(Room room: drawingPanel.rooms){
                     if(room.isSelected){
