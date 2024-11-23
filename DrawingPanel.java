@@ -490,53 +490,49 @@ public class DrawingPanel extends JPanel {
     }
 
     public void addWindoor(String type, Room parentRoom, int wall, String posn, String direction) {
-        // Validate room selection
         if (parentRoom == null) {
             System.out.println("No room selected to add " + type + ".");
             return;
         }
-
-        
     
-        // Create a new Windoor object
+        // Check if wall is shared
+        if ("window".equals(type) && isWallSharedWithAnotherRoom(parentRoom, wall)) {
+            System.out.println("Cannot add a window to a shared wall.");
+            JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+            JOptionPane.showMessageDialog(parentFrame,
+                "Cannot place a window on a wall shared with another room.",
+                "Invalid Window Placement",
+                JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+    
         Windoor windoor = new Windoor(type, parentRoom, windoorX, windoorY, wall);
-
-        
-    
-        // Calculate position based on wall
         windoor.givePos(wall);
-
-        // Adjust position by alignment
         adjustWindoorPositionByAlignment(windoor, posn, parentRoom.w, parentRoom.h);
     
-        // Check if it fits within the wall dimensions
-        if (wall == 0 || wall == 2) { // Top or Bottom wall
-            if (windoor.x + windoor.w > parentRoom.position.x + parentRoom.w) {
-                System.out.println(type + " exceeds room width.");
-                return;
-            }
-        } else { // Left or Right wall
-            if (windoor.y + windoor.w > parentRoom.position.y + parentRoom.h) {
-                System.out.println(type + " exceeds room height.");
-                return;
-            }
+        // Check if the windoor fits within the wall
+        if ((wall == 0 || wall == 2) && windoor.x + windoor.w > parentRoom.position.x + parentRoom.w) {
+            System.out.println(type + " exceeds room width.");
+            return;
+        } else if ((wall == 1 || wall == 3) && windoor.y + windoor.h > parentRoom.position.y + parentRoom.h) {
+            System.out.println(type + " exceeds room height.");
+            return;
         }
-
-        System.out.println("Pressed position: "+ posn);
     
-        // Add Windoor to room
-        
-        for(Windoor w : parentRoom.windoorlist){
-            if(w.x==windoor.x&&w.y==windoor.y){
-                JOptionPane.showMessageDialog(this, "Windows/Doors are overlapping! Please try again!", "Overlap Detected", JOptionPane.ERROR_MESSAGE );
+        for (Windoor existingWindoor : parentRoom.windoorlist) {
+            if (existingWindoor.x == windoor.x && existingWindoor.y == windoor.y) {
+                JOptionPane.showMessageDialog(this,
+                    "Windows/Doors are overlapping! Please try again!",
+                    "Overlap Detected",
+                    JOptionPane.ERROR_MESSAGE);
                 return;
-            }     
+            }
         }
+    
         parentRoom.addWindoor(windoor);
-        // Trigger repaint
         repaint();
     }
-
+    
     private void adjustWindoorPositionByAlignment(Windoor windoor, String posn, int roomWidth, int roomHeight) {
         switch (posn) {
             case "L/U": // Align Left (horizontal) or Up (vertical)
@@ -572,7 +568,43 @@ public class DrawingPanel extends JPanel {
         System.out.println("Positioning: " + posn + ", Wall: " + windoor.wall);
 
     }
-    
+    private boolean isWallSharedWithAnotherRoom(Room room, int wall) {
+        for (Room otherRoom : rooms) {
+            if (room != otherRoom) {
+                switch (wall) {
+                    case 0: // North wall
+                        if (otherRoom.position.y + otherRoom.h == room.position.y &&
+                            otherRoom.position.x < room.position.x + room.w &&
+                            otherRoom.position.x + otherRoom.w > room.position.x) {
+                            return true;
+                        }
+                        break;
+                    case 1: // East wall
+                        if (otherRoom.position.x == room.position.x + room.w &&
+                            otherRoom.position.y < room.position.y + room.h &&
+                            otherRoom.position.y + otherRoom.h > room.position.y) {
+                            return true;
+                        }
+                        break;
+                    case 2: // South wall
+                        if (otherRoom.position.y == room.position.y + room.h &&
+                            otherRoom.position.x < room.position.x + room.w &&
+                            otherRoom.position.x + otherRoom.w > room.position.x) {
+                            return true;
+                        }
+                        break;
+                    case 3: // West wall
+                        if (otherRoom.position.x + otherRoom.w == room.position.x &&
+                            otherRoom.position.y < room.position.y + room.h &&
+                            otherRoom.position.y + otherRoom.h > room.position.y) {
+                            return true;
+                        }
+                        break;
+                }
+            }
+        }
+        return false;
+    }
     
     
 }
