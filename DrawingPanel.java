@@ -518,6 +518,15 @@ public class DrawingPanel extends JPanel {
             System.out.println(type + " exceeds room height.");
             return;
         }
+        if((!parentRoom.type.equals("Living Room"))&&(!isWallSharedWithAnotherRoom(parentRoom, wall))&&("door".equals(type))){
+            JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+            JOptionPane.showMessageDialog(parentFrame,
+                "Cannot add a door to the outside in "+parentRoom.type,
+                "Invalid Door Placement",
+                JOptionPane.ERROR_MESSAGE);
+
+            return;
+        }
     
         for (Windoor existingWindoor : parentRoom.windoorlist) {
             if (existingWindoor.x == windoor.x && existingWindoor.y == windoor.y) {
